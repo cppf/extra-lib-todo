@@ -31,42 +31,47 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * const.hpp - constant declaration file
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MAKE_CONST_HPP_
+#define _MAKE_CONST_HPP_
 
 
-// make constants
-#include "make\const.hpp"
+// CHAR_MODE
+#ifndef ASCII
+#define	ASCII		0x0000
+#endif // !ASCII
+#ifndef UNICODE
+#define	UNICODE		0x0001
+#endif // !UNICODE
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
+// DEVICE
+#ifndef PROCESSOR
+#define	PROCESSOR	0x0010
+#endif // !PROCESSOR
+#ifndef CONTROLLER
+#define	CONTROLLER	0x0011
+#endif // !CONTROLLER
 
 
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
+// OS
+#ifndef NONE
+#define	NONE		0x0020
+#endif // !AVR
+#ifndef WINDOWS
+#define	WINDOWS		0x0021
+#endif // !WIN32
 
 
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
+// COMPILER
+#ifndef GCC
+#define	GCC			0x0030
+#endif // !GCC
+#ifndef VISUALCPP
+#define	VISUALCPP	0x0031
+#endif // !VISUALCPP
 
 
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif /* _MAKE_CONST_HPP_ */

@@ -31,42 +31,57 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * eeprom.hpp - EEPROM driver file
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MEM_EEPROM_HPP_
+#define _MEM_EEPROM_HPP_
+#if PLATFORM == AVR
 
 
-// make constants
-#include "make\const.hpp"
+namespace mem
+{
+using namespace data;
+
+class eeprom
+{
+	struct task
+	{
+		void*	Dest;
+		void*	Src;
+		uint	Size;
+	};
+	
+	private:
+	queue<task, 16> Tasks;
+	
+	private:
+	void _Isr()
+	{
+		_Handler();
+	}
+	
+	void _Handler()
+	{
+		
+	}
+	
+	public:
+	void Read(void* dest, void* src, uint size)
+	{
+		// Check if queue is already full or not, if yes, block
+		task tsk = {dest, src, size};
+		Tasks.PushRear(tsk);
+	}
+	
+	void Write(void* dest, void* src, uint size)
+	{
+		task tsk = {dest, src, size};
+	}
+};
+
+} // end (namespace) mem
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
-
-
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
-
-
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif
+#endif /* _MEM_EEPROM_HPP_ */

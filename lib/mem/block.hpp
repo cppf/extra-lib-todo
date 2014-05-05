@@ -31,42 +31,30 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * block.hpp - block memory operations
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MEM_BLOCK_HPP_
+#define _MEM_BLOCK_HPP_
 
 
-// make constants
-#include "make\const.hpp"
+// functions
+#define mem_Set			memset
+#define mem_Compare		memcmp
+#define mem_Copy		memcpy
+#define mem_Move		memmove
+#define mem_IndexOf		memchr
+#define mem_Find		memchr
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
+// check equality (true if equal)
+#define	mem_Equals(mem1, mem2, size)	\
+(!mem_Compare(mem1, mem2, size))
 
 
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
+// initialize memory to 0
+#define	mem_Init(dst, size)	\
+mem_Set(dst, size, 0)
 
 
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif /* _MEM_BLOCK_HPP_ */

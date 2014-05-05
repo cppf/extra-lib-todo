@@ -9,9 +9,13 @@ Header-only library for C++
 
 Types / Classes: type_name
 
+Globals: itemname
+
 Public Members: MemberName
 
 Private Members: parameterName
+
+Macro constants: CONSTANT_NAME
 
 
 

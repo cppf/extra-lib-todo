@@ -31,42 +31,36 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * hash.hpp - hashing functions
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MATH_HASH_HPP_
+#define _MATH_HASH_HPP_
 
 
-// make constants
-#include "make\const.hpp"
+// 8-bit XOR-ROR hashing
+noInline uint8 math_Hash8F(uint8* data, uint size);
+uint8 math_Hash8F(uint8* data, uint size)
+{
+	// opt: uword size
+	uint8 hash = 0;
+	for(; size > 0; data++, size--)
+	{
+		hash ^= *data;
+		assembly(
+		line("bst %0, 0")
+		line("lsr %0")
+		line("bld %0, 7")
+		: "=r"(hash)
+		: "r"(hash)
+		:
+		);
+	}
+	return hash;
+}
+
+#define math_Hash8(data, size)	\
+math_Hash8F((uint8*)(data), (uint)(size))
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
-
-
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
-
-
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif /* _MATH_HASH_HPP_ */

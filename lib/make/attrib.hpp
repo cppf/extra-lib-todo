@@ -31,42 +31,43 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * attrib.hpp - attribute declaration file (GCC only)
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MAKE_ATTRIB_HPP_
+#define _MAKE_ATTRIB_HPP_
+#if COMPILER == GCC
 
 
-// make constants
-#include "make\const.hpp"
+// attribute macro
+#define attrib(...)	\
+__attribute__((__VA_ARGS__))
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
+// standard attributes
+#define aligned(amt)	attrib(__aligned__(amt))
+#define alwaysinline	attrib(__always_inline__)
+#define deprecated(msg)	attrib(__deprecated__(msg))
+#define raw				attrib(__naked__)
+#define noinline		attrib(__noinline__)
+#define noreturn		attrib(__noreturn__)
+#define optimizespeed	attrib(__optimize__("O3"))
+#define optimizesize	attrib(__optimize__("Os"))
+#define optimize		optimizeSize
+#define osmain			attrib(__OS_main__)
+#define ostask			attrib(__OS_task__)
+#define pure			attrib(__pure__)
+#define hot				attrib(__hot__)
+#define cold			attrib(__cold__)
+#define section(name)	attrib(__section__(name))
+#define isrspecial		attrib(__interrupt__)
+#define isr				attrib(__signal__)
+#define ignore			attrib(__unused__)
+#define used			attrib(__used__)
+#define packed			attrib(__packed__)
+#define progmem			attrib(__progmem__)
+// osfn = attrib(section(".boot"), optimize("Os"))
 
 
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
-
-
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif // GCC
+#endif /* _MAKE_ATTRIB_HPP_ */

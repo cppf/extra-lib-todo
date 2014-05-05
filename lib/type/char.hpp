@@ -31,42 +31,44 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * char.hpp - character macros
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _TYPE_CHAR_HPP_
+#define _TYPE_CHAR_HPP_
 
 
-// make constants
-#include "make\const.hpp"
+#define	char_IsLower(ch)	\
+(((ch) >= 'a') && ((ch) <= 'z'))
+
+#define	char_IsUpper(ch)	\
+(((ch) >= 'A') && ((ch) <= 'Z'))
+
+#define	char_IsAlphabet(ch)		\
+(char_IsUpper(ch) || char_IsLower(ch))
+
+#define	char_IsDigit(ch)	\
+(((ch) >= '0') && ((ch) <= '9'))
+
+#define	char_IsAlphabetOrDigit(ch)	\
+(char_IsAlphabet(ch) || char_IsDigit(ch))
+
+#define	char_IsBlank(ch)	\
+(((ch) == '\t') || ((ch) == ' '))
+
+#define	char_IsSpace	char_IsBlank
+
+#define	char_IsControl(ch)	\
+((byte)(ch) <= (byte)31)
+
+#define	char_IsGraphical(ch)	\
+((byte)(ch) >= (byte)128)
+
+#define	char_ToLower(ch)	\
+((char_IsUpper(ch))? (ch - 'A' + 'a') : (ch))
+
+#define	char_ToUpper(ch)	\
+((char_IsLower(ch))? (ch - 'a' + 'A') : (ch))
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
-
-
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
-
-
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif /* _TYPE_CHAR_HPP_ */

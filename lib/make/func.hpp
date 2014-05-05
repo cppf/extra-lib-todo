@@ -31,42 +31,44 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * func.hpp - common global macros
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _MAKE_FUNC_HPP_
+#define _MAKE_FUNC_HPP_
 
 
-// make constants
-#include "make\const.hpp"
+// typeof macro
+#if COMPILER != GCC
+#define typeof(expr)	decltype(expr)
+#endif // !GCC
 
 
-// make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
+// token to string
+#ifndef tostring
+#define tostring(a)		#a
+#endif // !tostring
 
 
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
+// mark unused variables
+#ifndef unused
+#define unused(var)		(void)(var)
+#endif // !unused
 
 
-// types
-#include "type\basic.hpp"
-#include "type\char.hpp"
-#include "type\range.hpp"
-#include "type\string.hpp"
+// memory barrier (prevents reordering)
+#ifndef barrier
+#define barrier()		asm volatile("" ::: "memory")
+#endif // !barrier
 
 
-// memory
-#include "mem\basic.hpp"
-#include "mem\block.hpp"
+// assembly coding
+#ifndef assembly
+#define assembly		__asm__ __volatile__
+#endif // !assembly
+#ifndef line
+#define line(text)		text "\n\t"
+#endif // !line
 
 
-#endif /* _WIND_HPP_ */
+#endif /* _MAKE_FUNC_HPP_ */
