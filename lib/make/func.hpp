@@ -38,6 +38,10 @@
 #define _MAKE_FUNC_HPP_
 
 
+// required headers
+#include "const.hpp"
+
+
 // typeof macro
 #if COMPILER != GCC
 #define typeof(expr)	decltype(expr)
@@ -63,12 +67,20 @@
 
 
 // assembly coding
+#if COMPILER == GCC
 #ifndef assembly
 #define assembly		__asm__ __volatile__
 #endif // !assembly
 #ifndef line
 #define line(text)		text "\n\t"
 #endif // !line
-
+#else // VISUALCPP
+#ifndef assembly
+#define assembly		asm
+#endif // !assembly
+#ifndef line
+#define line(text)		text
+#endif // !line
+#endif
 
 #endif /* _MAKE_FUNC_HPP_ */

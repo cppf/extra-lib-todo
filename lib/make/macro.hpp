@@ -2,6 +2,10 @@
 #define _MAKE_MACRO_HPP_
 
 
+// required headers
+#include "const.hpp"
+
+
 #ifndef macro_Fn
 // macro overloading support
 #define	macro_Fn(x)	x
@@ -38,7 +42,7 @@
 #define	macro_Begin			({
 #define	macro_End			})
 #define macro_Return(var)	(var)
-#else
+#else // VISUALCPP
 #define	macro_Begin			do{
 #define	macro_End			}while(0)
 #endif

@@ -38,6 +38,10 @@
 #define _MATH_BIT_HPP_
 
 
+// required headers
+#include "..\make\macro.hpp"
+
+
 // form value by ones
 #define	bit_ValueByOnes1(b1)	\
 (1 << (b1))

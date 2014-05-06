@@ -38,6 +38,12 @@
 #define _MATH_BASIC_HPP_
 
 
+// required headers
+#include <math.h>
+#include "..\make\macro.hpp"
+#include "..\type\basic.hpp"
+
+
 // constants
 #define	math_e				M_E
 #define	math_log2e			M_LOG2E

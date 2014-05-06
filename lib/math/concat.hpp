@@ -38,7 +38,11 @@
 #define _MATH_CONCAT_HPP_
 
 
-// integer concatenation
+// required headers
+#include "..\make\macro.hpp"
+
+
+// concat numbers
 #define math_Concat2(v1, v0, sft)	\
 (((v1) << (sft)) | (v0))
 
@@ -64,7 +68,7 @@ math_Concat2(math_Concat3(v7, v6, v5, v4, v3, v2, v1, sft), v0, sft)
 macro_Fn(macro_Fn9(__VA_ARGS__, math_Concat8, math_Concat7, math_Concat6, math_Concat5, math_Concat4, math_Concat3, math_Concat2)(__VA_ARGS__))
 
 
-// value formation
+// form value
 #define math_MakeInt8n(v1, v0)	\
 math_Concat(v1, v0, 4)
 
@@ -78,7 +82,7 @@ macro_Fn(macro_Fn8(__VA_ARGS__, math_MakeInt8b, _7, _6, _5, _4, _3, math_MakeInt
 math_MakeInt8
 
 #define	math_MakeInt16(v1, v0)	\
-	math_Concat(v1, v0, 8)
+math_Concat(v1, v0, 8)
 
 #define math_MakeUint16	\
 math_MakeInt16

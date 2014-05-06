@@ -36,13 +36,18 @@
 
 #ifndef _MAKE_ATTRIB_HPP_
 #define _MAKE_ATTRIB_HPP_
-#if COMPILER == GCC
 
+
+// required headers
+#include "const.hpp"
+
+
+// GCC attribute definitions only
+#if COMPILER == GCC
 
 // attribute macro
 #define attrib(...)	\
 __attribute__((__VA_ARGS__))
-
 
 // standard attributes
 #define aligned(amt)	attrib(__aligned__(amt))
@@ -68,6 +73,36 @@ __attribute__((__VA_ARGS__))
 #define progmem			attrib(__progmem__)
 // osfn = attrib(section(".boot"), optimize("Os"))
 
+#else // VISUALCPP
+
+// attribute macro
+#define attrib(...)			__declspec(__VA_ARGS__)
+
+// standard attributes
+#define aligned(amt)
+#define alwaysinline		__forceinline
+#define deprecated(msg)
+#define raw
+#define noinline
+#define noreturn
+#define optimizespeed
+#define optimizesize
+#define optimize
+#define osmain
+#define ostask
+#define pure
+#define hot
+#define cold
+#define section(name)
+#define isrspecial
+#define isr
+#define ignore
+#define used
+#define packed
+#define progmem
+// osfn = 
 
 #endif // GCC
+
+
 #endif /* _MAKE_ATTRIB_HPP_ */

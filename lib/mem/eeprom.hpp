@@ -36,7 +36,7 @@
 
 #ifndef _MEM_EEPROM_HPP_
 #define _MEM_EEPROM_HPP_
-#if PLATFORM == AVR
+#if DEVICE == AVR
 
 
 namespace mem

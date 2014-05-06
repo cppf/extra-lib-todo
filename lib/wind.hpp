@@ -45,9 +45,9 @@
 // make properties
 #define	WORD_SIZE	64
 #define	CHAR_MODE	ASCII
+#define	COMPILER	VISUALCPP
 #define	DEVICE		PROCESSOR
 #define	OS			WINDOWS
-#define	COMPILER	VISUALCPP
 
 
 // make support

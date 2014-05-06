@@ -93,10 +93,18 @@ typedef uint64	uword;
 #ifndef byte
 typedef	unsigned char	byte;
 #endif // !byte
+#ifndef ubyte
 typedef	unsigned char	ubyte;
+#endif // !ubyte
+#ifndef ushort
 typedef unsigned short	ushort;
+#endif // !ushort
+#ifndef uint
 typedef unsigned int	uint;
+#endif // !uint
+#ifndef ulong
 typedef unsigned long	ulong;
+#endif // !ulong
 
 
 #endif /* _TYPE_BASIC_HPP_ */

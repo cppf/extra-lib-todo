@@ -38,6 +38,10 @@
 #define _MAKE_MERGE_HPP_
 
 
+// required headers
+#include "macro.hpp"
+
+
 // token merger
 #ifndef merge
 #define merge2(a, b)											a##b

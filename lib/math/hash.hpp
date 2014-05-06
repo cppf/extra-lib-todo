@@ -38,8 +38,13 @@
 #define _MATH_HASH_HPP_
 
 
+// required headers
+#include "..\make\func.hpp"
+#include "..\make\attrib.hpp"
+#include "..\type\basic.hpp"
+
 // 8-bit XOR-ROR hashing
-noInline uint8 math_Hash8F(uint8* data, uint size);
+noinline uint8 math_Hash8F(uint8* data, uint size);
 uint8 math_Hash8F(uint8* data, uint size)
 {
 	// opt: uword size
@@ -47,6 +52,7 @@ uint8 math_Hash8F(uint8* data, uint size)
 	for(; size > 0; data++, size--)
 	{
 		hash ^= *data;
+#if COMPILER == GCC
 		assembly(
 		line("bst %0, 0")
 		line("lsr %0")
@@ -55,6 +61,9 @@ uint8 math_Hash8F(uint8* data, uint size)
 		: "r"(hash)
 		:
 		);
+#else // VISUALCPP
+		hash = (hash >> 1) | ((hash & 1) << 7);
+#endif
 	}
 	return hash;
 }
