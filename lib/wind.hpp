@@ -38,16 +38,29 @@
 #define _WIND_HPP_
 
 
+// required headers
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
 // make constants
 #include "make\const.hpp"
 
 
 // make properties
-#define	WORD_SIZE	64
-#define	CHAR_MODE	ASCII
-#define	COMPILER	VISUALCPP
-#define	DEVICE		PROCESSOR
-#define	OS			WINDOWS
+#define	WORD_SIZE		64
+#define	CHAR_MODE		ASCII
+#define	COMPILER		VISUALCPP
+#define	DEVICE			PROCESSOR
+#define	ARCHITECTURE	X64
+#define	OS				WINDOWS
+
+
+// required headers
+#if OS == WINDOWS
+#include <Windows.h>
+#endif // OS == WINDOWS
 
 
 // make support
@@ -62,6 +75,10 @@
 #include "type\char.hpp"
 #include "type\range.hpp"
 #include "type\string.hpp"
+
+
+// math
+#include "math\basic.hpp"
 
 
 // memory

@@ -43,9 +43,9 @@
 
 
 // typeof macro
-#if COMPILER != GCC
+#if COMPILER == VISUALCPP
 #define typeof(expr)	decltype(expr)
-#endif // !GCC
+#endif // COMPILER == VISUALCPP
 
 
 // token to string
@@ -61,9 +61,11 @@
 
 
 // memory barrier (prevents reordering)
+#if COMPILER == GCC
 #ifndef barrier
 #define barrier()		asm volatile("" ::: "memory")
 #endif // !barrier
+#endif // COMPILER == GCC
 
 
 // assembly coding
@@ -74,9 +76,9 @@
 #ifndef line
 #define line(text)		text "\n\t"
 #endif // !line
-#else // VISUALCPP
+#else // COMPILER == VISUALCPP
 #ifndef assembly
-#define assembly		asm
+#define assembly		__asm
 #endif // !assembly
 #ifndef line
 #define line(text)		text

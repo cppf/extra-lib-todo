@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * attrib.hpp - attribute declaration file (GCC only)
+ * attrib.hpp - attribute declaration file
  */
 
 #ifndef _MAKE_ATTRIB_HPP_
@@ -42,67 +42,80 @@
 #include "const.hpp"
 
 
-// GCC attribute definitions only
+// attribute definitions
 #if COMPILER == GCC
 
 // attribute macro
-#define attrib(...)	\
-__attribute__((__VA_ARGS__))
+#define attrib(...)			__attribute__((__VA_ARGS__))
+// security
+#define	error(msg)			attrib(__error__(msg))
+#define	warning(msg)		attrib(__warning__(msg))
+#define outdated(msg)		attrib(__deprecated__(msg))
+// interrupt
+#define	isr					attrib(__signal__)
+#define	longisr				attrib(__interrupt__)
+// properties
+#define	progmem				attrib(__progmem__)
+#define noreturn			attrib(__noreturn__)
+#define	useresult			attrib(__warn_unused_result__)
+#define	readonly			attrib(__pure__)
+#define	readonlyargs		attrib(__const__)
+#define	noexception			attrib(__nothrow__)
+#define	nonnullargs(...)	attrib(__nonnull__(__VA_ARGS__))
+// visibility
+#define	dllref				attrib(__dllimport__)
+#define	dllfunc				attrib(__dllexport__)
+#define	external			attrib(__externally_visible__)
+// optimization
+#define raw					attrib(__naked__)
+#define	used				attrib(__used__)
+#define	unused				attrib(__unused__)
+#define fast				attrib(__optimize__("O3"))
+#define compact				attrib(__optimize__("Os"))
+#define	packed				attrib(__packed__)
+#define	lessused			attrib(__cold__)
+#define	highlyused			attrib(__hot__)
+#define isinline			attrib(__always_inline__)
+#define notinline			attrib(__noinline__)
+#define aligned(amt)		attrib(__aligned__(amt))
+#if DEVICE == PROCESSOR
+#define optimized			fast
+#else
+#define	optimized			compact
+#endif
+// calling convention
+#define	ccall			attrib(__cdecl__)
+#define	cdecl			attrib(__cdecl__)
+#define	stdcall			attrib(__stdcall__)
 
-// standard attributes
-#define aligned(amt)	attrib(__aligned__(amt))
-#define alwaysinline	attrib(__always_inline__)
-#define deprecated(msg)	attrib(__deprecated__(msg))
-#define raw				attrib(__naked__)
-#define noinline		attrib(__noinline__)
-#define noreturn		attrib(__noreturn__)
-#define optimizespeed	attrib(__optimize__("O3"))
-#define optimizesize	attrib(__optimize__("Os"))
-#define optimize		optimizeSize
-#define osmain			attrib(__OS_main__)
-#define ostask			attrib(__OS_task__)
-#define pure			attrib(__pure__)
-#define hot				attrib(__hot__)
-#define cold			attrib(__cold__)
-#define section(name)	attrib(__section__(name))
-#define isrspecial		attrib(__interrupt__)
-#define isr				attrib(__signal__)
-#define ignore			attrib(__unused__)
-#define used			attrib(__used__)
-#define packed			attrib(__packed__)
-#define progmem			attrib(__progmem__)
-// osfn = attrib(section(".boot"), optimize("Os"))
-
-#else // VISUALCPP
+#else // COMPILER == VISUALCPP
 
 // attribute macro
 #define attrib(...)			__declspec(__VA_ARGS__)
+// security
+#define outdated(msg)		attrib(deprecated(msg))
+// properties
+#define noreturn			attrib(noreturn)
+#define	noexception			attrib(nothrow)
+// visibility
+#define	dllref				attrib(dllimport)
+#define	dllfunc				attrib(dllexport)
+// optimization
+#define raw					attrib(naked)
+#define isinline			attrib(__forceinline)
+#define notinline			attrib(noinline)
+#define aligned(amt)		attrib(align(amt))
+// calling convention
+#define	ccall			__cdecl
+#ifndef cdecl
+#define	cdecl			__cdecl
+#endif // !cdecl
+#ifndef stdcall
+#define	stdcall			__stdcall
+#endif // !stdcall
 
-// standard attributes
-#define aligned(amt)
-#define alwaysinline		__forceinline
-#define deprecated(msg)
-#define raw
-#define noinline
-#define noreturn
-#define optimizespeed
-#define optimizesize
-#define optimize
-#define osmain
-#define ostask
-#define pure
-#define hot
-#define cold
-#define section(name)
-#define isrspecial
-#define isr
-#define ignore
-#define used
-#define packed
-#define progmem
-// osfn = 
 
-#endif // GCC
+#endif // COMPILER == GCC
 
 
 #endif /* _MAKE_ATTRIB_HPP_ */

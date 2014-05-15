@@ -56,6 +56,18 @@
 #endif // !CONTROLLER
 
 
+// ARCHITECTURE
+#ifndef X86
+#define	X86			0x0020
+#endif // !X86
+#ifndef X64
+#define	X64			0x0021
+#endif // !X64
+#ifndef AVR
+#define	AVR			0x0022
+#endif // !AVR
+
+
 // OS
 #ifndef NONE
 #define	NONE		0x0020

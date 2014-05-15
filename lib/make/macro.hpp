@@ -42,10 +42,10 @@
 #define	macro_Begin			({
 #define	macro_End			})
 #define macro_Return(var)	(var)
-#else // VISUALCPP
+#else // COMPILER == VISUALCPP
 #define	macro_Begin			do{
 #define	macro_End			}while(0)
-#endif
+#endif // COMPILER == GCC
 #endif // !macro_Fn
 
 

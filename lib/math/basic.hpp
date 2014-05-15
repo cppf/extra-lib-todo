@@ -29,13 +29,16 @@
  *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ----------------------------------------------------------------------- */
-
 /* 
  * basic.hpp - basic math functions
  */
 
 #ifndef _MATH_BASIC_HPP_
 #define _MATH_BASIC_HPP_
+
+
+// header config
+#define	_USE_MATH_DEFINES
 
 
 // required headers
@@ -45,107 +48,221 @@
 
 
 // constants
-#define	math_e				M_E
-#define	math_log2e			M_LOG2E
-#define	math_log10e			M_LOG10E
-#define	math_ln2			M_LN2
-#define	math_ln10			M_LN10
-#define	math_pi				M_PI
-#define	math_pi_by_2		M_PI_2
-#define	math_pi_by_4		M_PI_4
-#define	math_1_by_pi		M_1_PI
-#define	math_2_by_pi		M_2_PI
-#define	math_2_by_sqrt_pi	M_2_SQRTPI
-#define	math_sqrt_2			M_SQRT2
-#define	math_sqrt_1_by_2	M_SQRT1_2
-#define	math_nan			NAN
-#define	math_infinity		INFINITY
-#define	math_inf			INFINITY
+#define	E				M_E
+#define	LOG2_BASE_E		M_LOG2E
+#define	LOG10_BASE_E	M_LOG10E
+#define	LN2				M_LN2
+#define	LN10			M_LN10
+#define	PI				M_PI
+#define	PI_BY_2			M_PI_2
+#define	PI_BY_4			M_PI_4
+#define	ONE_BY_PI		M_1_PI
+#define	TWO_BY_PI		M_2_PI
+#define	TWO_BY_SQRT_PI	M_2_SQRTPI
+#define	SQRT_2			M_SQRT2
+#define	SQRT_1_BY_2		M_SQRT1_2
+#ifdef ININITY
+#define	INF				INFINITY
+#endif // ININITY
 
 
 // functions
-#define	math_Cos			cos
-#define	math_Sin			sin
-#define	math_Tan			tan
-#define	math_Mod			fmod
-#define	math_Sqrt			sqrt
-#define	math_CubeRoot		cbrt
-#define	math_Cbrt			cbrt
-#define	math_Hypotenuse		hypot
-#define	math_Hypot			hypot
-#define	math_Floor			floor
-#define	math_Ceil			ceil
-#define	math_Exp			exp
-#define	math_Cosh			cosh
-#define	math_Sinh			sinh
-#define	math_Tanh			tanh
-#define	math_Acos			acos
-#define	math_CosInv			acos
-#define	math_Asin			asin
-#define	math_SinInv			asin
-#define	math_Atan			atan
-#define	math_TanInv			atan
-#define	math_Atan2			atan2
-#define	math_TanInv2		atan2
-#define	math_Log			log
-#define	math_Log10			log10
-#define	math_Pow			pow
-#define	math_IsNan			isnan
-#define	math_IsInf			isinf
-#define	math_IsFinite		isfinite
+#define	Cos(x)			cos(x)
+#define	Sin(x)			sin(x)
+#define	Tan(x)			tan(x)
+template <typename T>
+inline T Cos(T x) 
+{
+	return cos(x);
+}
+
+template <typename T>
+inline T Sin(T x)
+{
+	return sin(x);
+}
+
+template <typename T>
+inline T Tan(T x)
+{
+	return tan(x);
+}
+
+template <typename T>
+inline T Mod(T x, T y)
+{
+	return fmod(x, y);
+}
+
+template <typename T>
+inline T Sqrt(T x)
+{
+	return sqrt(x);
+}
+
+template <typename T>
+inline T CubeRoot(T x)
+{
+	return cbrt(x);
+}
+
+template <typename T>
+inline T Hypotenuse(T x, T y)
+{
+	return hypot(x, y);
+}
+
+template <typename T>
+inline T Floor(T x)
+{
+	return floor(x);
+}
+
+template <typename T>
+inline T Ceil(T x)
+{
+	return ceil(x);
+}
+
+template <typename T>
+inline T Exp(T x)
+{
+	return exp(x);
+}
+
+template <typename T>
+inline T Cosh(T x)
+{
+	return cosh(x);
+}
+
+template <typename T>
+inline T Sinh(T x)
+{
+	return sinh(x);
+}
+
+template <typename T>
+inline T Tanh(T x)
+{
+	return tanh(x);
+}
+
+template <typename T>
+inline T CosInv(T x)
+{
+	return acos(x);
+}
+
+template <typename T>
+inline T SinInv(T x)
+{
+	return asin(x);
+}
+
+template <typename T>
+inline T TanInv(T x)
+{
+	return atan(x);
+}
+
+template <typename T>
+inline T TanInv2(T y, T x)
+{
+	return atan2(y, x);
+}
+
+template <typename T>
+inline T Log(T x)
+{
+	return log(x);
+}
+
+template <typename T>
+inline T Log10(T x)
+{
+	return log10(x);
+}
+
+template <typename T>
+inline T Pow(T x, T y)
+{
+	return pow(x, y);
+}
 
 
 // maximum of values
-#define	math_Max2(val1, val2)	\
-(((val1) > (val2))? (val1) : (val2))
+template <typename T>
+inline T Max(T a, T b)
+{
+	return (a > b)? a : b;
+}
 
-#define	math_Max3(val1, val2, val3)	\
-math_Max2(math_Max2(val1, val2), val3)
+template <typename T>
+inline T Max(T a, T b, T c)
+{
+	return Max(Max(a, b), c);
+}
 
-#define	math_Max4(val1, val2, val3, val4)	\
-math_Max2(math_Max2(val1, val2), math_Max2(val3, val4))
-
-#define	math_Max(...)	\
-macro_Fn(macro_Fn4(__VA_ARGS__, math_Max4, math_Max3, math_Max2)(__VA_ARGS__))
+template <typename T>
+inline T Max(T a, T b, T c, T d)
+{
+	return Max(Max(a, b), Max(c, d));
+}
 
 
 // minimum of values
-#define	math_Min2(val1, val2)	\
-(((val1) < (val2))? (val1) : (val2))
+template <typename T>
+inline T Min(T a, T b)
+{
+	return (a < b)? a : b;
+}
 
-#define	math_Min3(val1, val2, val3)	\
-math_Min2(math_Min2(val1, val2), val3)
+template <typename T>
+inline T Min(T a, T b, T c)
+{
+	return Min(Min(a, b), c);
+}
 
-#define	math_Min4(val1, val2, val3, val4)	\
-math_Min2(math_Min2(val1, val2), math_Min2(val3, val4))
-
-#define	math_min(...)	\
-macro_Fn(macro_Fn4(__VA_ARGS__, math_Min4, math_Min3, math_Min2)(__VA_ARGS__))
+template <typename T>
+inline T Min(T a, T b, T c, T d)
+{
+	return Min(Min(a, b), Min(c, d));
+}
 
 
 // absolute value
-#define	math_Abs(val)	\
-(((val) > 0)? (val) : -(val))
+template <typename T>
+inline T Abs(T a)
+{
+	return (a < 0)? -a : a;
+}
 
 
-// value sign
-#define	math_Sign(val)	\
-(((val) >= 0)? (((val) > 0)? 1 : 0) : -1)
+// sign of value
+template <typename T>
+inline T Sign(T a)
+{
+	return (a >= 0)? ((a > 0)? 1 : 0) : -1;
+}
 
 
 // square
-#define	math_Sqr(val)	\
-((val)*(val))
+template <typename T>
+inline T Sqr(T a)
+{
+	return a;
+}
 
 
 // base 2 logarithm
-uword math_Log2(uint val);
-uword math_Log2(uint val)
+template <typename T>
+T Log2(T a)
 {
-	uword log2 = (uword)-1;
-	while(val)
+	T log2 = (T)-1;
+	while(a)
 	{
-		val >>= 1;
+		a >>= 1;
 		log2++;
 	}
 	return log2;
@@ -153,8 +270,14 @@ uword math_Log2(uint val)
 
 
 // power of 2
-#define	math_Exp2(val)	\
-(1 << (val))
+template <typename T>
+inline T Exp2(T a) 
+{
+	return 1 << a;
+}
+
+
+} // namespace math
 
 
 #endif /* _MATH_BASIC_HPP_ */
