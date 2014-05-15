@@ -67,171 +67,43 @@
 
 
 // functions
-#define	Cos(x)			cos(x)
-#define	Sin(x)			sin(x)
-#define	Tan(x)			tan(x)
-template <typename T>
-inline T Cos(T x) 
-{
-	return cos(x);
-}
-
-template <typename T>
-inline T Sin(T x)
-{
-	return sin(x);
-}
-
-template <typename T>
-inline T Tan(T x)
-{
-	return tan(x);
-}
-
-template <typename T>
-inline T Mod(T x, T y)
-{
-	return fmod(x, y);
-}
-
-template <typename T>
-inline T Sqrt(T x)
-{
-	return sqrt(x);
-}
-
-template <typename T>
-inline T CubeRoot(T x)
-{
-	return cbrt(x);
-}
-
-template <typename T>
-inline T Hypotenuse(T x, T y)
-{
-	return hypot(x, y);
-}
-
-template <typename T>
-inline T Floor(T x)
-{
-	return floor(x);
-}
-
-template <typename T>
-inline T Ceil(T x)
-{
-	return ceil(x);
-}
-
-template <typename T>
-inline T Exp(T x)
-{
-	return exp(x);
-}
-
-template <typename T>
-inline T Cosh(T x)
-{
-	return cosh(x);
-}
-
-template <typename T>
-inline T Sinh(T x)
-{
-	return sinh(x);
-}
-
-template <typename T>
-inline T Tanh(T x)
-{
-	return tanh(x);
-}
-
-template <typename T>
-inline T CosInv(T x)
-{
-	return acos(x);
-}
-
-template <typename T>
-inline T SinInv(T x)
-{
-	return asin(x);
-}
-
-template <typename T>
-inline T TanInv(T x)
-{
-	return atan(x);
-}
-
-template <typename T>
-inline T TanInv2(T y, T x)
-{
-	return atan2(y, x);
-}
-
-template <typename T>
-inline T Log(T x)
-{
-	return log(x);
-}
-
-template <typename T>
-inline T Log10(T x)
-{
-	return log10(x);
-}
-
-template <typename T>
-inline T Pow(T x, T y)
-{
-	return pow(x, y);
-}
+#define	Cos(x)				cos(x)
+#define	Sin(x)				sin(x)
+#define	Tan(x)				tan(x)
+#define	Mod(x, y)			fmod(x, y)
+#define	Sqrt(x)				sqrt(x)
+#define	Hypotenuse(x, y)	hypot(x, y)
+#define	Floor(x)			floor(x)
+#define	Ceil(x)				ceil(x)
+#define	Exp(x)				exp(x)
+#define	Cosh(x)				cosh(x)
+#define	Sinh(x)				sinh(x)
+#define	Tanh(x)				tanh(x)
+#define	CosInv(x)			acos(x)
+#define	SinInv(x)			asin(x)
+#define	TanInv(x)			atan(x)
+#define	TanInv2(y, x)		atan2(y, x)
+#define	Log(x)				log(x)
+#define	Log10(x)			log10(x)
+#define	Pow(x, y)			pow(x, y)
 
 
 // maximum of values
-template <typename T>
-inline T Max(T a, T b)
-{
-	return (a > b)? a : b;
-}
-
-template <typename T>
-inline T Max(T a, T b, T c)
-{
-	return Max(Max(a, b), c);
-}
-
-template <typename T>
-inline T Max(T a, T b, T c, T d)
-{
-	return Max(Max(a, b), Max(c, d));
-}
+#define	Max2(a, b)			( ((a) > (b)) ? (a) : (b) )
+#define	Max3(a, b, c)		Max2(Max2(a, b), c)
+#define	Max4(a, b, c, d)	Max2(Max2(a, b), Max2(c, d))
+#define	Max(...)			macro_Fn(macro_Fn4(__VA_ARGS__, Max4, Max3, Max2)(__VA_ARGS__))
 
 
 // minimum of values
-template <typename T>
-inline T Min(T a, T b)
-{
-	return (a < b)? a : b;
-}
-
-template <typename T>
-inline T Min(T a, T b, T c)
-{
-	return Min(Min(a, b), c);
-}
-
-template <typename T>
-inline T Min(T a, T b, T c, T d)
-{
-	return Min(Min(a, b), Min(c, d));
-}
+#define	Min2(a, b)			( ((a) < (b)) ? (a) : (b) )
+#define	Min3(a, b, c)		Min2(Min2(a, b), c)
+#define	Min4(a, b, c, d)	Min2(Min2(a, b), Min2(c, d))
+#define	Min(...)			macro_Fn(macro_Fn4(__VA_ARGS__, Min4, Min3, Min2)(__VA_ARGS__))
 
 
 // absolute value
+#define	Abs(a)				( ((a) < 0)? -(a) : (a) )
 template <typename T>
 inline T Abs(T a)
 {
