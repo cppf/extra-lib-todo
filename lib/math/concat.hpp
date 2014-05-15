@@ -43,76 +43,76 @@
 
 
 // concat numbers
-#define math_Concat2(v1, v0, sft)	\
+#define Concat2(v1, v0, sft)	\
 (((v1) << (sft)) | (v0))
 
-#define math_Concat3(v2, v1, v0, sft)	\
-math_Concat2(math_Concat2(v2, v1, sft), v0, sft)
+#define Concat3(v2, v1, v0, sft)	\
+Concat2(Concat2(v2, v1, sft), v0, sft)
 
-#define math_Concat4(v3, v2, v1, v0, sft)	\
-math_Concat2(math_Concat3(v3, v2, v1, sft), v0, sft)
+#define Concat4(v3, v2, v1, v0, sft)	\
+Concat2(Concat3(v3, v2, v1, sft), v0, sft)
 
-#define math_Concat5(v4, v3, v2, v1, v0, sft)	\
-math_Concat2(math_Concat4(v4, v3, v2, v1, sft), v0, sft)
+#define Concat5(v4, v3, v2, v1, v0, sft)	\
+Concat2(Concat4(v4, v3, v2, v1, sft), v0, sft)
 
-#define math_Concat6(v5, v4, v3, v2, v1, v0, sft)	\
-math_Concat2(math_Concat3(v5, v4, v3, v2, v1, sft), v0, sft)
+#define Concat6(v5, v4, v3, v2, v1, v0, sft)	\
+Concat2(Concat3(v5, v4, v3, v2, v1, sft), v0, sft)
 
-#define math_Concat7(v6, v5, v4, v3, v2, v1, v0, sft)	\
-math_Concat2(math_Concat3(v6, v5, v4, v3, v2, v1, sft), v0, sft)
+#define Concat7(v6, v5, v4, v3, v2, v1, v0, sft)	\
+Concat2(Concat3(v6, v5, v4, v3, v2, v1, sft), v0, sft)
 
-#define math_Concat8(v7, v6, v5, v4, v3, v2, v1, v0, sft)	\
-math_Concat2(math_Concat3(v7, v6, v5, v4, v3, v2, v1, sft), v0, sft)
+#define Concat8(v7, v6, v5, v4, v3, v2, v1, v0, sft)	\
+Concat2(Concat3(v7, v6, v5, v4, v3, v2, v1, sft), v0, sft)
 
-#define	math_Concat(...)	\
-macro_Fn(macro_Fn9(__VA_ARGS__, math_Concat8, math_Concat7, math_Concat6, math_Concat5, math_Concat4, math_Concat3, math_Concat2)(__VA_ARGS__))
+#define	Concat(...)	\
+macro_Fn(macro_Fn9(__VA_ARGS__, Concat8, Concat7, Concat6, Concat5, Concat4, Concat3, Concat2)(__VA_ARGS__))
 
 
 // form value
-#define math_MakeInt8n(v1, v0)	\
-math_Concat(v1, v0, 4)
+#define MakeInt8n(v1, v0)	\
+Concat(v1, v0, 4)
 
-#define	math_MakeInt8b(v7, v6, v5, v4, v3, v2, v1, v0)	\
-math_Concat(v7, v6, v5, v4, v3, v2, v1, v0, 1)
+#define	MakeInt8b(v7, v6, v5, v4, v3, v2, v1, v0)	\
+Concat(v7, v6, v5, v4, v3, v2, v1, v0, 1)
 
-#define math_MakeInt8(...)	\
-macro_Fn(macro_Fn8(__VA_ARGS__, math_MakeInt8b, _7, _6, _5, _4, _3, math_MakeInt8n)(__VA_ARGS__))
+#define MakeInt8(...)	\
+macro_Fn(macro_Fn8(__VA_ARGS__, MakeInt8b, _7, _6, _5, _4, _3, MakeInt8n)(__VA_ARGS__))
 
-#define math_MakeUint8	\
-math_MakeInt8
+#define MakeUint8	\
+MakeInt8
 
-#define	math_MakeInt16(v1, v0)	\
-math_Concat(v1, v0, 8)
+#define	MakeInt16(v1, v0)	\
+Concat(v1, v0, 8)
 
-#define math_MakeUint16	\
-math_MakeInt16
+#define MakeUint16	\
+MakeInt16
 
-#define math_MakeInt32_4(v3, v2, v1, v0)	\
-math_Concat(v3,v2, v1, v0, 8)
+#define MakeInt32_4(v3, v2, v1, v0)	\
+Concat(v3,v2, v1, v0, 8)
 
-#define	math_MakeInt32_2(v1, v0)	\
-math_Concat(v1, v0, 16)
+#define	MakeInt32_2(v1, v0)	\
+Concat(v1, v0, 16)
 
-#define math_MakeInt32(...)	\
-macro_Fn(macro_Fn4(__VA_ARGS__, math_MakeInt32_4, _3, math_MakeInt32_2)(__VA_ARGS__))
+#define MakeInt32(...)	\
+macro_Fn(macro_Fn4(__VA_ARGS__, MakeInt32_4, _3, MakeInt32_2)(__VA_ARGS__))
 
-#define	math_MakeUint32	\
-math_MakeInt32
+#define	MakeUint32	\
+MakeInt32
 
-#define math_MakeInt64_8(v7, v6, v5, v4, v3, v2, v1, v0)	\
-math_Concat(v7, v6, v5, v4, v3, v2, v1, v0, 8)
+#define MakeInt64_8(v7, v6, v5, v4, v3, v2, v1, v0)	\
+Concat(v7, v6, v5, v4, v3, v2, v1, v0, 8)
 
-#define math_MakeInt64_4(v3, v2, v1, v0)	\
-math_Concat(v3, v2, v1, v0, 16)
+#define MakeInt64_4(v3, v2, v1, v0)	\
+Concat(v3, v2, v1, v0, 16)
 
-#define math_MakeInt64_2(v1, v0)	\
-math_Concat(v1, v0, 32)
+#define MakeInt64_2(v1, v0)	\
+Concat(v1, v0, 32)
 
-#define math_MakeInt64(...)	\
-macro_Fn(macro_Fn8(__VA_ARGS__, math_MakeInt64_8, _7, _6, _5, math_MakeInt64_4, _3, math_MakeInt64_2)(__VA_ARGS__))
+#define MakeInt64(...)	\
+macro_Fn(macro_Fn8(__VA_ARGS__, MakeInt64_8, _7, _6, _5, MakeInt64_4, _3, MakeInt64_2)(__VA_ARGS__))
 
-#define math_MakeUint64	\
-math_MakeInt64
+#define MakeUint64	\
+MakeInt64
 
 
 #endif /* _MATH_CONCAT_HPP_ */

@@ -40,6 +40,7 @@
 
 // required headers
 #include "..\make\macro.hpp"
+#include "..\type\basic.hpp"
 
 
 // form value by ones
@@ -103,8 +104,11 @@ bit_Clear
 
 
 // write bit (to 0/1)
-#define	bit_Write(dst, bit_no, bit_value)	\
-((dst) = ((dst) & ~(1 << (bit_no))) | ((bit_value) << (bit_no)))
+template <typename T>
+inline void bit_Write(T& dst, byte bitNo, byte bitVal)
+{
+	dst = (dst & ~(1 << bitNo)) | (bitVal << bitNo);
+}
 
 #define bit_Put	\
 bit_Write

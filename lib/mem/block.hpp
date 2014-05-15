@@ -125,7 +125,7 @@ inline void* mem_ReAlloc4F(void* ptr, uint size, uint flags)
 #define	mem_ReAlloc2(ptr, size)					realloc(ptr, size)
 #endif
 
-#define	mem_Alloc(...)	\
+#define	mem_ReAlloc(...)	\
 macro_Fn(macro_Fn4(__VA_ARGS__, mem_ReAlloc4, mem_ReAlloc3, mem_ReAlloc2)(__VA_ARGS__))
 
 

@@ -36,7 +36,13 @@
 
 #ifndef _MEM_EEPROM_HPP_
 #define _MEM_EEPROM_HPP_
-#if DEVICE == AVR
+
+
+// required headers
+#include "..\make\const.hpp"
+
+
+#if ARCHITECTURE == AVR
 
 
 namespace mem

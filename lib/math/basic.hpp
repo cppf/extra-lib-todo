@@ -89,21 +89,46 @@
 
 
 // maximum of values
-#define	Max2(a, b)			( ((a) > (b)) ? (a) : (b) )
-#define	Max3(a, b, c)		Max2(Max2(a, b), c)
-#define	Max4(a, b, c, d)	Max2(Max2(a, b), Max2(c, d))
-#define	Max(...)			macro_Fn(macro_Fn4(__VA_ARGS__, Max4, Max3, Max2)(__VA_ARGS__))
+template <typename T>
+inline T Max(T a, T b)
+{
+	return (a > b)? a : b;
+}
+
+template <typename T>
+inline T Max(T a, T b, T c)
+{
+	return Max(Max(a, b), c);
+}
+
+template <typename T>
+inline T Max(T a, T b, T c, T d)
+{
+	return Max(Max(a, b), Max(c, d));
+}
 
 
 // minimum of values
-#define	Min2(a, b)			( ((a) < (b)) ? (a) : (b) )
-#define	Min3(a, b, c)		Min2(Min2(a, b), c)
-#define	Min4(a, b, c, d)	Min2(Min2(a, b), Min2(c, d))
-#define	Min(...)			macro_Fn(macro_Fn4(__VA_ARGS__, Min4, Min3, Min2)(__VA_ARGS__))
+template <typename T>
+inline T Min(T a, T b)
+{
+	return (a < b)? a : b;
+}
+
+template <typename T>
+inline T Min(T a, T b, T c)
+{
+	return Min(Min(a, b), c);
+}
+
+template <typename T>
+inline T Min(T a, T b, T c, T d)
+{
+	return Min(Min(a, b), Min(c, d));
+}
 
 
 // absolute value
-#define	Abs(a)				( ((a) < 0)? -(a) : (a) )
 template <typename T>
 inline T Abs(T a)
 {
@@ -123,7 +148,7 @@ inline T Sign(T a)
 template <typename T>
 inline T Sqr(T a)
 {
-	return a;
+	return a*a;
 }
 
 
