@@ -31,80 +31,83 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * basic.hpp - basic type definitions
+ * achar.hpp - ascii character
  */
 
-#ifndef	_TYPE_BASIC_HPP_
-#define	_TYPE_BASIC_HPP_
+#ifndef _TYPE_ACHAR_HPP_
+#define _TYPE_ACHAR_HPP_
+
+
+// required headers
+#include "basic.hpp"
+#include "char.hpp"
 
 
 namespace wind
 {
 
 
-// basic values
-#ifndef NULL
-#define NULL	(0)
-#endif // !null
-
-#ifndef TRUE
-#define	TRUE	(1)
-#define	FALSE	(0)
-#endif // !true
+// ascii character class
+// can be type casted to char
+// provides associated functions
+class achar
+{
+public:
 
 
-// character types
-typedef wchar_t			wchar;
-#define	wcharof(str)	L##str
-#if CHAR_MODE == ASCII
-typedef char			tchar;
-#define	tcharof(str)	str
-#else // UNICODE
-typedef wchar			tchar;
-#define	tcharof(str)	L##str
-#endif
+	// achar value
+	char Value;
 
 
-// size-specific integers
-typedef	signed char			int8;
-typedef	unsigned char		uint8;
-typedef	short				int16;
-typedef	unsigned short		uint16;
-typedef	long				int32;
-typedef	unsigned long		uint32;
-typedef	long long			int64;
-typedef	unsigned long long	uint64;
+	// for type conversion
+	inline achar()
+	{ Value = '\0'; }
+
+	inline achar(char ch)
+	{ Value = ch; }
+
+	inline void operator=(char ch)
+	{ Value = ch; }
+
+	inline operator char() const
+	{ return Value; }
+
+	// achar functions
+	inline bool IsLowerCase() const
+	{ return char_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return char_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return char_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return char_IsDigit(Value); }
+
+	inline bool IsBlank() const
+	{ return char_IsBlank(Value); }
+
+	inline bool IsSpace() const
+	{ return char_IsSpace(Value); }
+
+	inline achar GetLowerCase() const
+	{ return (achar) char_GetLowerCase(Value); }
+
+	inline achar GetUpperCase() const
+	{ return (achar) char_GetUpperCase(Value); }
+
+	inline wchar GetWchar() const
+	{ return char_GetWchar(Value); }
+
+	inline tchar GetTchar() const
+	{ return char_GetTchar(Value); }
 
 
-// word size integer
-#ifndef word
-#if WORD_SIZE == 8
-typedef	int8	word;
-typedef	uint8	uword;
-#elif WORD_SIZE == 16
-typedef	int16	word;
-typedef	uint16	uword;
-#elif WORD_SIZE == 32
-typedef int32	word;
-typedef uint32	uword;
-#else // 64
-typedef int64	word;
-typedef uint64	uword;
-#endif
-#endif // !word
-
-
-// named types
-#ifndef byte
-typedef	unsigned char	byte;
-typedef	unsigned char	ubyte;
-#endif // !byte
-typedef unsigned short	ushort;
-typedef unsigned int	uint;
-typedef unsigned long	ulong;
+}; // end class achar
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_BASIC_HPP_ */
+#endif /* _TYPE_ACHAR_HPP_ */

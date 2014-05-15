@@ -31,80 +31,86 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * basic.hpp - basic type definitions
+ * vchar.hpp - varaible character (ascii / unicode)
  */
 
-#ifndef	_TYPE_BASIC_HPP_
-#define	_TYPE_BASIC_HPP_
+#ifndef _TYPE_VCHAR_HPP_
+#define _TYPE_VCHAR_HPP_
+
+
+// required headers
+#include "basic.hpp"
+#include "tchar.hpp"
 
 
 namespace wind
 {
 
 
-// basic values
-#ifndef NULL
-#define NULL	(0)
-#endif // !null
-
-#ifndef TRUE
-#define	TRUE	(1)
-#define	FALSE	(0)
-#endif // !true
+// variable character class
+// can be type casted to thcar
+// provides associated functions
+class vchar
+{
+public:
 
 
-// character types
-typedef wchar_t			wchar;
-#define	wcharof(str)	L##str
-#if CHAR_MODE == ASCII
-typedef char			tchar;
-#define	tcharof(str)	str
-#else // UNICODE
-typedef wchar			tchar;
-#define	tcharof(str)	L##str
-#endif
+	// vchar value
+	tchar Value;
 
 
-// size-specific integers
-typedef	signed char			int8;
-typedef	unsigned char		uint8;
-typedef	short				int16;
-typedef	unsigned short		uint16;
-typedef	long				int32;
-typedef	unsigned long		uint32;
-typedef	long long			int64;
-typedef	unsigned long long	uint64;
+	// for type conversion
+	inline vchar()
+	{ Value = tcharof('\0'); }
+
+	inline vchar(tchar ch)
+	{ Value = ch; }
+
+	inline void operator=(char ch)
+	{ Value = (tchar) ch; }
+
+	inline void operator=(tchar ch)
+	{ Value = ch; }
+
+	inline operator tchar() const
+	{ return Value; }
+
+	// achar functions
+	inline bool IsLowerCase() const
+	{ return tchar_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return tchar_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return tchar_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return tchar_IsDigit(Value); }
+
+	inline bool IsBlank() const
+	{ return tchar_IsBlank(Value); }
+
+	inline bool IsSpace() const
+	{ return tchar_IsSpace(Value); }
+
+	inline vchar GetLowerCase() const
+	{ return (vchar) tchar_GetLowerCase(Value); }
+
+	inline vchar GetUpperCase() const
+	{ return (vchar) tchar_GetUpperCase(Value); }
+
+	inline char GetChar() const
+	{ return tchar_GetChar(Value); }
+
+	inline wchar GetWchar() const
+	{ return tchar_GetWchar(Value); }
 
 
-// word size integer
-#ifndef word
-#if WORD_SIZE == 8
-typedef	int8	word;
-typedef	uint8	uword;
-#elif WORD_SIZE == 16
-typedef	int16	word;
-typedef	uint16	uword;
-#elif WORD_SIZE == 32
-typedef int32	word;
-typedef uint32	uword;
-#else // 64
-typedef int64	word;
-typedef uint64	uword;
-#endif
-#endif // !word
-
-
-// named types
-#ifndef byte
-typedef	unsigned char	byte;
-typedef	unsigned char	ubyte;
-#endif // !byte
-typedef unsigned short	ushort;
-typedef unsigned int	uint;
-typedef unsigned long	ulong;
+}; // end class achar
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_BASIC_HPP_ */
+#endif /* _TYPE_VCHAR_HPP_ */

@@ -31,80 +31,54 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * basic.hpp - basic type definitions
+ * wchar.hpp - wide character functions
  */
 
-#ifndef	_TYPE_BASIC_HPP_
-#define	_TYPE_BASIC_HPP_
+#ifndef _TYPE_WCHAR_HPP_
+#define _TYPE_WCHAR_HPP_
+
+
+// required headers
+#include "basic.hpp"
 
 
 namespace wind
 {
 
 
-// basic values
-#ifndef NULL
-#define NULL	(0)
-#endif // !null
+// wchar functions
+inline bool wchar_IsLowerCase(wchar ch)
+{ return (ch >= L'a') && (ch <= L'z'); }
 
-#ifndef TRUE
-#define	TRUE	(1)
-#define	FALSE	(0)
-#endif // !true
+inline bool wchar_IsUpperCase(wchar ch)
+{ return (ch >= L'A') && (ch <= L'Z'); }
 
+inline bool wchar_IsAlphabet(wchar ch)
+{ return wchar_IsLowerCase(ch) || wchar_IsUpperCase(ch); }
 
-// character types
-typedef wchar_t			wchar;
-#define	wcharof(str)	L##str
-#if CHAR_MODE == ASCII
-typedef char			tchar;
-#define	tcharof(str)	str
-#else // UNICODE
-typedef wchar			tchar;
-#define	tcharof(str)	L##str
-#endif
+inline bool wchar_IsDigit(wchar ch)
+{ return (ch >= L'0') && (ch <= L'9'); }
 
+inline bool wchar_IsBlank(wchar ch)
+{ return (ch == L'\t') || (ch == L' '); }
 
-// size-specific integers
-typedef	signed char			int8;
-typedef	unsigned char		uint8;
-typedef	short				int16;
-typedef	unsigned short		uint16;
-typedef	long				int32;
-typedef	unsigned long		uint32;
-typedef	long long			int64;
-typedef	unsigned long long	uint64;
+inline bool wchar_IsSpace(wchar ch)
+{ return wchar_IsBlank(ch); }
 
+inline wchar wchar_GetLowerCase(wchar ch)
+{ return wchar_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
 
-// word size integer
-#ifndef word
-#if WORD_SIZE == 8
-typedef	int8	word;
-typedef	uint8	uword;
-#elif WORD_SIZE == 16
-typedef	int16	word;
-typedef	uint16	uword;
-#elif WORD_SIZE == 32
-typedef int32	word;
-typedef uint32	uword;
-#else // 64
-typedef int64	word;
-typedef uint64	uword;
-#endif
-#endif // !word
+inline wchar wchar_GetUpperCase(wchar ch)
+{ return wchar_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
 
+inline char wchar_GetChar(wchar ch)
+{ return (char) ch; }
 
-// named types
-#ifndef byte
-typedef	unsigned char	byte;
-typedef	unsigned char	ubyte;
-#endif // !byte
-typedef unsigned short	ushort;
-typedef unsigned int	uint;
-typedef unsigned long	ulong;
+inline tchar wchar_GetTchar(wchar ch)
+{ return (tchar) ch; }
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_BASIC_HPP_ */
+#endif /* _TYPE_WCHAR_HPP_ */

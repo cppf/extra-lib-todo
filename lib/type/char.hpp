@@ -31,44 +31,50 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * char.hpp - character macros
+ * char.hpp - character functions
  */
 
 #ifndef _TYPE_CHAR_HPP_
 #define _TYPE_CHAR_HPP_
 
 
-#define	char_IsLower(ch)	\
-(((ch) >= 'a') && ((ch) <= 'z'))
+namespace wind
+{
 
-#define	char_IsUpper(ch)	\
-(((ch) >= 'A') && ((ch) <= 'Z'))
 
-#define	char_IsAlphabet(ch)		\
-(char_IsUpper(ch) || char_IsLower(ch))
+// char functions
+inline bool char_IsLowerCase(char ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
 
-#define	char_IsDigit(ch)	\
-(((ch) >= '0') && ((ch) <= '9'))
+inline bool char_IsUpperCase(char ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
 
-#define	char_IsAlphabetOrDigit(ch)	\
-(char_IsAlphabet(ch) || char_IsDigit(ch))
+inline bool char_IsAlphabet(char ch)
+{ return char_IsLowerCase(ch) || char_IsUpperCase(ch); }
 
-#define	char_IsBlank(ch)	\
-(((ch) == '\t') || ((ch) == ' '))
+inline bool char_IsDigit(char ch)
+{ return (ch >= '0') && (ch <= '9'); }
 
-#define	char_IsSpace	char_IsBlank
+inline bool char_IsBlank(char ch)
+{ return (ch == '\t') || (ch == ' '); }
 
-#define	char_IsControl(ch)	\
-((byte)(ch) <= (byte)31)
+inline bool char_IsSpace(char ch)
+{ return char_IsBlank(ch); }
 
-#define	char_IsGraphical(ch)	\
-((byte)(ch) >= (byte)128)
+inline char char_GetLowerCase(char ch)
+{ return char_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
 
-#define	char_ToLower(ch)	\
-((char_IsUpper(ch))? (ch - 'A' + 'a') : (ch))
+inline char char_GetUpperCase(char ch)
+{ return char_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
 
-#define	char_ToUpper(ch)	\
-((char_IsLower(ch))? (ch - 'a' + 'A') : (ch))
+inline wchar char_GetWchar(char ch)
+{ return (wchar) ch; }
+
+inline tchar char_GetTchar(char ch)
+{ return (tchar) ch; }
+
+
+} // end namespace wind
 
 
 #endif /* _TYPE_CHAR_HPP_ */

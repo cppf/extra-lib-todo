@@ -31,80 +31,40 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * basic.hpp - basic type definitions
+ * buffer.hpp - basic buffer structure
  */
 
-#ifndef	_TYPE_BASIC_HPP_
-#define	_TYPE_BASIC_HPP_
+#ifndef _DATA_BUFFER_HPP_
+#define _DATA_BUFFER_HPP_
 
 
-namespace wind
+// basic buffer definition
+template <uint size>
+union buffer
 {
+	int8	Int8[1];
+	uint8	Uint8[1];
+	int16	Int16[1];
+	uint16	Uint16[1];
+	int32	Int32[1];
+	uint32	Uint32[1];
+	int64	Int64[1];
+	uint64	Uint64[1];
+	int		Int[1];
+	uint	Uint[1];
+	word	Word[1];
+	uword	Uword[1];
+	byte	Byte[size];
+	ubyte	UByte[1];
+	sbyte	Sbyte[1];
+	char	Char[1];
+	short	Short[1];
+	ushort	Ushort[1];
+	long	Long[1];
+	ulong	Ulong[1];
+	float	Float[1];
+	double	Double[1];
+};
 
 
-// basic values
-#ifndef NULL
-#define NULL	(0)
-#endif // !null
-
-#ifndef TRUE
-#define	TRUE	(1)
-#define	FALSE	(0)
-#endif // !true
-
-
-// character types
-typedef wchar_t			wchar;
-#define	wcharof(str)	L##str
-#if CHAR_MODE == ASCII
-typedef char			tchar;
-#define	tcharof(str)	str
-#else // UNICODE
-typedef wchar			tchar;
-#define	tcharof(str)	L##str
-#endif
-
-
-// size-specific integers
-typedef	signed char			int8;
-typedef	unsigned char		uint8;
-typedef	short				int16;
-typedef	unsigned short		uint16;
-typedef	long				int32;
-typedef	unsigned long		uint32;
-typedef	long long			int64;
-typedef	unsigned long long	uint64;
-
-
-// word size integer
-#ifndef word
-#if WORD_SIZE == 8
-typedef	int8	word;
-typedef	uint8	uword;
-#elif WORD_SIZE == 16
-typedef	int16	word;
-typedef	uint16	uword;
-#elif WORD_SIZE == 32
-typedef int32	word;
-typedef uint32	uword;
-#else // 64
-typedef int64	word;
-typedef uint64	uword;
-#endif
-#endif // !word
-
-
-// named types
-#ifndef byte
-typedef	unsigned char	byte;
-typedef	unsigned char	ubyte;
-#endif // !byte
-typedef unsigned short	ushort;
-typedef unsigned int	uint;
-typedef unsigned long	ulong;
-
-
-} // end namespace wind
-
-
-#endif /* _TYPE_BASIC_HPP_ */
+#endif /* _DATA_BUFFER_HPP_ */

@@ -174,7 +174,4 @@ inline T Exp2(T a)
 }
 
 
-} // namespace math
-
-
 #endif /* _MATH_BASIC_HPP_ */
