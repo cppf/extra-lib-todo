@@ -31,24 +31,48 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * string.hpp - string macros
+ * string.hpp - string functions and wrapper
  */
 
 #ifndef _TYPE_STRING_HPP_
 #define _TYPE_STRING_HPP_
 
 
+// required headers
+#include "..\make\const.hpp"
+#include "basic.hpp"
+#include <string.h>
+
+
+namespace wind
+{
+
+
 // definition
 typedef char*	string;
 
 
-// functions
-#define	string_Length		strlen
-#define	string_Compare		strcmp
-#define	string_ToLower		strlwr
-#define	string_ToUpper		strupr
-#define string_Copy			strcpy
-#define string_Reverse		strrev
+// string functions
+inline int string_Length(const char* str)
+{ return strlen(str); }
+
+inline int string_Compare(const char* str1, const char* str2)
+{ return strcmp(str1, str2); }
+
+inline char* string_ToLower(char* str)
+{ return strlwr(str); }
+
+inline char* string_ToUpper(char* str)
+{ return strupr(str); }
+
+inline char* string_CopyTo(char* dst, const char* src)
+{ return strcpy(dst, src); }
+
+inline char* string_Reverse(char* str)
+{ return strrev(str); }
+
+inline char* string_Concat(char* dst, const char* src)
+{ return NULL; }
 #define string_Concat		strcat
 #define string_Reverse		strrev
 #define string_IndexOfChar	strchr

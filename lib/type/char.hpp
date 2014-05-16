@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * char.hpp - character functions
+ * char.hpp - character functions and wrapper
  */
 
 #ifndef _TYPE_CHAR_HPP_
@@ -72,6 +72,71 @@ inline wchar char_GetWchar(char ch)
 
 inline tchar char_GetTchar(char ch)
 { return (tchar) ch; }
+
+
+// character wrapper class
+// can be type casted to char
+class char_
+{
+public:
+
+
+	// char value
+	char Value;
+
+
+	// for type conversion
+	inline char_()
+	{ Value = '\0'; }
+
+	inline char_(char ch)
+	{ Value = ch; }
+
+	inline void operator=(char ch)
+	{ Value = ch; }
+
+	inline operator char() const
+	{ return Value; }
+
+	// achar functions
+	inline bool IsLowerCase() const
+	{ return char_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return char_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return char_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return char_IsDigit(Value); }
+
+	inline bool IsBlank() const
+	{ return char_IsBlank(Value); }
+
+	inline bool IsSpace() const
+	{ return char_IsSpace(Value); }
+
+	inline char_ GetLowerCase() const
+	{ return (char_) char_GetLowerCase(Value); }
+
+	inline char_ GetUpperCase() const
+	{ return (char_) char_GetUpperCase(Value); }
+
+	inline void ToLowerCase()
+	{ Value = char_GetLowerCase(Value); }
+
+	inline void ToUpperCase()
+	{ Value = char_GetUpperCase(Value); }
+
+	inline wchar GetWchar() const
+	{ return char_GetWchar(Value); }
+
+	inline tchar GetTchar() const
+	{ return char_GetTchar(Value); }
+
+
+}; // end class achar
 
 
 } // end namespace wind

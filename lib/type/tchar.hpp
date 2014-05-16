@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * tchar.hpp - text character functions
+ * tchar.hpp - text character functions and wrapper
  */
 
 #ifndef _TYPE_TCHAR_HPP_
@@ -39,6 +39,7 @@
 
 
 // required headers
+#include "..\make\const.hpp"
 #include "basic.hpp"
 
 
@@ -76,6 +77,76 @@ inline char tchar_GetChar(tchar ch)
 
 inline wchar tchar_GetWchar(tchar ch)
 { return (wchar) ch; }
+
+
+// text character wrapper
+// can be type casted to tchar
+class tchar_
+{
+public:
+
+
+	// vchar value
+	tchar Value;
+
+
+	// for type conversion
+	inline tchar_()
+	{ Value = tcharof('\0'); }
+
+	inline tchar_(tchar ch)
+	{ Value = ch; }
+
+	inline void operator=(char ch)
+	{ Value = (tchar) ch; }
+
+#if CHAR_MODE == UNICODE
+	inline void operator=(tchar ch)
+	{ Value = ch; }
+#endif
+
+	inline operator tchar() const
+	{ return Value; }
+
+	// achar functions
+	inline bool IsLowerCase() const
+	{ return tchar_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return tchar_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return tchar_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return tchar_IsDigit(Value); }
+
+	inline bool IsBlank() const
+	{ return tchar_IsBlank(Value); }
+
+	inline bool IsSpace() const
+	{ return tchar_IsSpace(Value); }
+
+	inline tchar_ GetLowerCase() const
+	{ return (tchar_) tchar_GetLowerCase(Value); }
+
+	inline tchar_ GetUpperCase() const
+	{ return (tchar_) tchar_GetUpperCase(Value); }
+
+	inline void ToLowerCase()
+	{ Value = tchar_GetLowerCase(Value); }
+
+	inline void ToUpperCase()
+	{ Value = tchar_GetUpperCase(Value); }
+
+	inline char GetChar() const
+	{ return tchar_GetChar(Value); }
+
+	inline wchar GetWchar() const
+	{ return tchar_GetWchar(Value); }
+
+
+}; // end class achar
 
 
 } // end namespace wind

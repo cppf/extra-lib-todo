@@ -38,7 +38,7 @@
 #define _MAKE_CONST_HPP_
 
 
-// CHAR_MODE
+// TEXT_MODE
 #ifndef ASCII
 #define	ASCII		0x0000
 #endif // !ASCII
@@ -48,24 +48,14 @@
 
 
 // DEVICE
-#ifndef PROCESSOR
 #define	PROCESSOR	0x0010
-#endif // !PROCESSOR
-#ifndef CONTROLLER
 #define	CONTROLLER	0x0011
-#endif // !CONTROLLER
 
 
 // ARCHITECTURE
-#ifndef X86
 #define	X86			0x0020
-#endif // !X86
-#ifndef X64
 #define	X64			0x0021
-#endif // !X64
-#ifndef AVR
 #define	AVR			0x0022
-#endif // !AVR
 
 
 // OS
@@ -78,12 +68,8 @@
 
 
 // COMPILER
-#ifndef GCC
 #define	GCC			0x0030
-#endif // !GCC
-#ifndef VISUALCPP
 #define	VISUALCPP	0x0031
-#endif // !VISUALCPP
 
 
 #endif /* _MAKE_CONST_HPP_ */

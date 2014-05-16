@@ -38,6 +38,10 @@
 #define _DATA_BUFFER_HPP_
 
 
+// required headers
+#include "..\type\basic.hpp"
+
+
 // basic buffer definition
 template <uint size>
 union buffer

@@ -54,13 +54,13 @@ namespace wind
 
 
 // character types
-typedef wchar_t			wchar;
+typedef	wchar_t			wchar;
 #define	wcharof(str)	L##str
 #if CHAR_MODE == ASCII
-typedef char			tchar;
+#define	tchar			char
 #define	tcharof(str)	str
 #else // UNICODE
-typedef wchar			tchar;
+#define	tchar			wchar
 #define	tcharof(str)	L##str
 #endif
 

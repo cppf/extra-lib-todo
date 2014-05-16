@@ -48,6 +48,10 @@
 #endif
 
 
+namespace wind
+{
+
+
 // memory info
 #if OS == WINDOWS
 HANDLE	mem_Heap;
@@ -64,8 +68,14 @@ inline void mem_Begin()
 
 
 // functions
-#define mem_Set			memset
-#define	mem_Fill		memset
+inline void mem_Set(void* ptr, uword size, byte val)
+{ memset(ptr, val, size); }
+
+inline void mem_Fill(void* ptr, uword size, byte val)
+{ mem_Set(ptr, size, val); }
+
+inline byte mem_Compare(void* ptr, uword size, byte val)
+{  }
 #define mem_Compare		memcmp
 #define mem_Copy		memcpy
 #define mem_Move		memmove
