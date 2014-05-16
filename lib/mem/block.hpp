@@ -68,22 +68,38 @@ inline void mem_Begin()
 
 
 // functions
-inline void mem_Set(void* ptr, uword size, byte val)
-{ memset(ptr, val, size); }
+inline void mem_Set(void* dst, uword size, byte val)
+{ memset(dst, val, size); }
 
-inline void mem_Fill(void* ptr, uword size, byte val)
-{ mem_Set(ptr, size, val); }
+inline void mem_Fill(void* dst, uword size, byte val)
+{ mem_Set(dst, size, val); }
 
-inline byte mem_Compare(void* ptr, uword size, byte val)
-{  }
-#define mem_Compare		memcmp
-#define mem_Copy		memcpy
-#define mem_Move		memmove
-#define mem_IndexOf		memchr
-#define mem_Find		memchr
+inline word mem_Compare(const void* ptr1, const void* ptr2, uword size)
+{ return (byte) memcmp(ptr1, ptr2, size); }
 
-#define	mem_Equals(mem1, mem2, size)	(!mem_Compare(mem1, mem2, size))
-#define	mem_Init(dst, size)				mem_Set(dst, size, 0)
+inline void mem_Copy(void* dst, const void* src, uword size)
+{ memcpy(dst, src, size); }
+
+inline void mem_Copy(void* dst, uword dstSize, const void* src, uword size)
+{ memcpy_s(dst, dstSize, src, size); }
+
+inline void mem_Move(void* dst, const void* src, uword size)
+{ memmove(dst, src, size); }
+
+inline void mem_Move(void* dst, uword dstSize, void* src, uword size)
+{ memmove_s(dst, dstSize, src, size); }
+
+inline void* mem_IndexOf(void* ptr, uword size, byte val)
+{ return memchr(ptr, val, size); }
+
+inline void* mem_Find(void* ptr, uword size, byte val)
+{ return mem_IndexOf(ptr, size, val); }
+
+inline word mem_Equals(const void* ptr1, const void* ptr2, uword size)
+{ return !mem_Compare(ptr1, ptr2, size); }
+
+inline void mem_Init(void* dst, uword size)
+{ mem_Set(dst, size, 0); }
 
 
 // memory flags
@@ -100,69 +116,102 @@ inline byte mem_Compare(void* ptr, uword size, byte val)
 
 // allocate
 #if OS == WINDOWS
-#define	mem_Alloc3(heap, size, flags)	HeapAlloc(heap, flags, size)
-#define	mem_Alloc2(size, flags)			HeapAlloc(mem_Heap, flags, size)
-#define	mem_Alloc1(size)				HeapAlloc(mem_Heap, 0, size)
+inline void* mem_Alloc(HANDLE heap, uint size, uint flags)
+{ return HeapAlloc(heap, flags, size); }
+
+inline void* mem_Alloc(uint size, uint flags)
+{ return mem_Alloc(mem_Heap, size, flags); }
+
+inline void* mem_Alloc(uint size)
+{ return mem_Alloc(mem_Heap, size, 0); }
+
 #else // NONE
-inline void* mem_Alloc3F(uint size, uint flags)
+inline void* mem_Alloc(uint heap, uint size, uint flags)
 {
+	unused(heap);
 	if(flags & INITIALIZE) return calloc(size, 1);
 	else return malloc(size);
 }
-#define	mem_Alloc3(heap, size, flags)	mem_Alloc3F(size, flags)
-#define	mem_Alloc2(size, flags)			mem_Alloc3F(size, flags)
-#define	mem_Alloc1(size)				malloc(size)
-#endif
 
-#define	mem_Alloc(...)	\
-macro_Fn(macro_Fn3(__VA_ARGS__, mem_Alloc3, mem_Alloc2, mem_Alloc1)(__VA_ARGS__))
+inline void* mem_Alloc(uint size, uint flags)
+{ return mem_Alloc(0, size, flags); }
+
+inline void* mem_Alloc(uint size)
+{ return mem_Alloc(0, size, 0); }
+#endif
 
 
 // reallocate
 #if OS == WINDOWS
-#define	mem_ReAlloc4(heap, ptr, size, flags)	HeapReAlloc(heap, flags, ptr, size)
-#define	mem_ReAlloc3(ptr, size, flags)			HeapReAlloc(mem_Heap, flags, ptr, size)
-#define	mem_ReAlloc2(ptr, size)					HeapReAlloc(mem_Heap, 0, ptr, size)
+inline void* mem_ReAlloc(HANDLE heap, void* ptr, uint size, uint flags)
+{ return HeapReAlloc(heap, flags, ptr, size); }
+
+inline void* mem_ReAlloc(void* ptr, uint size, uint flags)
+{ return mem_ReAlloc(mem_Heap, ptr, size, flags); }
+
+inline void* mem_ReAlloc(void* ptr, uint size)
+{ return mem_ReAlloc(mem_Heap, ptr, size, 0); }
+
 #else // NONE
-inline void* mem_ReAlloc4F(void* ptr, uint size, uint flags)
+inline void* mem_ReAlloc(uint heap, void* ptr, uint size, uint flags)
 {
+	unused(heap);
 	ptr = realloc(ptr, size);
 	if(flags & INITIALIZE) mem_Init(ptr, size);
 	return ptr;
 }
-#define	mem_ReAlloc4(heap, ptr, size, flags)	mem_ReAlloc4F(ptr, size, flags)
-#define	mem_ReAlloc3(ptr, size, flags)			mem_ReAlloc4F(ptr, size, flags)
-#define	mem_ReAlloc2(ptr, size)					realloc(ptr, size)
-#endif
 
-#define	mem_ReAlloc(...)	\
-macro_Fn(macro_Fn4(__VA_ARGS__, mem_ReAlloc4, mem_ReAlloc3, mem_ReAlloc2)(__VA_ARGS__))
+inline void* mem_ReAlloc(void* ptr, uint size, uint flags)
+{ return mem_ReAlloc(mem_Heap, ptr, size, flags); }
+
+inline void* mem_ReAlloc(void* ptr, uint size, uint flags)
+{ return mem_ReAlloc(mem_Heap, ptr, size, 0); }
+#endif
 
 
 // free
 #if OS == WINDOWS
-#define	mem_Free2(heap, ptr)	HeapFree(heap, 0, ptr)
-#define	mem_Free1(ptr)			HeapFree(mem_Heap, 0, ptr)
-#else // NONE
-#define	mem_Free2(heap, ptr)	free(ptr)
-#define	mem_Free1(ptr)			free(ptr)
-#endif
+inline void mem_Free(HANDLE heap, void* ptr)
+{ HeapFree(heap, 0, ptr); }
 
-#define	mem_Free(...)	\
-macro_Fn(macro_Fn2(__VA_ARGS__, mem_Free2, mem_Free1))(__VA_ARGS__)
+inline void mem_Free(void* ptr)
+{ mem_Free(mem_Heap, ptr); }
+
+#else // NONE
+
+inline void mem_Free(uint heap, void* ptr)
+{
+	unused(heap);
+	free(ptr);
+}
+
+inline void mem_Free(void* ptr)
+{ mem_Free(ptr); }
+#endif
 
 
 // compact
 #if OS == WINDOWS
-#define	mem_Compact1(heap)		HeapCompact(heap, 0)
-#define	mem_Compact0()			HeapCompact(mem_Heap, 0)
+inline uint mem_Compact(HANDLE heap)
+{ return HeapCompact(heap, 0); }
+
+inline uint mem_Compact()
+{ return mem_Compact(mem_Heap); }
+
 #else
-#define	mem_Compact1(heap)
-#define	mem_Compact0()
+
+inline uint mem_Compact(uint heap)
+{
+	unused(heap);
+	return 0;
+}
+
+inline uint mem_Compact()
+{ return mem_Compact(mem_Heap); }
 #endif
 
-#define	mem_Compact(...)	\
-macro_Fn(macro_Fn1(__VA_ARGS__, mem_Compact1, mem_Compact0))(__VA_ARGS__)
+
+} // end namespace wind
 
 
 #endif /* _MEM_BLOCK_HPP_ */

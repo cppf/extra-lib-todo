@@ -49,8 +49,8 @@
 
 
 // token to string
-#ifndef tostring
-#define tostring(a)		#a
+#ifndef stringof
+#define stringof(a)		#a
 #endif // !tostring
 
 

@@ -60,16 +60,16 @@ inline int string_Compare(const char* str1, const char* str2)
 { return strcmp(str1, str2); }
 
 inline char* string_ToLower(char* str)
-{ return strlwr(str); }
+{ return NULL; /*strlwr(str);*/ }
 
 inline char* string_ToUpper(char* str)
-{ return strupr(str); }
+{ return NULL; /*strupr(str);*/ }
 
 inline char* string_CopyTo(char* dst, const char* src)
-{ return strcpy(dst, src); }
+{ return NULL; /*strcpy(dst, src);*/ }
 
 inline char* string_Reverse(char* str)
-{ return strrev(str); }
+{ return NULL; /*strrev(str);*/ }
 
 inline char* string_Concat(char* dst, const char* src)
 { return NULL; }
@@ -109,6 +109,9 @@ string_Copy((str)+(start), (str)+(stop))
 
 #define string_Remove(...)	\
 macro_Fn(macro_Fn3(__VA_ARGS__, string_Remove3, string_Remove2)(__VA_ARGS__))
+
+
+ } // end namespace wind
 
 
 #endif /* _TYPE_STRING_HPP_ */

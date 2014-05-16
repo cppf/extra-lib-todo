@@ -41,11 +41,12 @@
 // required headers
 #include "..\make\macro.hpp"
 #include "..\make\func.hpp"
+#include "..\type\basic.hpp"
 
 
 // specify byte address
-#define Addr(base, off)	\
-(((char*)(base)) + (off))
+#define byteaddr(base, off)	\
+(((byte*)(base)) + (off))
 
 
 // swap variables
