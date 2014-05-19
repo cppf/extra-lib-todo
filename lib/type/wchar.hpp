@@ -31,73 +31,34 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wchar.hpp - wide character functions and wrapper
+ * wchar.hpp - wide (unicode) character wrapper
  */
 
 #ifndef _TYPE_WCHAR_HPP_
 #define _TYPE_WCHAR_HPP_
 
 
-// required headers
-#include "basic.hpp"
-
-
 namespace wind
 {
 
 
-// wchar functions
-inline bool wchar_IsLowerCase(wchar ch)
-{ return (ch >= L'a') && (ch <= L'z'); }
-
-inline bool wchar_IsUpperCase(wchar ch)
-{ return (ch >= L'A') && (ch <= L'Z'); }
-
-inline bool wchar_IsAlphabet(wchar ch)
-{ return wchar_IsLowerCase(ch) || wchar_IsUpperCase(ch); }
-
-inline bool wchar_IsDigit(wchar ch)
-{ return (ch >= L'0') && (ch <= L'9'); }
-
-inline bool wchar_IsBlank(wchar ch)
-{ return (ch == L'\t') || (ch == L' '); }
-
-inline bool wchar_IsSpace(wchar ch)
-{ return wchar_IsBlank(ch); }
-
-inline wchar wchar_GetLowerCase(wchar ch)
-{ return wchar_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
-
-inline wchar wchar_GetUpperCase(wchar ch)
-{ return wchar_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
-
-inline char wchar_GetChar(wchar ch)
-{ return (char) ch; }
-
-inline tchar wchar_GetTchar(wchar ch)
-{ return (tchar) ch; }
-
-
-// wide character wrapper
+// wide character wrapper class
 // can be type casted to wchar
 class wchar_
 {
 public:
 
 
-	// uchar value
+	// wchar value
 	wchar Value;
 
 
 	// for type conversion
 	inline wchar_()
-	{ Value = L'\0'; }
+	{ Value = '\0'; }
 
 	inline wchar_(wchar ch)
 	{ Value = ch; }
-
-	inline void operator=(char ch)
-	{ Value = (wchar) ch; }
 
 	inline void operator=(wchar ch)
 	{ Value = ch; }
@@ -105,45 +66,42 @@ public:
 	inline operator wchar() const
 	{ return Value; }
 
-	// achar functions
+	// wrapper functionality
 	inline bool IsLowerCase() const
-	{ return wchar_IsLowerCase(Value); }
+	{ return (Value >= L'a') && (Value <= L'z'); }
 
 	inline bool IsUpperCase() const
-	{ return wchar_IsUpperCase(Value); }
+	{ return (Value >= L'A') && (Value <= L'Z'); }
 
 	inline bool IsAlphabet() const
-	{ return wchar_IsAlphabet(Value); }
+	{ return IsLowerCase() || IsUpperCase(); }
 
 	inline bool IsDigit() const
-	{ return wchar_IsDigit(Value); }
+	{ return (Value >= L'0') && (Value <= L'9'); }
 
 	inline bool IsBlank() const
-	{ return wchar_IsBlank(Value); }
+	{ return (Value == L'\t') || (Value == L' '); }
 
 	inline bool IsSpace() const
-	{ return wchar_IsSpace(Value); }
+	{ return IsBlank(); }
 
 	inline wchar_ GetLowerCase() const
-	{ return (wchar_) wchar_GetLowerCase(Value); }
+	{ return (wchar_) IsUpperCase()? (Value - L'A' + L'a') : Value; }
 
 	inline wchar_ GetUpperCase() const
-	{ return (wchar_) wchar_GetUpperCase(Value); }
-
-	inline void ToLowerCase()
-	{ Value = wchar_GetLowerCase(Value); }
-
-	inline void ToUpperCase()
-	{ Value = wchar_GetUpperCase(Value); }
+	{ return (wchar_) IsLowerCase()? (Value - L'a' + L'A') : Value; }
 
 	inline char GetChar() const
-	{ return wchar_GetChar(Value); }
+	{ return (char) Value; }
+
+	inline wchar GetWchar() const
+	{ return Value; }
 
 	inline tchar GetTchar() const
-	{ return wchar_GetTchar(Value); }
+	{ return (tchar) Value; }
 
 
-}; // end class achar
+}; // end class wchar_
 
 
 } // end namespace wind

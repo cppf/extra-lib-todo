@@ -79,7 +79,6 @@ macro_Fn(macro_Fn8(__VA_ARGS__, bit_ValueByOnes8, bit_ValueByOnes7, bit_ValueByO
 #define bit_Get	\
 bit_Read
 
-
 // test / check bit
 #define bit_Test(src, ...)	\
 ((src) & bit_ValueByOnes(__VA_ARGS__))

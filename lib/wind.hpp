@@ -85,7 +85,8 @@
 
 // memory
 #include "mem\basic.hpp"
-#include "mem\block.hpp"
+#include "mem\heap.hpp"
+#include "mem\pointer.hpp"
 
 
 #endif /* _WIND_HPP_ */

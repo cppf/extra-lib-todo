@@ -5,6 +5,9 @@
 // required headers
 #include "const.hpp"
 
+#define	max2(a, b)		2
+#define	max3(a, b, c)	3
+
 
 #ifndef macro_Fn
 // macro overloading support

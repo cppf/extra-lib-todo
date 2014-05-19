@@ -68,37 +68,37 @@ inline void mem_Begin()
 
 
 // functions
-inline void mem_Set(void* dst, uword size, byte val)
+inline void mem_Set(void* dst, uint size, byte val)
 { memset(dst, val, size); }
 
-inline void mem_Fill(void* dst, uword size, byte val)
+inline void mem_Fill(void* dst, uint size, byte val)
 { mem_Set(dst, size, val); }
 
-inline word mem_Compare(const void* ptr1, const void* ptr2, uword size)
+inline word mem_Compare(const void* ptr1, const void* ptr2, uint size)
 { return (byte) memcmp(ptr1, ptr2, size); }
 
-inline void mem_Copy(void* dst, const void* src, uword size)
+inline void mem_Copy(void* dst, const void* src, uint size)
 { memcpy(dst, src, size); }
 
-inline void mem_Copy(void* dst, uword dstSize, const void* src, uword size)
+inline void mem_Copy(void* dst, uint dstSize, const void* src, uint size)
 { memcpy_s(dst, dstSize, src, size); }
 
-inline void mem_Move(void* dst, const void* src, uword size)
+inline void mem_Move(void* dst, const void* src, uint size)
 { memmove(dst, src, size); }
 
-inline void mem_Move(void* dst, uword dstSize, void* src, uword size)
+inline void mem_Move(void* dst, uint dstSize, const void* src, uint size)
 { memmove_s(dst, dstSize, src, size); }
 
-inline void* mem_IndexOf(void* ptr, uword size, byte val)
+inline void* mem_IndexOf(void* ptr, uint size, byte val)
 { return memchr(ptr, val, size); }
 
-inline void* mem_Find(void* ptr, uword size, byte val)
+inline void* mem_Find(void* ptr, uint size, byte val)
 { return mem_IndexOf(ptr, size, val); }
 
-inline word mem_Equals(const void* ptr1, const void* ptr2, uword size)
+inline bool mem_Equals(const void* ptr1, const void* ptr2, uint size)
 { return !mem_Compare(ptr1, ptr2, size); }
 
-inline void mem_Init(void* dst, uword size)
+inline void mem_Init(void* dst, uint size)
 { mem_Set(dst, size, 0); }
 
 

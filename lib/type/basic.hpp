@@ -57,10 +57,10 @@ namespace wind
 typedef	wchar_t			wchar;
 #define	wcharof(str)	L##str
 #if CHAR_MODE == ASCII
-#define	tchar			char
+typedef char			tchar;
 #define	tcharof(str)	str
 #else // UNICODE
-#define	tchar			wchar
+typedef wchar			tchar;
 #define	tcharof(str)	L##str
 #endif
 
@@ -85,7 +85,7 @@ typedef	uint8	uword;
 typedef	int16	word;
 typedef	uint16	uword;
 #elif WORD_SIZE == 32
-typedef int32	word;
+  typedef int32	word;
 typedef uint32	uword;
 #else // 64
 typedef int64	word;
@@ -97,7 +97,7 @@ typedef uint64	uword;
 // named types
 #ifndef byte
 typedef	unsigned char	byte;
-typedef	unsigned char	ubyte;
+typedef	signed char		sbyte;
 #endif // !byte
 typedef unsigned short	ushort;
 typedef unsigned int	uint;
