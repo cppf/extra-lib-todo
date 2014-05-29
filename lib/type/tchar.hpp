@@ -40,6 +40,8 @@
 
 // required headers
 #include "..\make\const.hpp"
+#include "char.hpp"
+#include "wchar.hpp"
 
 
 namespace wind

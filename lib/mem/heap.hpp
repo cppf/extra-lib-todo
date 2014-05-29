@@ -51,7 +51,7 @@ namespace wind
 
 
 // heap wrapper class
-// for memory allocation ...
+// for memory management
 class heap
 {
 
@@ -61,19 +61,19 @@ class heap
 #define	EXECUTE_ENABLED			HEAP_CREATE_ENABLE_EXECUTE,
 #define	GENERATES_EXCEPTIONS	HEAP_GENERATE_EXCEPTIONS,
 #define	NOT_SERIALIZED			HEAP_NO_SERIALIZE
-#define	INITIALIZED				HEAP_ZERO_MEMORY
+#define	ZERO_FILLED				HEAP_ZERO_MEMORY
 #else
 #define	EXECUTE_ENABLED			0x00040000
 #define	GENERATES_EXCEPTIONS	0x00000004
 #define	NOT_SERIALIZED			0x00000001
-#define	INITIALIZED				0x00000008
+#define	ZERO_FILLED				0x00000008
 #endif
 
 
 // default handle, heap handle
 public:
-#if OS == WINDOWS
 	static heap	Default;
+#if OS == WINDOWS
 	HANDLE		Handle;
 #endif
 
@@ -84,31 +84,28 @@ public:
 	inline static void Begin()
 	{ *( (HANDLE*)&Default ) = GetProcessHeap(); }
 
-	inline static heap GetDefault()
-	{ return heap::Default; }
-
 	// getprocessheaps
 
 
-	// create and destroy
+	// initialization
 	inline heap(uint initialSize=0, uint maxSize=0, uint flags=0)
 	{ Handle = HeapCreate(flags, initialSize, maxSize); }
 
 	inline void Destroy()
 	{ HeapDestroy(Handle); Handle = NULL; }
 
-	// allocation functions...
+	// wrapper functionality
 	inline void* Alloc(uint size, uint flags=0)
 	{ return HeapAlloc(Handle, flags, size); }
 
-	inline void* ReAlloc(void* ptr, uint size, uint flags=0)
-	{ return HeapReAlloc(Handle, flags, ptr, size); }
+	inline void* ReAlloc(void* addr, uint size, uint flags=0)
+	{ return HeapReAlloc(Handle, flags, addr, size); }
 
-	inline void Free(void* ptr, uint flags=0)
-	{ HeapFree(Handle, flags, ptr); }
+	inline void Free(void* addr, uint flags=0)
+	{ HeapFree(Handle, flags, addr); }
 
-	inline uint SizeOf(void* ptr, uint flags=0)
-	{ return HeapSize(Handle, flags, ptr); }
+	inline uint SizeOf(void* addr, uint flags=0)
+	{ return HeapSize(Handle, flags, addr); }
 
 	inline void Lock()
 	{ HeapLock(Handle); }
@@ -124,9 +121,6 @@ public:
 	// static functions
 	inline static void Begin()
 	{ }
-
-	inline static heap GetDefault()
-	{ return heap(); }
 
 	// getprocessheaps
 
@@ -162,6 +156,10 @@ public:
 
 
 }; // end class heap
+
+
+// static heap data
+heap heap::Default;
 
 
 } // end namespace wind
