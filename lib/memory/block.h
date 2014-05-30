@@ -31,54 +31,54 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * address.h - memory address wrapper class
+ * mem\block.h - memory block wrapper class
  */
 
-#ifndef _MEM_ADDRESS_H_
-#define _MEM_ADDRESS_H_
+#ifndef _MEM_BLOCK_H_
+#define _MEM_BLOCK_H_
 
 
 // required headers
-#include <stdlib.h>
-#include <string.h>
-#include "..\make\const.h"
-#include "..\type\basic.h"
-#if OS == WINDOWS
-#include <Windows.h>
+#include "memF.h"
+#include "address.h"
+
+
+#ifdef __cplusplus
+namespace wind {
 #endif
 
 
-namespace wind
-{
-
-
-// memory address wrapper class
+// memory block wrapper class
 // can be type casted to type*
 template <typename T>
-class address
+class block
 {
+
+
 public:
+	// block value
+	T*	Address;
+	int	Size;
 
 
-	// address value
-	T* Value;
-
-
+public:
 	// initialization
-	inline address(T* addr=NULL)
-	{ Value = addr; }
+	inline block(T* addr=NULL, uint size=0)
+	{ Address = addr; Size = size; }
 
-	inline void operator=(T* addr)
-	{ Value = addr; }
+	inline void operator=(T* ptr)
+	{ Address = ptr; Size = 0; }
 
 	inline operator T*() const
-	{ return Value; }
+	{ return Address; }
 
 
-	// block operations
-#if OS == WINDOWS
+	// functions
 	inline void Fill(uint size, byte val)
-	{ FillMemory(Value, size, val); }
+	{ mem_Fill(Value, size, val); }
+
+	inline void Fill(byte val)
+	{  }
 
 	inline void FillZero(uint size)
 	{ ZeroMemory(Value, size); }
@@ -89,25 +89,11 @@ public:
 	inline void MoveFrom(const void* src, uint size)
 	{ MoveMemory(Value, src, size); }
 
-#else // OS != WINDOWS
-	inline void Fill(uint size, byte val)
-	{ memset(Value, size, val); }
+	inline int Compare(const void* ptr, uint size) const
+	{ return memcmp(Value, ptr, size); }
 
-	inline void FillZero(uint size)
-	{ memset(Value, size, 0); }
-
-	inline void CopyFrom(const void* src, uint size)
-	{ memcpy(Value, src, size); }
-
-	inline void MoveFrom(const void* src, uint size)
-	{ memmove(Value, src, size); }
-#endif
-
-	inline int Compare(const void* addr, uint size) const
-	{ return memcmp(Value, addr, size); }
-
-	inline bool Equals(const void* addr, uint size) const
-	{ return !Compare(addr, size); }
+	inline bool Equals(const void* ptr, uint size) const
+	{ return !Compare(ptr, size); }
 
 	inline void CopyFrom(uint dstSize, const void* src, uint size)
 	{ memcpy_s(Value, dstSize, src, size); }
@@ -119,10 +105,10 @@ public:
 	{ return memchr(Value, val, size); }
 
 
-}; // end class address
+}; // end class pointer
 
 
 } // end namespace wind
 
 
-#endif /* _MEM_ADDRESS_HPP_ */
+#endif /* _MEM_BLOCK_H_ */

@@ -44,8 +44,7 @@
 #include "wchar.h"
 
 #ifdef __cplusplus
-namespace wind
-{
+namespace wind {
 
 
 // text character wrapper class

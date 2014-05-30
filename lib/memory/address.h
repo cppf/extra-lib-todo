@@ -31,98 +31,81 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * block.hpp - memory block wrapper
+ * mem\address.h - memory address wrapper class
  */
 
-#ifndef _MEM_BLOCK_HPP_
-#define _MEM_BLOCK_HPP_
+#ifndef _MEM_ADDRESS_H_
+#define _MEM_ADDRESS_H_
 
 
 // required headers
-#include "..\make\const.hpp"
-#include "..\type\basic.hpp"
-#include "address.hpp"
-#if OS == WINDOWS
-#include <Windows.h>
+#include "memF.h"
+
+
+#ifdef __cplusplus
+namespace wind {
 #endif
 
 
-namespace wind
-{
-
-
-// memory block wrapper class
+// memory address wrapper class
 // can be type casted to type*
 template <typename T>
-class block
+class address
 {
+
+
 public:
+	// address value
+	T* Value;
 
 
-	// block value
-	T*	Address;
-	int	Size;
+public:
+	// initialization
+	inline address(void* addr=NULL)
+	{ Value = (T*) addr; }
 
-
-	// for type conversion
-	inline block(T* addr=NULL, uint size=0)
-	{ Address = addr; Size = size; }
-
-	inline void operator=(T* ptr)
-	{ Address = ptr; Size = 0; }
+	inline void operator=(void* addr)
+	{ Value = (T*) addr; }
 
 	inline operator T*() const
-	{ return Address; }
+	{ return Value; }
 
 
-	// block operations
-#if OS == WINDOWS
+	// functions
 	inline void Fill(uint size, byte val)
-	{ FillMemory(Value, size, val); }
+	{ mem_Fill(Value, size, val); }
 
 	inline void FillZero(uint size)
-	{ ZeroMemory(Value, size); }
+	{ mem_FillZero(Value, size); }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ CopyMemory(Value, src, size); }
+	inline void Copy(const void* src, uint size)
+	{ mem_Copy(Value, src, size); }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ MoveMemory(Value, src, size); }
+	inline void Copy(uint dstSize, const void* src, uint size)
+	{ mem_Copy(Value, dstSize, src, size); }
 
-#else // OS != WINDOWS
-	inline void Fill(uint size, byte val)
-	{ memset(Value, size, val); }
+	inline void Move(const void* src, uint size)
+	{ mem_Move(Value, src, size); }
 
-	inline void FillZero(uint size)
-	{ memset(Value, size, 0); }
+	inline void Move(uint dstSize, const void* src, uint size)
+	{ mem_Move(Value, dstSize, src, size); }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ memcpy(Value, src, size); }
+	inline int Compare(const void* addr, uint size) const
+	{ return mem_Compare(Value, addr, size); }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ memmove(Value, src, size); }
-#endif
-
-	inline int Compare(const void* ptr, uint size) const
-	{ return memcmp(Value, ptr, size); }
-
-	inline bool Equals(const void* ptr, uint size) const
-	{ return !Compare(ptr, size); }
-
-	inline void CopyFrom(uint dstSize, const void* src, uint size)
-	{ memcpy_s(Value, dstSize, src, size); }
-
-	inline void MoveFrom(uint dstSize, const void* src, uint size)
-	{ memmove_s(Value, dstSize, src, size); }
+	inline bool Equals(const void* addr, uint size) const
+	{ return mem_Compare(Value, addr, size); }
 
 	inline void* Find(uint size, byte val)
-	{ return memchr(Value, val, size); }
+	{ return mem_Find(Value, size, val); }
 
 
-}; // end class pointer
+}; // end class address
 
 
+#ifdef __cplusplus
 } // end namespace wind
+#endif
 
 
-#endif /* _MEM_POINTER_HPP_ */
+#endif /* _MEM_ADDRESS_H_ */

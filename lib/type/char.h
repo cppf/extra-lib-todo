@@ -43,8 +43,7 @@
 
 
 #ifdef __cplusplus
-namespace wind
-{
+namespace wind {
 
 
 // ANSI character wrapper class

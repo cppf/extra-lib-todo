@@ -29,6 +29,7 @@
  *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ----------------------------------------------------------------------- */
+
 /* 
  * math\basic.h - basic math functions
  */
@@ -48,8 +49,7 @@
 
 
 #ifdef __cplusplus
-namespace wind
-{
+namespace wind {
 #endif
 
 
@@ -157,9 +157,7 @@ T Log2(T a)
 // power of 2
 template <typename T>
 inline T Exp2(T a) 
-{
-	return 1 << a;
-}
+{ return 1 << a; }
 
 
 #ifdef __cplusplus

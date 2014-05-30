@@ -75,7 +75,7 @@
 #include "type\tchar.h"
 #include "type\gchar.h"
 
-
+#include "mem\memF.h"
 /*
 // math
 #include "math\basic.hpp"

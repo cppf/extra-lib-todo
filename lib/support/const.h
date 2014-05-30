@@ -39,9 +39,8 @@
 
 
 // TEXT_MODE
-#ifndef ANSI
 #define	ANSI		0x0000
-#endif
+#define	ASCII		ANSI
 #ifndef UNICODE
 #define	UNICODE		0x0001
 #endif

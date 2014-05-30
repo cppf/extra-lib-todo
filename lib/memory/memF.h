@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * memF.h - memory functions
+ * mem\memF.h - memory functions
  */
 
 #ifndef _MEM_MEMF_H_
@@ -49,56 +49,49 @@
 
 
 #ifdef __cplusplus
-namespace wind
-{
+namespace wind {
 #endif
 
 
 // block operations
 #if OS == WINDOWS
-inline void mem_Fill(void* addr, uint size, byte val)
-{ FillMemory(addr, size, val); }
-
-inline void FillZero(uint size)
-{ ZeroMemory(Value, size); }
-
-inline void CopyFrom(const void* src, uint size)
-{ CopyMemory(Value, src, size); }
-
-inline void MoveFrom(const void* src, uint size)
-{ MoveMemory(Value, src, size); }
-
+#define	_mem_fill(addr, sz, val)	FillMemory(addr, sz, val)
+#define	_mem_fillZero(addr, sz)		ZeroMemory(addr, sz)
+#define	_mem_copy(dst, src, sz)		CopyMemory(dst, src, sz)
+#define	_mem_move(dst, src, sz)		MoveMemory(dst, src, sz)
 #else // OS != WINDOWS
-	inline void Fill(uint size, byte val)
-	{ memset(Value, size, val); }
+#define	_mem_fill(addr, sz, val)	memset(addr, sz, val)
+#define	_mem_fillZero(addr, sz)		memset(addr, sz, 0)
+#define	_mem_copy(dst, src, sz)		memcpy(dst, src, sz)
+#define	_mem_move(dst, src, sz)		memmove(dst, src, sz)
+#endif// OS == WINDOWS
 
-	inline void FillZero(uint size)
-	{ memset(Value, size, 0); }
+inline void mem_Fill(void* addr, uint size, byte val)
+{ _mem_fill(addr, size, val); }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ memcpy(Value, src, size); }
+inline void mem_FillZero(void* addr, uint size)
+{ _mem_fillZero(addr, size); }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ memmove(Value, src, size); }
-#endif
+inline void mem_Copy(void* dst, const void* src, uint size)
+{ _mem_copy(dst, src, size); }
 
-	inline int Compare(const void* addr, uint size) const
-	{ return memcmp(Value, addr, size); }
+inline void mem_Copy(void* dst, uint dstSize, const void* src, uint size)
+{ memcpy_s(dst, dstSize, src, size); }
 
-	inline bool Equals(const void* addr, uint size) const
-	{ return !Compare(addr, size); }
+inline void mem_Move(void* dst, const void* src, uint size)
+{ _mem_move(dst, src, size); }
 
-	inline void CopyFrom(uint dstSize, const void* src, uint size)
-	{ memcpy_s(Value, dstSize, src, size); }
+inline void mem_Move(void* dst, uint dstSize, const void* src, uint size)
+{ memmove_s(dst, dstSize, src, size); }
 
-	inline void MoveFrom(uint dstSize, const void* src, uint size)
-	{ memmove_s(Value, dstSize, src, size); }
+inline int mem_Compare(const void* addr1, const void* addr2, uint size)
+{ return memcmp(addr1, addr2, size); }
 
-	inline void* Find(uint size, byte val)
-	{ return memchr(Value, val, size); }
+inline bool mem_Equals(const void* addr1, const void* addr2, uint size)
+{ return !mem_Compare(addr1, addr2, size); }
 
-
-}; // end class address
+inline void* mem_Find(void* addr, uint size, byte val)
+{ return memchr(addr, val, size); }
 
 
 #ifdef __cplusplus
