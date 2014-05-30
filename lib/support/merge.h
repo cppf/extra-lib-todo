@@ -31,15 +31,15 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * make\merge.h - token merging macro
+ * support\merge.h - Provides an overloaded macro for simple token merging
  */
 
-#ifndef _MAKE_MERGE_H_
-#define _MAKE_MERGE_H_
+#ifndef _SUPPORT_MERGE_H_
+#define _SUPPORT_MERGE_H_
 
 
 // required headers
-#include "macro.h"
+#include "macro_overloading.h"
 
 
 // token merger
@@ -65,4 +65,4 @@ macro_Fn(macro_Fn16(__VA_ARGS__, merge16, merge15, merge14, merge13, merge12, me
 #endif // !merge
 
 
-#endif /* _MAKE_MERGE_H_ */
+#endif /* _SUPPORT_MERGE_H_ */

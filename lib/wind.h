@@ -42,13 +42,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "make\const.h"
+#include "support\constants.h"
 
-
-// make properties
+// Wind configuration settings
 #define	WORD_SIZE		32
 #define	TEXT_MODE		ANSI
-#define	COMPILER		VISUALCPP
+#define	COMPILER		VISUAL_CPP
 #define	DEVICE			PROCESSOR
 #define	ARCHITECTURE	X86
 #define	OS				WINDOWS
@@ -57,25 +56,27 @@
 // required headers
 #if OS == WINDOWS
 #include <Windows.h>
-#endif // OS == WINDOWS
+#endif
 
 
 // make support
-#include "make\attrib.h"
-#include "make\func.h"
-#include "make\macro.h"
-#include "make\merge.h"
+#include "support\keywords.h"
+#include "support\attributes.h"
+#include "support\macro_overloading.h"
+#include "support\merge.h"
 
 
 // types
-#include "type\basic.h"
-#include "type\range.h"
+#include "type\primitives.h"
+#include "type\ranges.h"
 #include "type\char.h"
 #include "type\wchar.h"
 #include "type\tchar.h"
 #include "type\gchar.h"
 
-#include "mem\memF.h"
+#include "memory\memF.h"
+
+
 /*
 // math
 #include "math\basic.hpp"

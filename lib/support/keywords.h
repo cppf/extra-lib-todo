@@ -31,44 +31,59 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * make\const.h - constant declaration file
+ * support\keywords.h - Provides cross-compiler keyword-type functions for certain operations
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MAKE_CONST_H_
-#define _MAKE_CONST_H_
+#ifndef _SUPPORT_KEYWORDS_H_
+#define _SUPPORT_KEYWORDS_H_
 
 
-// TEXT_MODE
-#define	ANSI		0x0000
-#define	ASCII		ANSI
-#ifndef UNICODE
-#define	UNICODE		0x0001
+// required headers
+#include "constants.h"
+
+
+// get type of a variable
+#if COMPILER == VISUAL_CPP
+#define typeof(expr)	decltype(expr)
 #endif
 
 
-// DEVICE
-#define	PROCESSOR	0x0010
-#define	CONTROLLER	0x0011
-
-
-// ARCHITECTURE
-#define	X86			0x0020
-#define	X64			0x0021
-#define	AVR			0x0022
-
-
-// OS
-#ifndef NONE
-#define	NONE		0x0020
-#endif
-#ifndef WINDOWS
-#define	WINDOWS		0x0021
+// convert a token to string
+#ifndef stringof
+#define stringof(a)		#a
 #endif
 
 
-// COMPILER
-#define	GCC			0x0030
-#define	VISUALCPP	0x0031
+// mark unused variables
+#ifndef unused
+#define unused(var)		(void)(var)
+#endif
 
 
-#endif /* _MAKE_CONST_H_ */
+// memory barrier to prevent reordering
+#if COMPILER == GCC
+#ifndef barrier
+#define barrier()		asm volatile("" ::: "memory")
+#endif
+#endif // COMPILER == GCC
+
+
+// assembly coding
+#if COMPILER == GCC
+#ifndef assembly
+#define assembly		__asm__ __volatile__
+#endif
+#ifndef line
+#define line(text)		text "\n\t"
+#endif
+#else // COMPILER != GCC
+#ifndef assembly
+#define assembly		__asm
+#endif
+#ifndef line
+#define line(text)		text
+#endif
+#endif // COMPILER == GCC
+
+#endif /* _SUPPORT_KEYWORDS_H_ */

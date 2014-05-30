@@ -31,18 +31,16 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * make\macro.h - macro overloading support
+ * support\macro_overloading.h - Provides support for overloading macros, in a way similar to function overloading
+ * This file is a part of the Wind library for C++.
  */
 
-#ifndef _MAKE_MACRO_H_
-#define _MAKE_MACRO_H_
+#ifndef _SUPPORT_MACRO_OVERLOADING_H_
+#define _SUPPORT_MACRO_OVERLOADING_H_
 
 
 // required headers
-#include "const.h"
-
-
-#ifndef macro_Fn
+#include "constants.h"
 
 
 // macro overloading support
@@ -87,7 +85,4 @@
 #endif // COMPILER == GCC
 
 
-#endif // !macro_Fn
-
-
-#endif /* _MAKE_MACRO_H_ */
+#endif /* _SUPPORT_MACRO_OVERLOADING_H_ */

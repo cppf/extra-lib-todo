@@ -31,15 +31,16 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * make\attrib.h - attribute declaration file
+ * support\attributes.h - Defines cross-compiler function and variable attributes
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MAKE_ATTRIB_H_
-#define _MAKE_ATTRIB_H_
+#ifndef _SUPPORT_ATTRIBUTES_H_
+#define _SUPPORT_ATTRIBUTES_H_
 
 
 // required headers
-#include "const.h"
+#include "constants.h"
 
 
 // attribute definitions
@@ -118,4 +119,4 @@
 #endif // COMPILER == GCC
 
 
-#endif /* _MAKE_ATTRIB_H_ */
+#endif /* _SUPPORT_ATTRIBUTES_H_ */

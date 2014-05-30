@@ -31,15 +31,16 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\range.hpp - datatype min., max. values
+ * type\ranges.h - Defines the minimum and maximum values of primitive datatypes
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_RANGE_H_
-#define _TYPE_RANGE_H_
+#ifndef _TYPE_RANGES_H_
+#define _TYPE_RANGES_H_
 
 
 // required headers
-#include "basic.h"
+#include "primitives.h"
 
 
 #ifdef __cplusplus
@@ -109,6 +110,15 @@ const word uword_Max = uint64_Max;
 // named types
 const char char_Min = '\0';
 const char char_Max = '\xFF';
+const wchar wchar_Min = L'\0';
+const wchar wchar_Max = L'\xFFFF';
+#if TEXT_MODE == ANSI
+const tchar tchar_Min = char_Min;
+const tchar tchar_Max = char_Max;
+#else // TEXT_MODE == UNICODE
+const tchar tchar_Min = wchar_Min;
+const tchar tchar_Max = wchar_Max;
+#endif
 const byte byte_Min = uint8_Min;
 const byte byte_Max = uint8_Max;
 const sbyte sbyte_Min = int8_Min;
@@ -128,4 +138,4 @@ const ulong ulong_Max = uint32_Max;
 #endif
 
 
-#endif /* _TYPE_RANGE_H_ */
+#endif /* _TYPE_RANGES_H_ */

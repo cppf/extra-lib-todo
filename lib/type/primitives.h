@@ -31,11 +31,12 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\basic.h - basic type definitions
+ * type\primitive.h - Defines basic primitive datatypes for use with the Wind library
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef	_TYPE_BASIC_H_
-#define	_TYPE_BASIC_H_
+#ifndef	_TYPE_PRIMITIVES_H_
+#define	_TYPE_PRIMITIVES_H_
 
 
 #ifdef __cplusplus
@@ -110,4 +111,4 @@ typedef unsigned long	ulong;
 #endif
 
 
-#endif /* _TYPE_BASIC_H_ */
+#endif /* _TYPE_PRIMITIVES_H_ */

@@ -31,58 +31,41 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * make\func.h - common global macros
+ * support\constants.h - Wind configuration and support constants declaration file
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MAKE_FUNC_H_
-#define _MAKE_FUNC_H_
+#ifndef _SUPPORT_CONSTANTS_H_
+#define _SUPPORT_CONSTANTS_H_
 
 
-// required headers
-#include "const.h"
-
-
-// typeof macro
-#if COMPILER == VISUALCPP
-#define typeof(expr)	decltype(expr)
+// TEXT_MODE
+#define	ANSI		0x0000
+#define	ASCII		ANSI
+#ifndef UNICODE
+#define	UNICODE		0x0001
 #endif
 
 
-// token to string
-#ifndef stringof
-#define stringof(a)		#a
-#endif
+// DEVICE
+#define	PROCESSOR	0x0010
+#define	CONTROLLER	0x0011
 
 
-// mark unused variables
-#ifndef unused
-#define unused(var)		(void)(var)
-#endif
+// ARCHITECTURE
+#define	AVR			0x0020
+#define	X86			0x0021
+#define	X64			0x0022
 
 
-// memory barrier (prevents reordering)
-#if COMPILER == GCC
-#ifndef barrier
-#define barrier()		asm volatile("" ::: "memory")
-#endif
-#endif // COMPILER == GCC
+// OS
+#define	NO_OS		0x0030
+#define	WINDOWS		0x0031
 
 
-// assembly coding
-#if COMPILER == GCC
-#ifndef assembly
-#define assembly		__asm__ __volatile__
-#endif
-#ifndef line
-#define line(text)		text "\n\t"
-#endif
-#else // COMPILER != GCC
-#ifndef assembly
-#define assembly		__asm
-#endif
-#ifndef line
-#define line(text)		text
-#endif
-#endif // COMPILER == GCC
+// COMPILER
+#define	GCC			0x0040
+#define	VISUAL_CPP	0x0041
 
-#endif /* _MAKE_FUNC_H_ */
+
+#endif /* _SUPPORT_CONSTANTS_H_ */
