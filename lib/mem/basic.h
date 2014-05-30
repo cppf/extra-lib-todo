@@ -31,17 +31,17 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * basic.hpp - basic memory macros
+ * mem\basic.h - basic memory macros
  */
 
-#ifndef _MEM_BASIC_HPP_
-#define _MEM_BASIC_HPP_
+#ifndef _MEM_BASIC_H_
+#define _MEM_BASIC_H_
 
 
 // required headers
-#include "..\make\macro.hpp"
-#include "..\make\func.hpp"
-#include "..\type\basic.hpp"
+#include "..\make\macro.h"
+#include "..\make\func.h"
+#include "..\type\basic.h"
 
 
 // specify byte address

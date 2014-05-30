@@ -31,15 +31,15 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * attrib.hpp - attribute declaration file
+ * make\attrib.h - attribute declaration file
  */
 
-#ifndef _MAKE_ATTRIB_HPP_
-#define _MAKE_ATTRIB_HPP_
+#ifndef _MAKE_ATTRIB_H_
+#define _MAKE_ATTRIB_H_
 
 
 // required headers
-#include "const.hpp"
+#include "const.h"
 
 
 // attribute definitions
@@ -88,7 +88,7 @@
 #define	cdecl			attrib(__cdecl__)
 #define	stdcall			attrib(__stdcall__)
 
-#else // COMPILER == VISUALCPP
+#else // COMPILER != GCC
 
 // attribute macro
 #define attrib(...)			__declspec(__VA_ARGS__)
@@ -109,13 +109,13 @@
 #define	ccall			__cdecl
 #ifndef cdecl
 #define	cdecl			__cdecl
-#endif // !cdecl
+#endif
 #ifndef stdcall
 #define	stdcall			__stdcall
-#endif // !stdcall
+#endif
 
 
 #endif // COMPILER == GCC
 
 
-#endif /* _MAKE_ATTRIB_HPP_ */
+#endif /* _MAKE_ATTRIB_H_ */

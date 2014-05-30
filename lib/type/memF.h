@@ -31,58 +31,79 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * func.hpp - common global macros
+ * memF.h - memory functions
  */
 
-#ifndef _MAKE_FUNC_HPP_
-#define _MAKE_FUNC_HPP_
+#ifndef _MEM_MEMF_H_
+#define _MEM_MEMF_H_
 
 
 // required headers
-#include "const.hpp"
-
-
-// typeof macro
-#if COMPILER == VISUALCPP
-#define typeof(expr)	decltype(expr)
-#endif // COMPILER == VISUALCPP
-
-
-// token to string
-#ifndef stringof
-#define stringof(a)		#a
-#endif // !tostring
-
-
-// mark unused variables
-#ifndef unused
-#define unused(var)		(void)(var)
-#endif // !unused
-
-
-// memory barrier (prevents reordering)
-#if COMPILER == GCC
-#ifndef barrier
-#define barrier()		asm volatile("" ::: "memory")
-#endif // !barrier
-#endif // COMPILER == GCC
-
-
-// assembly coding
-#if COMPILER == GCC
-#ifndef assembly
-#define assembly		__asm__ __volatile__
-#endif // !assembly
-#ifndef line
-#define line(text)		text "\n\t"
-#endif // !line
-#else // COMPILER == VISUALCPP
-#ifndef assembly
-#define assembly		__asm
-#endif // !assembly
-#ifndef line
-#define line(text)		text
-#endif // !line
+#include <stdlib.h>
+#include <string.h>
+#include "..\make\const.h"
+#include "..\type\basic.h"
+#if OS == WINDOWS
+#include <Windows.h>
 #endif
 
-#endif /* _MAKE_FUNC_HPP_ */
+
+#ifdef __cplusplus
+namespace wind
+{
+#endif
+
+
+// block operations
+#if OS == WINDOWS
+inline void mem_Fill(void* addr, uint size, byte val)
+{ FillMemory(addr, size, val); }
+
+inline void FillZero(uint size)
+{ ZeroMemory(Value, size); }
+
+inline void CopyFrom(const void* src, uint size)
+{ CopyMemory(Value, src, size); }
+
+inline void MoveFrom(const void* src, uint size)
+{ MoveMemory(Value, src, size); }
+
+#else // OS != WINDOWS
+	inline void Fill(uint size, byte val)
+	{ memset(Value, size, val); }
+
+	inline void FillZero(uint size)
+	{ memset(Value, size, 0); }
+
+	inline void CopyFrom(const void* src, uint size)
+	{ memcpy(Value, src, size); }
+
+	inline void MoveFrom(const void* src, uint size)
+	{ memmove(Value, src, size); }
+#endif
+
+	inline int Compare(const void* addr, uint size) const
+	{ return memcmp(Value, addr, size); }
+
+	inline bool Equals(const void* addr, uint size) const
+	{ return !Compare(addr, size); }
+
+	inline void CopyFrom(uint dstSize, const void* src, uint size)
+	{ memcpy_s(Value, dstSize, src, size); }
+
+	inline void MoveFrom(uint dstSize, const void* src, uint size)
+	{ memmove_s(Value, dstSize, src, size); }
+
+	inline void* Find(uint size, byte val)
+	{ return memchr(Value, val, size); }
+
+
+}; // end class address
+
+
+#ifdef __cplusplus
+} // end namespace wind
+#endif
+
+
+#endif /* _MEM_MEMF_H_ */

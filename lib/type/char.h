@@ -31,63 +31,80 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.hpp - main include file
+ * type\char.hpp - ANSI character wrapper class
  */
 
-#ifndef _WIND_HPP_
-#define _WIND_HPP_
+#ifndef _TYPE_CHAR_H_
+#define _TYPE_CHAR_H_
 
 
 // required headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "charF.h"
 
 
-// make constants
-#include "make\const.hpp"
+#ifdef __cplusplus
+namespace wind
+{
 
 
-// make properties
-#define	WORD_SIZE		32
-#define	TEXT_MODE		ASCII
-#define	COMPILER		VISUALCPP
-#define	DEVICE			PROCESSOR
-#define	ARCHITECTURE	X86
-#define	OS				WINDOWS
+// ANSI character wrapper class
+// can be type casted to char
+class char_
+{
 
 
-// required headers
-#if OS == WINDOWS
-#include <Windows.h>
-#endif // OS == WINDOWS
+public:
+	// data
+	char Value;
 
 
-// make support
-#include "make\attrib.hpp"
-#include "make\func.hpp"
-#include "make\macro.hpp"
-#include "make\merge.hpp"
+	// initialization
+	inline char_()
+	{ Value = '\0'; }
+
+	inline char_(char ch)
+	{ Value = ch; }
+
+	inline void operator=(char ch)
+	{ Value = ch; }
+
+	inline operator char() const
+	{ return Value; }
+
+	// functions
+	inline bool IsLowerCase() const
+	{ return char_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return char_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return char_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return char_IsDigit(Value); }
+
+	inline char_ GetLowerCase() const
+	{ return (char_) char_GetLowerCase(Value); }
+
+	inline char_ GetUpperCase() const
+	{ return (char_) char_GetUpperCase(Value); }
+
+	inline char GetChar() const
+	{ return Value; }
+
+	inline wchar GetWchar() const
+	{ return (wchar) Value; }
+
+	inline tchar GetTchar() const
+	{ return (tchar) Value; }
 
 
-// types
-#include "type\basic.hpp"
-#include "type\range.hpp"
-#include "type\char.hpp"
-#include "type\wchar.hpp"
-#include "type\tchar.hpp"
-#include "type\string.hpp"
+}; // end class char_
 
 
-// math
-#include "math\basic.hpp"
+} // end namespace wind
+#endif // !__cplusplus
 
 
-// memory
-#include "mem\basic.hpp"
-#include "mem\heap.hpp"
-#include "mem\address.hpp"
-#include "mem\block.hpp"
-
-
-#endif /* _WIND_HPP_ */
+#endif /* _TYPE_CHAR_H_ */

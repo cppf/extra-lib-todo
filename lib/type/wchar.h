@@ -31,45 +31,81 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * const.hpp - constant declaration file
+ * type\wchar.h - Unicode (wide) character wrapper class
  */
 
-#ifndef _MAKE_CONST_HPP_
-#define _MAKE_CONST_HPP_
+#ifndef _TYPE_WCHAR_H_
+#define _TYPE_WCHAR_H_
 
 
-// TEXT_MODE
-#ifndef ASCII
-#define	ASCII		0x0000
-#endif // !ASCII
-#ifndef UNICODE
-#define	UNICODE		0x0001
-#endif // !UNICODE
+// required headers
+#include "wcharF.h"
 
 
-// DEVICE
-#define	PROCESSOR	0x0010
-#define	CONTROLLER	0x0011
+#ifdef __cplusplus
+namespace wind
+{
 
 
-// ARCHITECTURE
-#define	X86			0x0020
-#define	X64			0x0021
-#define	AVR			0x0022
+// wide character wrapper class
+// can be type casted to wchar
+class wchar_
+{
 
 
-// OS
-#ifndef NONE
-#define	NONE		0x0020
-#endif // !AVR
-#ifndef WINDOWS
-#define	WINDOWS		0x0021
-#endif // !WIN32
+public:
+	// wchar value
+	wchar Value;
 
 
-// COMPILER
-#define	GCC			0x0030
-#define	VISUALCPP	0x0031
+public:
+	// initialization
+	inline wchar_()
+	{ Value = L'\0'; }
+
+	inline wchar_(wchar ch)
+	{ Value = ch; }
+
+	inline void operator=(wchar ch)
+	{ Value = ch; }
+
+	inline operator wchar() const
+	{ return Value; }
+
+	// functions
+	inline bool IsLowerCase() const
+	{ return wchar_IsLowerCase(Value); }
+
+	inline bool IsUpperCase() const
+	{ return wchar_IsUpperCase(Value); }
+
+	inline bool IsAlphabet() const
+	{ return wchar_IsAlphabet(Value); }
+
+	inline bool IsDigit() const
+	{ return wchar_IsDigit(Value); }
+
+	inline wchar_ GetLowerCase() const
+	{ return (wchar_) wchar_GetLowerCase(Value); }
+
+	inline wchar_ GetUpperCase() const
+	{ return (wchar_) wchar_GetUpperCase(Value); }
+
+	inline char GetChar() const
+	{ return (char) Value; }
+
+	inline wchar GetWchar() const
+	{ return Value; }
+
+	inline tchar GetTchar() const
+	{ return (tchar) Value; }
 
 
-#endif /* _MAKE_CONST_HPP_ */
+}; // end class wchar_
+
+
+} // end namespace wind
+#endif // !__cplusplus
+
+
+#endif /* _TYPE_WCHAR_H_ */

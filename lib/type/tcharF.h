@@ -31,80 +31,55 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * char.hpp - ascii character wrapper
+ * type\tcharF.h - text character functions
  */
 
-#ifndef _TYPE_CHAR_HPP_
-#define _TYPE_CHAR_HPP_
+#ifndef _TYPE_TCHARF_H_
+#define _TYPE_TCHARF_H_
 
 
+// required headers
+#include "basic.h"
+
+
+#ifdef __cplusplus
 namespace wind
 {
+#endif
 
 
-// ascii character wrapper class
-// can be type casted to char
-class char_
-{
-public:
+// functions
+inline bool tchar_IsLowerCase(tchar ch)
+{ return (ch >= tcharof('a')) && (ch <= tcharof('z')); }
+
+inline bool tchar_IsUpperCase(tchar ch)
+{ return (ch >= tcharof('A')) && (ch <= tcharof('Z')); }
+
+inline bool tchar_IsAlphabet(tchar ch)
+{ return tchar_IsLowerCase(ch) || tchar_IsUpperCase(ch); }
+
+inline bool tchar_IsDigit(tchar ch)
+{ return (ch >= tcharof('0')) && (ch <= tcharof('9')); }
+
+inline tchar tchar_GetLowerCase(tchar ch)
+{ return tchar_IsUpperCase(ch)? (ch - tcharof('A') + tcharof('a')) : ch; }
+
+inline tchar tchar_GetUpperCase(tchar ch)
+{ return tchar_IsLowerCase(ch)? (ch - tcharof('a') + tcharof('A')) : ch; }
+
+inline char tchar_GetChar(tchar ch)
+{ return (char) ch; }
+
+inline wchar tchar_GetWchar(tchar ch)
+{ return (wchar) ch; }
+
+inline tchar tchar_GetTchar(tchar ch)
+{ return ch; }
 
 
-	// char value
-	char Value;
-
-
-	// for type conversion
-	inline char_()
-	{ Value = '\0'; }
-
-	inline char_(char ch)
-	{ Value = ch; }
-
-	inline void operator=(char ch)
-	{ Value = ch; }
-
-	inline operator char() const
-	{ return Value; }
-
-	// wrapper functionality
-	inline bool IsLowerCase() const
-	{ return (Value >= 'a') && (Value <= 'z'); }
-
-	inline bool IsUpperCase() const
-	{ return (Value >= 'A') && (Value <= 'Z'); }
-
-	inline bool IsAlphabet() const
-	{ return IsLowerCase() || IsUpperCase(); }
-
-	inline bool IsDigit() const
-	{ return (Value >= '0') && (Value <= '9'); }
-
-	inline bool IsBlank() const
-	{ return (Value == '\t') || (Value == ' '); }
-
-	inline bool IsSpace() const
-	{ return IsBlank(); }
-
-	inline char_ GetLowerCase() const
-	{ return (char_) IsUpperCase()? (Value - 'A' + 'a') : Value; }
-
-	inline char_ GetUpperCase() const
-	{ return (char_) IsLowerCase()? (Value - 'a' + 'A') : Value; }
-
-	inline char GetChar() const
-	{ return Value; }
-
-	inline wchar GetWchar() const
-	{ return (wchar) Value; }
-
-	inline tchar GetTchar() const
-	{ return (tchar) Value; }
-
-
-}; // end class char_
-
-
+#ifdef __cplusplus
 } // end namespace wind
+#endif
 
 
-#endif /* _TYPE_CHAR_HPP_ */
+#endif /* _TYPE_TCHARF_H_ */

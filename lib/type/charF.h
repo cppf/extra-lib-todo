@@ -31,38 +31,55 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * merge.hpp - token merging macro
+ * type\charF.h - ANSI character functions
  */
 
-#ifndef _MAKE_MERGE_HPP_
-#define _MAKE_MERGE_HPP_
+#ifndef _TYPE_CHARF_H_
+#define _TYPE_CHARF_H_
 
 
 // required headers
-#include "macro.hpp"
+#include "basic.h"
 
 
-// token merger
-#ifndef merge
-#define merge2(a, b)											a##b
-#define merge3(a, b, c)											a##b##c
-#define merge4(a, b, c, d)										a##b##c##d
-#define merge5(a, b, c, d, e)									a##b##c##d##e
-#define merge6(a, b, c, d, e, f)								a##b##c##d##e##f
-#define merge7(a, b, c, d, e, f, g)								a##b##c##d##e##f##g
-#define merge8(a, b, c, d, e, f, g, h)							a##b##c##d##e##f##g##h
-#define merge9(a, b, c, d, e, f, g, h, i)						a##b##c##d##e##f##g##h##i
-#define merge10(a, b, c, d, e, f, g, h, i, j)					a##b##c##d##e##f##g##h##i##j##k
-#define merge11(a, b, c, d, e, f, g, h, i, j, k)				a##b##c##d##e##f##g##h##i##j##k##l
-#define merge12(a, b, c, d, e, f, g, h, i, j, k, l)				a##b##c##d##e##f##g##h##i##j##k##l
-#define merge13(a, b, c, d, e, f, g, h, i, j, k, l, m)			a##b##c##d##e##f##g##h##i##j##k##l##m
-#define merge14(a, b, c, d, e, f, g, h, i, j, k, l, m, n)		a##b##c##d##e##f##g##h##i##j##k##l##m##n
-#define merge15(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)	a##b##c##d##e##f##g##h##i##j##k##l##m##n##o
-#define merge16(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)	a##b##c##d##e##f##g##h##i##j##k##l##m##n##o##p
-
-#define merge(...)	\
-macro_Fn(macro_Fn16(__VA_ARGS__, merge16, merge15, merge14, merge13, merge12, merge11, merge10, merge9, merge8, merge7, merge6, merge5, merge4, merge3, merge2)(__VA_ARGS__))
-#endif // !merge
+#ifdef __cplusplus
+namespace wind
+{
+#endif
 
 
-#endif /* _MAKE_MERGE_HPP_ */
+// functions
+inline bool char_IsLowerCase(char ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
+
+inline bool char_IsUpperCase(char ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
+
+inline bool char_IsAlphabet(char ch)
+{ return char_IsLowerCase(ch) || char_IsUpperCase(ch); }
+
+inline bool char_IsDigit(char ch)
+{ return (ch >= '0') && (ch <= '9'); }
+
+inline char char_GetLowerCase(char ch)
+{ return char_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
+
+inline char char_GetUpperCase(char ch)
+{ return char_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
+
+inline char char_GetChar(char ch)
+{ return ch; }
+
+inline wchar char_GetWchar(char ch)
+{ return (wchar) ch; }
+
+inline tchar char_GetTchar(char ch)
+{ return (tchar) ch; }
+
+
+#ifdef __cplusplus
+} // end namespace wind
+#endif
+
+
+#endif /* _TYPE_CHARF_H_ */

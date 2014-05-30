@@ -70,7 +70,7 @@ class heap
 #endif
 
 
-// default handle, heap handle
+// data
 public:
 	static heap	Default;
 #if OS == WINDOWS
@@ -83,6 +83,9 @@ public:
 	// static functions
 	inline static void Begin()
 	{ *( (HANDLE*)&Default ) = GetProcessHeap(); }
+
+	inline static void End()
+	{ Default.Handle = NULL; }
 
 	// getprocessheaps
 
@@ -104,22 +107,16 @@ public:
 	inline void Free(void* addr, uint flags=0)
 	{ HeapFree(Handle, flags, addr); }
 
-	inline uint SizeOf(void* addr, uint flags=0)
-	{ return HeapSize(Handle, flags, addr); }
-
-	inline void Lock()
-	{ HeapLock(Handle); }
-
-	inline void Unlock()
-	{ HeapUnlock(Handle); }
-
-	inline void Compact(uint flags = 0)
+	inline void Optimize(uint flags = 0)
 	{ HeapCompact(Handle, flags); }
 
 #else // OS != WINDOWS
 
 	// static functions
 	inline static void Begin()
+	{ }
+
+	inline static void End()
 	{ }
 
 	// getprocessheaps
@@ -140,16 +137,7 @@ public:
 	inline void Free(void* ptr, uint flags=0)
 	{ unused(flags); free(ptr); }
 
-	inline uint SizeOf(void* ptr, uint flags=0)
-	{ unused(ptr); unused(flags); return 0; }
-
-	inline void Lock()
-	{ }
-
-	inline void Unlock()
-	{ }
-
-	inline void Compact(uint flags = 0)
+	inline void Optimize(uint flags = 0)
 	{ unused(flags); }
 
 #endif	// OS == WINDOWS

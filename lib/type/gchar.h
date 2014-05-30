@@ -31,98 +31,82 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * address.h - memory address wrapper class
+ * type\gchar.h - generic character wrapper class
  */
 
-#ifndef _MEM_ADDRESS_H_
-#define _MEM_ADDRESS_H_
+#ifndef _TYPE_GCHAR_H_
+#define _TYPE_GCHAR_H_
 
 
 // required headers
-#include <stdlib.h>
-#include <string.h>
-#include "..\make\const.h"
-#include "..\type\basic.h"
-#if OS == WINDOWS
-#include <Windows.h>
-#endif
+#include "gcharF.h"
 
 
+#ifdef __cplusplus
 namespace wind
 {
 
 
-// memory address wrapper class
-// can be type casted to type*
+// generic character wrapper class
+// can be type casted to type T
 template <typename T>
-class address
+class gchar_
 {
+
+
 public:
+	// wchar value
+	T Value;
 
 
-	// address value
-	T* Value;
-
-
+public:
 	// initialization
-	inline address(T* addr=NULL)
-	{ Value = addr; }
+	inline gchar_()
+	{ Value = L'\0'; }
 
-	inline void operator=(T* addr)
-	{ Value = addr; }
+	inline gchar_(T ch)
+	{ Value = ch; }
 
-	inline operator T*() const
+	inline void operator=(T ch)
+	{ Value = ch; }
+
+	inline operator T() const
 	{ return Value; }
 
+	// wrapper functionality
+	inline bool IsLowerCase() const
+	{ return gchar_IsLowerCase(Value); }
 
-	// block operations
-#if OS == WINDOWS
-	inline void Fill(uint size, byte val)
-	{ FillMemory(Value, size, val); }
+	inline bool IsUpperCase() const
+	{ return gchar_IsUpperCase(Value); }
 
-	inline void FillZero(uint size)
-	{ ZeroMemory(Value, size); }
+	inline bool IsAlphabet() const
+	{ return gchar_IsAlphabet(Value); }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ CopyMemory(Value, src, size); }
+	inline bool IsDigit() const
+	{ return gchar_IsDigit(Value); }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ MoveMemory(Value, src, size); }
+	inline gchar_ GetLowerCase() const
+	{ return (gchar_) gchar_GetLowerCase(Value); }
 
-#else // OS != WINDOWS
-	inline void Fill(uint size, byte val)
-	{ memset(Value, size, val); }
+	inline gchar_ GetUpperCase() const
+	{ return (gchar_) gchar_GetUpperCase(Value); }
 
-	inline void FillZero(uint size)
-	{ memset(Value, size, 0); }
+	inline char GetChar() const
+	{ return (char) Value; }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ memcpy(Value, src, size); }
+	inline wchar GetWchar() const
+	{ return (wchar) Value; }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ memmove(Value, src, size); }
-#endif
-
-	inline int Compare(const void* addr, uint size) const
-	{ return memcmp(Value, addr, size); }
-
-	inline bool Equals(const void* addr, uint size) const
-	{ return !Compare(addr, size); }
-
-	inline void CopyFrom(uint dstSize, const void* src, uint size)
-	{ memcpy_s(Value, dstSize, src, size); }
-
-	inline void MoveFrom(uint dstSize, const void* src, uint size)
-	{ memmove_s(Value, dstSize, src, size); }
-
-	inline void* Find(uint size, byte val)
-	{ return memchr(Value, val, size); }
+	inline tchar GetTchar() const
+	{ return (tchar) Value; }
 
 
-}; // end class address
+}; // end class gchar_
 
 
 } // end namespace wind
+#endif // !__cplusplus
 
 
-#endif /* _MEM_ADDRESS_HPP_ */
+#endif /* _TYPE_GCHAR_H_ */

@@ -31,33 +31,62 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * tchar.hpp - text (from TEXT_MODE) character wrapper
+ * wind.h - main include file
  */
 
-#ifndef _TYPE_TCHAR_HPP_
-#define _TYPE_TCHAR_HPP_
+#ifndef _WIND_H_
+#define _WIND_H_
 
 
 // required headers
-#include "..\make\const.hpp"
-#include "char.hpp"
-#include "wchar.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "make\const.h"
 
 
-namespace wind
-{
+// make properties
+#define	WORD_SIZE		32
+#define	TEXT_MODE		ANSI
+#define	COMPILER		VISUALCPP
+#define	DEVICE			PROCESSOR
+#define	ARCHITECTURE	X86
+#define	OS				WINDOWS
 
 
-// text character wrapper class
-// can be type casted to tchar
-#if TEXT_MODE == ASCII
-typedef char_	tchar_;
-#else // TEXT_MODE == UNICODE
-typedef wchar_	tchar_;
-#endif // TEXT_MODE == ASCII
+// required headers
+#if OS == WINDOWS
+#include <Windows.h>
+#endif // OS == WINDOWS
 
 
-} // end namespace wind
+// make support
+#include "make\attrib.h"
+#include "make\func.h"
+#include "make\macro.h"
+#include "make\merge.h"
 
 
-#endif /* _TYPE_TCHAR_HPP_ */
+// types
+#include "type\basic.h"
+#include "type\range.h"
+#include "type\char.h"
+#include "type\wchar.h"
+#include "type\tchar.h"
+#include "type\gchar.h"
+
+
+/*
+// math
+#include "math\basic.hpp"
+
+
+// memory
+#include "mem\basic.hpp"
+#include "mem\heap.hpp"
+#include "mem\address.hpp"
+#include "mem\block.hpp"
+*/
+
+
+#endif /* _WIND_H_ */
