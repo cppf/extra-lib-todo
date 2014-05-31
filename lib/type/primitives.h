@@ -39,9 +39,7 @@
 #define	_TYPE_PRIMITIVES_H_
 
 
-#ifdef __cplusplus
 namespace wind {
-#endif
 
 
 // basic values
@@ -106,9 +104,7 @@ typedef unsigned int	uint;
 typedef unsigned long	ulong;
 
 
-#ifdef __cplusplus
 } // end namespace wind
-#endif
 
 
 #endif /* _TYPE_PRIMITIVES_H_ */

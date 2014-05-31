@@ -31,21 +31,19 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * mem\block.h - memory block wrapper class
+ * memory\block.h - Defines a memory block wrapper class that provides common associated functionality
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MEM_BLOCK_H_
-#define _MEM_BLOCK_H_
+#ifndef _MEMORY_BLOCK_H_
+#define _MEMORY_BLOCK_H_
 
 
 // required headers
-#include "memF.h"
 #include "address.h"
 
 
-#ifdef __cplusplus
 namespace wind {
-#endif
 
 
 // memory block wrapper class
@@ -56,59 +54,59 @@ class block
 
 
 public:
-	// block value
+	// data
 	T*	Address;
 	int	Size;
 
 
 public:
 	// initialization
-	inline block(T* addr=NULL, uint size=0)
-	{ Address = addr; Size = size; }
+	inline block(void* addr=NULL, uint size=0)
+	{ Address = (T*) addr; Size = size; }
 
-	inline void operator=(T* ptr)
-	{ Address = ptr; Size = 0; }
+	inline void operator=(void* ptr)
+	{ Address = (T*) ptr; Size = 0; }
 
 	inline operator T*() const
 	{ return Address; }
 
+	inline static block Create(void* addr=NULL, uint size=0)
+	{ return block(addr, size); }
+
+	inline void Destroy()
+	{ Address = NULL; Size = 0; }
+
 
 	// functions
 	inline void Fill(uint size, byte val)
-	{ mem_Fill(Value, size, val); }
+	{ block_Fill(Address, size, val); }
 
 	inline void Fill(byte val)
-	{  }
+	{ block_Fill(Address, Size, val); }
 
-	inline void FillZero(uint size)
-	{ ZeroMemory(Value, size); }
+	inline void FillZero(uint size=Size)
+	{ block_FillZero(Address, size); }
 
-	inline void CopyFrom(const void* src, uint size)
-	{ CopyMemory(Value, src, size); }
+	inline void Copy(const void* src, uint size)
+	{ block_Copy(Address, Size, src, size); }
 
-	inline void MoveFrom(const void* src, uint size)
-	{ MoveMemory(Value, src, size); }
+	inline void Move(const void* src, uint size)
+	{ block_Move(Address, Size, src, size); }
 
-	inline int Compare(const void* ptr, uint size) const
-	{ return memcmp(Value, ptr, size); }
+	inline int Compare(const void* addr, uint size) const
+	{ return block_Compare(Address, addr, size); }
 
-	inline bool Equals(const void* ptr, uint size) const
-	{ return !Compare(ptr, size); }
-
-	inline void CopyFrom(uint dstSize, const void* src, uint size)
-	{ memcpy_s(Value, dstSize, src, size); }
-
-	inline void MoveFrom(uint dstSize, const void* src, uint size)
-	{ memmove_s(Value, dstSize, src, size); }
+	inline bool Equals(const void* addr, uint size) const
+	{ return block_Equals(Address, addr, size); }
 
 	inline void* Find(uint size, byte val)
-	{ return memchr(Value, val, size); }
+	{ return block_Find(Address, val, size); }
 
 
-}; // end class pointer
+}; // end class block
 
 
 } // end namespace wind
 
 
-#endif /* _MEM_BLOCK_H_ */
+#endif /* _MEMORY_BLOCK_H_ */

@@ -31,81 +31,51 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\gchar.h - generic character wrapper class
+ * type\char_func.h - Provides standard ANSI character functions
+ * This file is part of the Wind library fir C++.
  */
 
-#ifndef _TYPE_GCHAR_H_
-#define _TYPE_GCHAR_H_
+#ifndef _TYPE_CHAR_FUNC_H_
+#define _TYPE_CHAR_FUNC_H_
 
 
 // required headers
-#include "gcharF.h"
+#include "primitives.h"
 
 
-#ifdef __cplusplus
 namespace wind {
 
 
-// generic character wrapper class
-// can be type casted to type T
-template <typename T>
-class gchar_
-{
+// functions
+inline bool char_IsLowerCase(char ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
 
+inline bool char_IsUpperCase(char ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
 
-public:
-	// wchar value
-	T Value;
+inline bool char_IsAlphabet(char ch)
+{ return char_IsLowerCase(ch) || char_IsUpperCase(ch); }
 
+inline bool char_IsDigit(char ch)
+{ return (ch >= '0') && (ch <= '9'); }
 
-public:
-	// initialization
-	inline gchar_()
-	{ Value = L'\0'; }
+inline char char_GetLowerCase(char ch)
+{ return char_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
 
-	inline gchar_(T ch)
-	{ Value = ch; }
+inline char char_GetUpperCase(char ch)
+{ return char_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
 
-	inline void operator=(T ch)
-	{ Value = ch; }
+inline char char_GetChar(char ch)
+{ return ch; }
 
-	inline operator T() const
-	{ return Value; }
+inline wchar char_GetWchar(char ch)
+{ return (wchar) ch; }
 
-	// wrapper functionality
-	inline bool IsLowerCase() const
-	{ return gchar_IsLowerCase(Value); }
-
-	inline bool IsUpperCase() const
-	{ return gchar_IsUpperCase(Value); }
-
-	inline bool IsAlphabet() const
-	{ return gchar_IsAlphabet(Value); }
-
-	inline bool IsDigit() const
-	{ return gchar_IsDigit(Value); }
-
-	inline gchar_ GetLowerCase() const
-	{ return (gchar_) gchar_GetLowerCase(Value); }
-
-	inline gchar_ GetUpperCase() const
-	{ return (gchar_) gchar_GetUpperCase(Value); }
-
-	inline char GetChar() const
-	{ return (char) Value; }
-
-	inline wchar GetWchar() const
-	{ return (wchar) Value; }
-
-	inline tchar GetTchar() const
-	{ return (tchar) Value; }
-
-
-}; // end class gchar_
+inline tchar char_GetTchar(char ch)
+{ return (tchar) ch; }
 
 
 } // end namespace wind
-#endif // !__cplusplus
 
 
-#endif /* _TYPE_GCHAR_H_ */
+#endif /* _TYPE_CHAR_FUNC_H_ */

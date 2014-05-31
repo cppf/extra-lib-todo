@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\char.hpp - ANSI character wrapper class
+ * type\char.h - ANSI character wrapper class
  */
 
 #ifndef _TYPE_CHAR_H_
@@ -39,7 +39,7 @@
 
 
 // required headers
-#include "charF.h"
+#include "char_func.h"
 
 
 #ifdef __cplusplus

@@ -56,9 +56,14 @@
 
 
 // mark unused variables
-#ifndef unused
-#define unused(var)		(void)(var)
+#ifndef unusedvar
+#define unusedvar(var)		(void)(var)
 #endif
+
+
+// specify byte address
+#define byteaddr(base, off)	\
+(((unsigned char*)(base)) + (off))
 
 
 // memory barrier to prevent reordering

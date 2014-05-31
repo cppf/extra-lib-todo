@@ -43,9 +43,7 @@
 #include "primitives.h"
 
 
-#ifdef __cplusplus
 namespace wind {
-#endif
 
 
 // size-specified integers
@@ -133,9 +131,7 @@ const ulong ulong_Min = uint32_Min;
 const ulong ulong_Max = uint32_Max;
 
 
-#ifdef __cplusplus
 }
-#endif
 
 
 #endif /* _TYPE_RANGES_H_ */

@@ -31,20 +31,19 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * mem\address.h - memory address wrapper class
+ * memory\address.h - Defines a memory address wrapper class that provides common associated functionality
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MEM_ADDRESS_H_
-#define _MEM_ADDRESS_H_
+#ifndef _MEMORY_ADDRESS_H_
+#define _MEMORY_ADDRESS_H_
 
 
 // required headers
-#include "memF.h"
+#include "block_func.h"
 
 
-#ifdef __cplusplus
 namespace wind {
-#endif
 
 
 // memory address wrapper class
@@ -55,9 +54,9 @@ class address
 
 
 public:
-	// address value
+	// data
 	T* Value;
-
+	
 
 public:
 	// initialization
@@ -70,42 +69,46 @@ public:
 	inline operator T*() const
 	{ return Value; }
 
+	inline static address Create(void* addr=NULL)
+	{ return address(addr); }
+
+	inline void Destroy()
+	{ Value = NULL; }
+
 
 	// functions
 	inline void Fill(uint size, byte val)
-	{ mem_Fill(Value, size, val); }
+	{ block_Fill(Value, size, val); }
 
 	inline void FillZero(uint size)
-	{ mem_FillZero(Value, size); }
+	{ block_FillZero(Value, size); }
 
 	inline void Copy(const void* src, uint size)
-	{ mem_Copy(Value, src, size); }
+	{ block_Copy(Value, src, size); }
 
 	inline void Copy(uint dstSize, const void* src, uint size)
-	{ mem_Copy(Value, dstSize, src, size); }
+	{ block_Copy(Value, dstSize, src, size); }
 
 	inline void Move(const void* src, uint size)
-	{ mem_Move(Value, src, size); }
+	{ block_Move(Value, src, size); }
 
 	inline void Move(uint dstSize, const void* src, uint size)
-	{ mem_Move(Value, dstSize, src, size); }
+	{ block_Move(Value, dstSize, src, size); }
 
 	inline int Compare(const void* addr, uint size) const
-	{ return mem_Compare(Value, addr, size); }
+	{ return block_Compare(Value, addr, size); }
 
 	inline bool Equals(const void* addr, uint size) const
-	{ return mem_Compare(Value, addr, size); }
+	{ return block_Equals(Value, addr, size); }
 
 	inline void* Find(uint size, byte val)
-	{ return mem_Find(Value, size, val); }
+	{ return block_Find(Value, size, val); }
 
 
 }; // end class address
 
 
-#ifdef __cplusplus
 } // end namespace wind
-#endif
 
 
-#endif /* _MEM_ADDRESS_H_ */
+#endif /* _MEMORY_ADDRESS_H_ */

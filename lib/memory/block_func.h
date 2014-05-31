@@ -31,72 +31,70 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * mem\memF.h - memory functions
+ * memory\block_func.h - Provides block memory operations for use with the Wind library
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MEM_MEMF_H_
-#define _MEM_MEMF_H_
+#ifndef _MEMORY_BLOCK_FUNC_H_
+#define _MEMORY_BLOCK_FUNC_H_
 
 
 // required headers
 #include <stdlib.h>
 #include <string.h>
-#include "..\make\const.h"
-#include "..\type\basic.h"
+#include "..\support\constants.h"
+#include "..\type\primitives.h"
 #if OS == WINDOWS
 #include <Windows.h>
 #endif
 
 
-#ifdef __cplusplus
 namespace wind {
-#endif
 
 
 // block operations
 #if OS == WINDOWS
-#define	_mem_fill(addr, sz, val)	FillMemory(addr, sz, val)
-#define	_mem_fillZero(addr, sz)		ZeroMemory(addr, sz)
-#define	_mem_copy(dst, src, sz)		CopyMemory(dst, src, sz)
-#define	_mem_move(dst, src, sz)		MoveMemory(dst, src, sz)
+#define	_block_fill(addr, sz, val)		FillMemory(addr, sz, val)
+#define	_block_fillZero(addr, sz)		ZeroMemory(addr, sz)
+#define	_block_copy(dst, src, sz)		CopyMemory(dst, src, sz)
+#define	_block_move(dst, src, sz)		MoveMemory(dst, src, sz)
 #else // OS != WINDOWS
-#define	_mem_fill(addr, sz, val)	memset(addr, sz, val)
-#define	_mem_fillZero(addr, sz)		memset(addr, sz, 0)
-#define	_mem_copy(dst, src, sz)		memcpy(dst, src, sz)
-#define	_mem_move(dst, src, sz)		memmove(dst, src, sz)
-#endif// OS == WINDOWS
+#define	_block_fill(addr, sz, val)		memset(addr, sz, val)
+#define	_block_fillZero(addr, sz)		memset(addr, sz, 0)
+#define	_block_copy(dst, src, sz)		memcpy(dst, src, sz)
+#define	_block_move(dst, src, sz)		memmove(dst, src, sz)
+#endif // OS == WINDOWS
 
-inline void mem_Fill(void* addr, uint size, byte val)
-{ _mem_fill(addr, size, val); }
 
-inline void mem_FillZero(void* addr, uint size)
-{ _mem_fillZero(addr, size); }
+inline void block_Fill(void* addr, uint size, byte val)
+{ _block_fill(addr, size, val); }
 
-inline void mem_Copy(void* dst, const void* src, uint size)
-{ _mem_copy(dst, src, size); }
+inline void block_FillZero(void* addr, uint size)
+{ _block_fillZero(addr, size); }
 
-inline void mem_Copy(void* dst, uint dstSize, const void* src, uint size)
+inline void block_Copy(void* dst, const void* src, uint size)
+{ _block_copy(dst, src, size); }
+
+inline void block_Copy(void* dst, uint dstSize, const void* src, uint size)
 { memcpy_s(dst, dstSize, src, size); }
 
-inline void mem_Move(void* dst, const void* src, uint size)
-{ _mem_move(dst, src, size); }
+inline void block_Move(void* dst, const void* src, uint size)
+{ _block_move(dst, src, size); }
 
-inline void mem_Move(void* dst, uint dstSize, const void* src, uint size)
+inline void block_Move(void* dst, uint dstSize, const void* src, uint size)
 { memmove_s(dst, dstSize, src, size); }
 
-inline int mem_Compare(const void* addr1, const void* addr2, uint size)
+inline int block_Compare(const void* addr1, const void* addr2, uint size)
 { return memcmp(addr1, addr2, size); }
 
-inline bool mem_Equals(const void* addr1, const void* addr2, uint size)
-{ return !mem_Compare(addr1, addr2, size); }
+inline bool block_Equals(const void* addr1, const void* addr2, uint size)
+{ return !block_Compare(addr1, addr2, size); }
 
-inline void* mem_Find(void* addr, uint size, byte val)
+inline void* block_Find(void* addr, uint size, byte val)
 { return memchr(addr, val, size); }
 
 
-#ifdef __cplusplus
 } // end namespace wind
-#endif
 
 
-#endif /* _MEM_MEMF_H_ */
+#endif /* _MEMORY_BLOCK_FUNC_H_ */

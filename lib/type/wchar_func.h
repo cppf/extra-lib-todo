@@ -31,61 +31,51 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\gcharF.h - generic character functions
+ * type\wchar_func.h - Provides standard Unicode (wide) character functions
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_GCHARF_H_
-#define _TYPE_GCHARF_H_
+#ifndef _TYPE_WCHAR_FUNC_H_
+#define _TYPE_WCHAR_FUNC_H_
 
 
 // required headers
-#include "basic.h"
+#include "primitives.h"
 
 
-#ifdef __cplusplus
 namespace wind {
 
 
 // functions
-template <typename T>
-inline bool gchar_IsLowerCase(T ch)
-{ return (ch >= 'a') && (ch <= 'z'); }
+inline bool wchar_IsLowerCase(wchar ch)
+{ return (ch >= L'a') && (ch <= L'z'); }
 
-template <typename T>
-inline bool gchar_IsUpperCase(T ch)
-{ return (ch >= 'A') && (ch <= 'Z'); }
+inline bool wchar_IsUpperCase(wchar ch)
+{ return (ch >= L'A') && (ch <= L'Z'); }
 
-template <typename T>
-inline bool gchar_IsAlphabet(T ch)
-{ return gchar_IsLowerCase(ch) || gchar_IsUpperCase(ch); }
+inline bool wchar_IsAlphabet(wchar ch)
+{ return wchar_IsLowerCase(ch) || wchar_IsUpperCase(ch); }
 
-template <typename T>
-inline bool gchar_IsDigit(T ch)
-{ return (ch >= '0') && (ch <= '9'); }
+inline bool wchar_IsDigit(wchar ch)
+{ return (ch >= L'0') && (ch <= L'9'); }
 
-template <typename T>
-inline T gchar_GetLowerCase(T ch)
-{ return gchar_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
+inline wchar wchar_GetLowerCase(wchar ch)
+{ return wchar_IsUpperCase(ch)? (ch - L'A' + L'a') : ch; }
 
-template <typename T>
-inline char gchar_GetUpperCase(T ch)
-{ return gchar_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
+inline wchar wchar_GetUpperCase(wchar ch)
+{ return wchar_IsLowerCase(ch)? (ch - L'a' + L'A') : ch; }
 
-template <typename T>
-inline char gchar_GetChar(T ch)
+inline char wchar_GetChar(wchar ch)
 { return (char) ch; }
 
-template <typename T>
-inline wchar gchar_GetWchar(T ch)
-{ return (wchar) ch; }
+inline wchar wchar_GetWwchar(wchar ch)
+{ return ch; }
 
-template <typename T>
-inline tchar gchar_GetTchar(T ch)
+inline tchar wchar_GetTwchar(wchar ch)
 { return (tchar) ch; }
 
 
 } // end namespace wind
-#endif // !__cplusplus
 
 
-#endif /* _TYPE_GCHARF_H_ */
+#endif /* _TYPE_WCHARF_H_ */

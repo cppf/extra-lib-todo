@@ -31,54 +31,33 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\tcharF.h - text character functions
+ * type\handle.h - Defines handle datatype for storing object handles
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_TCHARF_H_
-#define _TYPE_TCHARF_H_
+#ifndef _TYPE_HANDLE_HPP_
+#define _TYPE_HANDLE_HPP_
 
 
 // required headers
-#include "basic.h"
-
-
-#ifdef __cplusplus
-namespace wind {
+#include "..\support\constants.h"
+#if OS == WINDOWS
+#include <Windows.h>
 #endif
 
 
-// functions
-inline bool tchar_IsLowerCase(tchar ch)
-{ return (ch >= tcharof('a')) && (ch <= tcharof('z')); }
-
-inline bool tchar_IsUpperCase(tchar ch)
-{ return (ch >= tcharof('A')) && (ch <= tcharof('Z')); }
-
-inline bool tchar_IsAlphabet(tchar ch)
-{ return tchar_IsLowerCase(ch) || tchar_IsUpperCase(ch); }
-
-inline bool tchar_IsDigit(tchar ch)
-{ return (ch >= tcharof('0')) && (ch <= tcharof('9')); }
-
-inline tchar tchar_GetLowerCase(tchar ch)
-{ return tchar_IsUpperCase(ch)? (ch - tcharof('A') + tcharof('a')) : ch; }
-
-inline tchar tchar_GetUpperCase(tchar ch)
-{ return tchar_IsLowerCase(ch)? (ch - tcharof('a') + tcharof('A')) : ch; }
-
-inline char tchar_GetChar(tchar ch)
-{ return (char) ch; }
-
-inline wchar tchar_GetWchar(tchar ch)
-{ return (wchar) ch; }
-
-inline tchar tchar_GetTchar(tchar ch)
-{ return ch; }
+namespace wind
+{
 
 
-#ifdef __cplusplus
+#if OS == WINDOWS
+typedef void* handle;
+#else
+typedef HANDLE handle;
+#endif
+
+
 } // end namespace wind
-#endif
 
 
-#endif /* _TYPE_TCHARF_H_ */
+#endif /* _TYPE_HANDLE_HPP_ */
