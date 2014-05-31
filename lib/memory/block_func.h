@@ -42,44 +42,62 @@
 // required headers
 #include <stdlib.h>
 #include <string.h>
-#include "..\support\constants.h"
-#include "..\type\primitives.h"
-#if OS == WINDOWS
-#include <Windows.h>
-#endif
+#include "heap_func.h"
 
 
 namespace wind {
 
 
-// block operations
+// initialization
+inline void* block_Create(handle hHeap, uint size, uint flags=0)
+{ return heap_Alloc(hHeap, size, flags); }
+
+inline void* block_Create(uint size, uint flags=0)
+{ return heap_Alloc(size, flags); }
+
+inline void* block_Resize(handle hHeap, void* addr, uint size, uint flags=0)
+{ return heap_ReAlloc(hHeap, addr, size, flags); }
+
+inline void* block_Resize(void* addr, uint size, uint flags=0)
+{ return heap_ReAlloc(addr, size, flags); }
+
+inline void block_Destroy(handle hHeap, void* addr, uint flags=0)
+{ return heap_Free(hHeap, addr, flags); }
+
+inline void block_Destroy(void* addr, uint flags=0)
+{ return heap_Free(addr, flags); }
+
+
+// functions
 #if OS == WINDOWS
-#define	_block_fill(addr, sz, val)		FillMemory(addr, sz, val)
-#define	_block_fillZero(addr, sz)		ZeroMemory(addr, sz)
-#define	_block_copy(dst, src, sz)		CopyMemory(dst, src, sz)
-#define	_block_move(dst, src, sz)		MoveMemory(dst, src, sz)
-#else // OS != WINDOWS
-#define	_block_fill(addr, sz, val)		memset(addr, sz, val)
-#define	_block_fillZero(addr, sz)		memset(addr, sz, 0)
-#define	_block_copy(dst, src, sz)		memcpy(dst, src, sz)
-#define	_block_move(dst, src, sz)		memmove(dst, src, sz)
-#endif // OS == WINDOWS
+inline void block_Fill(void* dst, uint size, byte val)
+{ FillMemory(dst, size, val); }
 
-
-inline void block_Fill(void* addr, uint size, byte val)
-{ _block_fill(addr, size, val); }
-
-inline void block_FillZero(void* addr, uint size)
-{ _block_fillZero(addr, size); }
+inline void block_FillZero(void* dst, uint size)
+{ SecureZeroMemory(dst, size); }
 
 inline void block_Copy(void* dst, const void* src, uint size)
-{ _block_copy(dst, src, size); }
+{ CopyMemory(dst, src, size); }
+
+inline void block_Move(void* dst, void* src, uint size)
+{ MoveMemory(dst, src, size); }
+
+#else // OS != WINDOWS
+inline void block_Fill(void* dst, uint size, byte val)
+{ memset(dst, size, val); }
+
+inline void block_FillZero(void* dst, uint size)
+{ memset(dst, size, 0); }
+
+inline void block_Copy(void* dst, const void* src, uint size)
+{ memcpy(dst, src, size); }
+
+inline void block_Move(void* dst, void* src, uint size)
+{ memmove(dst, src, size); }
+#endif // OS == WINDOWS
 
 inline void block_Copy(void* dst, uint dstSize, const void* src, uint size)
 { memcpy_s(dst, dstSize, src, size); }
-
-inline void block_Move(void* dst, const void* src, uint size)
-{ _block_move(dst, src, size); }
 
 inline void block_Move(void* dst, uint dstSize, const void* src, uint size)
 { memmove_s(dst, dstSize, src, size); }

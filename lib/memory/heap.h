@@ -66,6 +66,9 @@ public:
 	inline static void End()
 	{ Default.Handle = NULL; }
 
+	inline operator handle()
+	{ return Handle; }
+
 	inline heap(uint startSize=0, uint flags=0)
 	{ Handle = heap_Create(startSize, flags); }
 

@@ -43,6 +43,7 @@
 #include "..\support\keywords.h"
 #include "..\support\constants.h"
 #include "..\type\primitives.h"
+#include "..\type\handle.h"
 #if OS == WINDOWS
 #include <Windows.h>
 #endif
