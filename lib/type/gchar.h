@@ -31,24 +31,25 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\char_func.h - Defines ansANSI character wrapper class with standard associated functions
+ * type\gchar_func.h - Defines generic character wrapper class with standard associated functions
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_CHAR_H_
-#define _TYPE_CHAR_H_
+#ifndef _TYPE_GCHAR_H_
+#define _TYPE_GCHAR_H_
 
 
 // required headers
-#include "char_func.h"
+#include "gchar_func.h"
 
 
 namespace wind {
 
 
-// ANSI character wrapper class
+// Generic character wrapper class
 // can be type casted to char
-class char_
+template <typename T>
+class gchar
 {
 
 
@@ -57,55 +58,68 @@ public:
 	char Value;
 
 
+public:
 	// initialization
-	inline operator char() const
+	inline operator T() const
 	{ return Value; }
 
-	inline void operator=(char ch)
+	inline void operator=(T ch)
 	{ Value = ch; }
 
-	inline char_(char ch='\0')
+	inline gchar(T ch='\0')
 	{ Value = ch; }
 
-	inline static char_ Create(char ch='\0')
-	{ return char_(ch); }
+	inline static gchar Create(T ch='\0')
+	{ return gchar(ch); }
 
 	inline void Destroy()
 	{ Value = '\0'; }
 
 	// functions
 	inline bool IsLowerCase() const
-	{ return char_IsLowerCase(Value); }
+	{ return gchar_IsLowerCase(Value); }
 
 	inline bool IsUpperCase() const
-	{ return char_IsUpperCase(Value); }
+	{ return gchar_IsUpperCase(Value); }
 
 	inline bool IsAlphabet() const
-	{ return char_IsAlphabet(Value); }
+	{ return gchar_IsAlphabet(Value); }
 
 	inline bool IsDigit() const
-	{ return char_IsDigit(Value); }
+	{ return gchar_IsDigit(Value); }
 
-	inline char_ GetLowerCase() const
-	{ return (char_) char_GetLowerCase(Value); }
+	inline gchar GetLowerCase() const
+	{ return (gchar) gchar_GetLowerCase(Value); }
 
-	inline char_ GetUpperCase() const
-	{ return (char_) char_GetUpperCase(Value); }
+	inline gchar GetUpperCase() const
+	{ return (gchar) gchar_GetUpperCase(Value); }
 
 	inline char GetChar() const
-	{ return Value; }
+	{ return gchar_GetChar(Value); }
 
 	inline wchar GetWchar() const
-	{ return (wchar) Value; }
+	{ return gchar_GetWchar(Value); }
 
 	inline tchar GetTchar() const
-	{ return (tchar) Value; }
+	{ return gchar_GetTchar(Value); }
 
 
-}; // end class char_
+}; // end class gchar
+
+
+// ANSI character wrapper
+typedef gchar<char> char_;
+
+
+// Unicode (wide) character wrapper
+typedef gchar<wchar> wchar_;
+
+
+// Text (from TEXT_MODE) character wrapper
+typedef gchar<tchar> tchar_;
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_CHAR_H_ */
+#endif /* _TYPE_GCHAR_H_ */

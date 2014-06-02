@@ -47,31 +47,40 @@ namespace wind {
 
 
 // functions
-inline bool char_IsLowerCase(char ch)
+template <typename T>
+inline bool gchar_IsLowerCase(T ch)
 { return (ch >= 'a') && (ch <= 'z'); }
 
-inline bool char_IsUpperCase(char ch)
+template <typename T>
+inline bool gchar_IsUpperCase(T ch)
 { return (ch >= 'A') && (ch <= 'Z'); }
 
-inline bool char_IsAlphabet(char ch)
-{ return char_IsLowerCase(ch) || char_IsUpperCase(ch); }
+template <typename T>
+inline bool gchar_IsAlphabet(T ch)
+{ return gchar_IsLowerCase(ch) || gchar_IsUpperCase(ch); }
 
-inline bool char_IsDigit(char ch)
+template <typename T>
+inline bool gchar_IsDigit(T ch)
 { return (ch >= '0') && (ch <= '9'); }
 
-inline char char_GetLowerCase(char ch)
-{ return char_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
+template <typename T>
+inline char gchar_GetLowerCase(T ch)
+{ return gchar_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
 
-inline char char_GetUpperCase(char ch)
-{ return char_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
+template <typename T>
+inline char gchar_GetUpperCase(T ch)
+{ return gchar_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
 
-inline char char_GetChar(char ch)
-{ return ch; }
+template <typename T>
+inline char gchar_GetChar(T ch)
+{ return (char) ch; }
 
-inline wchar char_GetWchar(char ch)
+template <typename T>
+inline wchar gchar_GetWchar(T ch)
 { return (wchar) ch; }
 
-inline tchar char_GetTchar(char ch)
+template <typename T>
+inline tchar gchar_GetTchar(T ch)
 { return (tchar) ch; }
 
 

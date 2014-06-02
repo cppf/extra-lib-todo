@@ -41,6 +41,9 @@
 
 // required headers
 #include "..\support\constants.h"
+#if OS == WINDOWS
+#include <Windows.h>
+#endif
 
 
 namespace wind {
@@ -106,6 +109,14 @@ typedef	signed char		sbyte;
 typedef unsigned short	ushort;
 typedef unsigned int	uint;
 typedef unsigned long	ulong;
+
+
+// object handle
+#if OS == WINDOWS
+typedef void* handle;
+#else
+typedef HANDLE handle;
+#endif
 
 
 } // end namespace wind
