@@ -31,7 +31,8 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\char.h - ANSI character wrapper class
+ * type\char_func.h - Defines ansANSI character wrapper class with standard associated functions
+ * This file is part of the Wind library for C++.
  */
 
 #ifndef _TYPE_CHAR_H_
@@ -42,7 +43,6 @@
 #include "char_func.h"
 
 
-#ifdef __cplusplus
 namespace wind {
 
 
@@ -58,17 +58,20 @@ public:
 
 
 	// initialization
-	inline char_()
-	{ Value = '\0'; }
-
-	inline char_(char ch)
-	{ Value = ch; }
+	inline operator char() const
+	{ return Value; }
 
 	inline void operator=(char ch)
 	{ Value = ch; }
 
-	inline operator char() const
-	{ return Value; }
+	inline char_(char ch='\0')
+	{ Value = ch; }
+
+	inline static char_ Create(char ch='\0')
+	{ return char_(ch); }
+
+	inline void Destroy()
+	{ Value = '\0'; }
 
 	// functions
 	inline bool IsLowerCase() const
@@ -103,7 +106,6 @@ public:
 
 
 } // end namespace wind
-#endif // !__cplusplus
 
 
 #endif /* _TYPE_CHAR_H_ */

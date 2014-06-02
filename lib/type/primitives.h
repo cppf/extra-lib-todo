@@ -39,6 +39,10 @@
 #define	_TYPE_PRIMITIVES_H_
 
 
+// required headers
+#include "..\support\constants.h"
+
+
 namespace wind {
 
 
@@ -95,10 +99,10 @@ typedef uint64	uword;
 
 
 // named types
-#ifndef byte
+#if OS != WINDOWS
 typedef	unsigned char	byte;
-typedef	signed char		sbyte;
 #endif
+typedef	signed char		sbyte;
 typedef unsigned short	ushort;
 typedef unsigned int	uint;
 typedef unsigned long	ulong;

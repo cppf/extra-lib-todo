@@ -60,14 +60,14 @@ public:
 
 public:
 	// initialization
-	inline address(void* addr=NULL)
-	{ Value = (T*) addr; }
-
 	inline void operator=(void* addr)
 	{ Value = (T*) addr; }
 
 	inline operator T*() const
 	{ return Value; }
+
+	inline address(void* addr=NULL)
+	{ Value = (T*) addr; }
 
 	inline static address Create(void* addr=NULL)
 	{ return address(addr); }

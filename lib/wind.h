@@ -47,6 +47,7 @@
 // Wind configuration settings
 #define	WORD_SIZE		32
 #define	TEXT_MODE		ANSI
+#define	HEAP_MODE		MULTI_HEAP
 #define	COMPILER		VISUAL_CPP
 #define	DEVICE			PROCESSOR
 #define	ARCHITECTURE	X86
@@ -70,16 +71,17 @@
 #include "type\primitives.h"
 #include "type\ranges.h"
 #include "type\handle.h"
-/*
 #include "type\char.h"
 #include "type\wchar.h"
 #include "type\tchar.h"
-*/
+
+
+// memory
+#include "memory\heap_func.h"
+#include "memory\heap.h"
 #include "memory\block_func.h"
 #include "memory\address.h"
 #include "memory\block.h"
-#include "memory\heap_func.h"
-#include "memory\heap.h"
 /*
 // math
 #include "math\basic.hpp"

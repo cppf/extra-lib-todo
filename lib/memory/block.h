@@ -40,6 +40,7 @@
 
 
 // required headers
+#include "block_func.h"
 #include "address.h"
 
 
@@ -55,26 +56,82 @@ class block
 
 public:
 	// data
-	T*	Address;
+	address<T> Address;
 	int	Size;
+#if HEAP_MODE == MULTI_HEAP
+	heap Heap;
+#endif
 
 
 public:
 	// initialization
-	inline block(void* addr=NULL, uint size=0)
-	{ Address = (T*) addr; Size = size; }
-
-	inline void operator=(void* ptr)
-	{ Address = (T*) ptr; Size = 0; }
-
-	inline operator T*() const
+	inline operator address<T>() const
 	{ return Address; }
 
-	inline static block Create(void* addr=NULL, uint size=0)
-	{ return block(addr, size); }
+#if HEAP_MODE == MULTI_HEAP
+	inline operator block<void>() const
+	{ return block<void>(Address, Size, Heap); }
 
-	inline void Destroy()
+	inline void operator=(const block<void> &blk)
+	{ Address = blk.Address; Size = blk.Size; Heap = blk.Heap; }
+
+	inline block(const block<void> &blk)
+	{ Address = blk.Address; Size = blk.Size; Heap = blk.Heap; }
+
+	inline block()
+	{ Address = NULL; Size = 0; Heap = heap(); }
+
+	inline block(void* addr, uint size, heap hHeap=heap())
+	{ Address = addr; Size = size; Heap = hHeap; }
+
+	inline static block Create(heap hHeap, uint size, uint flags=0)
+	{ return block(block_Create(hHeap, size, flags), size, hHeap); }
+
+	inline static block Create(uint size, uint flags=0)
+	{ return block(block_Create(size, flags), size, heap::Default); }
+
+	inline void Destroy(uint flags=0)
+	{ block_Destroy(Heap, Address, flags); Address = NULL; Size = 0; Heap.Handle = NULL; }
+
+	inline void Resize(uint size, uint flags=0)
+	{ Address = block_Resize(Heap, Address, size, flags); Size = size; }
+
+
+#else
+
+	inline operator block<void>() const
+	{ return block<void>(Address, Size); }
+
+	inline void operator=(const block<void> &blk)
+	{ Address = blk.Address; Size = blk.Size; }
+
+	inline block(const block<void> &blk)
+	{ Address = blk.Address; Size = blk.Size; }
+
+	inline block()
 	{ Address = NULL; Size = 0; }
+
+	inline block(void* addr, uint size)
+	{ Address = addr; Size = size; }
+
+	inline static block Create(heap hHeap, uint size, uint flags=0)
+	{ return block(block_Create(hHeap, size, flags), size); }
+
+	inline static block Create(uint size, uint flags=0)
+	{ return block(block_Create(size, flags), size); }
+
+	inline void Destroy(heap hHeap, uint flags=0)
+	{ block_Destroy(hHeap, Address, flags); Address = NULL; Size = 0; }
+
+	inline void Destroy(uint flags=0)
+	{ block_Destroy(Address, flags); Address = NULL; Size = 0; }
+
+	inline void Resize(heap hHeap, uint size, uint flags=0)
+	{ Address = block_Resize(hHeap, Address, size, flags); Size = size; }
+
+	inline void Resize(uint size, uint flags=0)
+	{ Address = block_Resize(Address, size, flags); Size = size; }
+#endif
 
 
 	// functions

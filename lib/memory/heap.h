@@ -61,7 +61,7 @@ public:
 public:
 	// initialization
 	inline static void Begin()
-	{ *( (handle*)&Default ) = heap_Begin(); }
+	{ Default.Handle = heap_Begin(); }
 
 	inline static void End()
 	{ Default.Handle = NULL; }
@@ -69,11 +69,11 @@ public:
 	inline operator handle()
 	{ return Handle; }
 
-	inline heap(uint startSize=0, uint flags=0)
-	{ Handle = heap_Create(startSize, flags); }
+	inline heap(handle hHeap=NULL)
+	{ Handle = hHeap; }
 
 	inline static heap Create(uint startSize=0, uint flags=0)
-	{ return heap(startSize, flags); }
+	{ return heap(heap_Create(startSize, flags)); }
 
 	inline void Destroy()
 	{ heap_Destroy(Handle); Handle = NULL; }

@@ -39,11 +39,10 @@
 
 
 // required headers
-#include "..\make\const.h"
+#include "..\support\constants.h"
 #include "char.h"
 #include "wchar.h"
 
-#ifdef __cplusplus
 namespace wind {
 
 
@@ -57,7 +56,6 @@ typedef wchar_	tchar_;
 
 
 } // end namespace wind
-#endif // !__cplusplus
 
 
 #endif /* _TYPE_TCHAR_H_ */

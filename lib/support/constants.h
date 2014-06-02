@@ -68,4 +68,9 @@
 #define	VISUAL_CPP	0x0041
 
 
+// HEAP_MODE
+#define	SINGLE_HEAP	0x0050
+#define	MULTI_HEAP	0x0051
+
+
 #endif /* _SUPPORT_CONSTANTS_H_ */

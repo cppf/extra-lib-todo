@@ -32,7 +32,7 @@
 
 /* 
  * type\char_func.h - Provides standard ANSI character functions
- * This file is part of the Wind library fir C++.
+ * This file is part of the Wind library for C++.
  */
 
 #ifndef _TYPE_CHAR_FUNC_H_

@@ -39,10 +39,9 @@
 
 
 // required headers
-#include "wcharF.h"
+#include "wchar_func.h"
 
 
-#ifdef __cplusplus
 namespace wind {
 
 
@@ -104,7 +103,6 @@ public:
 
 
 } // end namespace wind
-#endif // !__cplusplus
 
 
 #endif /* _TYPE_WCHAR_H_ */

@@ -31,63 +31,51 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * eeprom.hpp - EEPROM driver file
+ * type\gchar_func.h - Provides standard generic-type character functions
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _MEM_EEPROM_HPP_
-#define _MEM_EEPROM_HPP_
+#ifndef _TYPE_GCHAR_FUNC_H_
+#define _TYPE_GCHAR_FUNC_H_
 
 
 // required headers
-#include "..\make\const.hpp"
+#include "primitives.h"
 
 
-#if ARCHITECTURE == AVR
+namespace wind {
 
 
-namespace mem
-{
-using namespace data;
+// functions
+inline bool char_IsLowerCase(char ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
 
-class eeprom
-{
-	struct task
-	{
-		void*	Dest;
-		void*	Src;
-		uint	Size;
-	};
-	
-	private:
-	queue<task, 16> Tasks;
-	
-	private:
-	void _Isr()
-	{
-		_Handler();
-	}
-	
-	void _Handler()
-	{
-		
-	}
-	
-	public:
-	void Read(void* dest, void* src, uint size)
-	{
-		// Check if queue is already full or not, if yes, block
-		task tsk = {dest, src, size};
-		Tasks.PushRear(tsk);
-	}
-	
-	void Write(void* dest, void* src, uint size)
-	{
-		task tsk = {dest, src, size};
-	}
-};
+inline bool char_IsUpperCase(char ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
 
-} // end (namespace) mem
+inline bool char_IsAlphabet(char ch)
+{ return char_IsLowerCase(ch) || char_IsUpperCase(ch); }
+
+inline bool char_IsDigit(char ch)
+{ return (ch >= '0') && (ch <= '9'); }
+
+inline char char_GetLowerCase(char ch)
+{ return char_IsUpperCase(ch)? (ch - 'A' + 'a') : ch; }
+
+inline char char_GetUpperCase(char ch)
+{ return char_IsLowerCase(ch)? (ch - 'a' + 'A') : ch; }
+
+inline char char_GetChar(char ch)
+{ return ch; }
+
+inline wchar char_GetWchar(char ch)
+{ return (wchar) ch; }
+
+inline tchar char_GetTchar(char ch)
+{ return (tchar) ch; }
 
 
-#endif
-#endif /* _MEM_EEPROM_HPP_ */
+} // end namespace wind
+
+
+#endif /* _TYPE_GCHAR_FUNC_H_ */
