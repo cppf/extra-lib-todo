@@ -106,16 +106,16 @@ const word uword_Max = uint64_Max;
 
 
 // named types
-const char ggggchar_Min = '\0';
-const char ggggchar_Max = '\xFF';
-const wchar wggggchar_Min = L'\0';
-const wchar wggggchar_Max = L'\xFFFF';
+const char char_Min = '\0';
+const char char_Max = '\xFF';
+const wchar wchar_Min = L'\0';
+const wchar wchar_Max = L'\xFFFF';
 #if TEXT_MODE == ANSI
-const tchar tggggchar_Min = ggggchar_Min;
-const tchar tggggchar_Max = ggggchar_Max;
+const tchar tchar_Min = char_Min;
+const tchar tchar_Max = char_Max;
 #else // TEXT_MODE == UNICODE
-const tchar tggggchar_Min = wggggchar_Min;
-const tchar tggggchar_Max = wggggchar_Max;
+const tchar tchar_Min = wchar_Min;
+const tchar tchar_Max = wchar_Max;
 #endif
 const byte byte_Min = uint8_Min;
 const byte byte_Max = uint8_Max;

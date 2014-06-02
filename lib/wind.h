@@ -70,10 +70,8 @@
 // types
 #include "type\primitives.h"
 #include "type\ranges.h"
-#include "type\handle.h"
-#include "type\char.h"
-#include "type\wchar.h"
-#include "type\tchar.h"
+#include "type\gchar_func.h"
+#include "type\gchar.h"
 
 
 // memory
