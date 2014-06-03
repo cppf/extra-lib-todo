@@ -31,12 +31,12 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * memory\block_func.h - Provides block memory operations for use with the Wind library
+ * memory\buffer_func.h - Provides standard memory operations than can be performed on a buffer
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _MEMORY_BLOCK_FUNC_H_
-#define _MEMORY_BLOCK_FUNC_H_
+#ifndef _MEMORY_BUFFER_FUNC_H_
+#define _MEMORY_BUFFER_FUNC_H_
 
 
 // required headers
@@ -49,70 +49,70 @@ namespace wind {
 
 
 // initialization
-inline void* block_Create(handle hHeap, uint size, uint flags=0)
+inline void* buffer_Create(handle hHeap, uint size, uint flags=0)
 { return heap_Alloc(hHeap, size, flags); }
 
-inline void* block_Create(uint size, uint flags=0)
+inline void* buffer_Create(uint size, uint flags=0)
 { return heap_Alloc(size, flags); }
 
-inline void* block_Resize(handle hHeap, void* addr, uint size, uint flags=0)
+inline void* buffer_Resize(handle hHeap, void* addr, uint size, uint flags=0)
 { return heap_ReAlloc(hHeap, addr, size, flags); }
 
-inline void* block_Resize(void* addr, uint size, uint flags=0)
+inline void* buffer_Resize(void* addr, uint size, uint flags=0)
 { return heap_ReAlloc(addr, size, flags); }
 
-inline void block_Destroy(handle hHeap, void* addr, uint flags=0)
+inline void buffer_Destroy(handle hHeap, void* addr, uint flags=0)
 { return heap_Free(hHeap, addr, flags); }
 
-inline void block_Destroy(void* addr, uint flags=0)
+inline void buffer_Destroy(void* addr, uint flags=0)
 { return heap_Free(addr, flags); }
 
 
 // functions
 #if OS == WINDOWS
-inline void block_Fill(void* dst, uint size, byte val)
+inline void buffer_Fill(void* dst, uint size, byte val)
 { FillMemory(dst, size, val); }
 
-inline void block_FillZero(void* dst, uint size)
+inline void buffer_FillZero(void* dst, uint size)
 { SecureZeroMemory(dst, size); }
 
-inline void block_Copy(void* dst, const void* src, uint size)
+inline void buffer_Copy(void* dst, const void* src, uint size)
 { CopyMemory(dst, src, size); }
 
-inline void block_Move(void* dst, void* src, uint size)
+inline void buffer_Move(void* dst, void* src, uint size)
 { MoveMemory(dst, src, size); }
 
 #else // OS != WINDOWS
-inline void block_Fill(void* dst, uint size, byte val)
+inline void buffer_Fill(void* dst, uint size, byte val)
 { memset(dst, size, val); }
 
-inline void block_FillZero(void* dst, uint size)
+inline void buffer_FillZero(void* dst, uint size)
 { memset(dst, size, 0); }
 
-inline void block_Copy(void* dst, const void* src, uint size)
+inline void buffer_Copy(void* dst, const void* src, uint size)
 { memcpy(dst, src, size); }
 
-inline void block_Move(void* dst, void* src, uint size)
+inline void buffer_Move(void* dst, void* src, uint size)
 { memmove(dst, src, size); }
 #endif // OS == WINDOWS
 
-inline void block_Copy(void* dst, uint dstSize, const void* src, uint size)
+inline void buffer_Copy(void* dst, uint dstSize, const void* src, uint size)
 { memcpy_s(dst, dstSize, src, size); }
 
-inline void block_Move(void* dst, uint dstSize, const void* src, uint size)
+inline void buffer_Move(void* dst, uint dstSize, const void* src, uint size)
 { memmove_s(dst, dstSize, src, size); }
 
-inline int block_Compare(const void* addr1, const void* addr2, uint size)
+inline int buffer_Compare(const void* addr1, const void* addr2, uint size)
 { return memcmp(addr1, addr2, size); }
 
-inline bool block_Equals(const void* addr1, const void* addr2, uint size)
-{ return !block_Compare(addr1, addr2, size); }
+inline bool buffer_Equals(const void* addr1, const void* addr2, uint size)
+{ return !buffer_Compare(addr1, addr2, size); }
 
-inline void* block_Find(void* addr, uint size, byte val)
+inline void* buffer_Find(void* addr, uint size, byte val)
 { return memchr(addr, val, size); }
 
 
 } // end namespace wind
 
 
-#endif /* _MEMORY_BLOCK_FUNC_H_ */
+#endif /* _MEMORY_BUFFER_FUNC_H_ */

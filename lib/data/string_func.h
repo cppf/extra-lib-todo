@@ -31,18 +31,18 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * stringz_func.h - Provides functions for performing string operations on a zero-terminated string
+ * string_func.h - Provides functions for performing string operations on a length-specified string
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _DATA_STRINGZ_FUNC_H_
-#define _DATA_STRINGZ_FUNC_H_
+#ifndef _DATA_STRING_FUNC_H_
+#define _DATA_STRING_FUNC_H_
 
 
 // required headers
 #include "..\support\constants.h"
 #include "..\type\primitives.h"
-#include "..\memory\buffer_func.h"
+#include "..\memory\block_func.h"
 #include <string.h>
 
 
@@ -50,34 +50,21 @@ namespace wind
 {
 
 
-// definition
-typedef char*	stringz;
-
-
-// string functions
+// length-specified string functions
 inline int stringz_Length(const char* str)
 { return strlen(str); }
 
 inline int stringz_Compare(const char* str1, const char* str2)
 { return strcmp(str1, str2); }
 
+inline char* stringz_ToLower(char* str)
+{ return strlwr(str); }
+
+inline char* stringz_ToUpper(char* str)
+{ return strupr(str); }
+
 inline char* stringz_Copy(char* dst, const char* src)
 { return strcpy(dst, src); }
-
-inline char* stringz_GetCopy(const char* src)
-{ int len = stringz_Length(src); char* dst = (char*) buffer_Create(len+1); stringz_Copy(dst, src); return dst; }
-
-inline char* stringz_GetLowerCase(char* dst, char* src)
-{ if(dst != src) stringz_Copy(dst, src); return strlwr(dst); }
-
-inline char* stringz_GetUpperCase(char* dst, char* src)
-{ if(dst != src) stringz_Copy(dst, src); return strupr(src); }
-
-inline char* stringz_GetUpperCase(char* dst, const char* src)
-{ stringz_Copy(dst, src); return stringz_ToUpperCase(dst); }
-
-inline char* stringz_GetUpperCase(const char* str)
-{ return stringz_ToUpperCase(stringz_GetCopy(str)); }
 
 inline char* stringz_Reverse(char* str)
 { return strrev(str); }
@@ -116,7 +103,7 @@ inline char* stringz_Filter(char* dst, const char* src, int start)
 { stringz_Copy(dst, src + start); return dst; }
 
 inline char* stringz_Filter(char* dst, const char* src, int start, int stop)
-{ buffer_Copy(dst, src+start, stop-start); dst[stop-start] = '\0'; return dst; }
+{ block_Copy(dst, src+start, stop-start); dst[stop-start] = '\0'; return dst; }
 
 inline char* stringz_Remove(char* str, int start)
 { str[start] = '\0'; return str; }
@@ -128,4 +115,4 @@ inline char* stringz_Remove(char* str, int start, int stop)
 } // end namespace wind
 
 
-#endif /* _DATA_STRINGZ_FUNC_H_ */
+#endif /* _DATA_STRING_FUNC_H_ */
