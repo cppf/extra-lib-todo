@@ -31,64 +31,86 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * support\keywords.h - Provides cross-compiler keyword-type functions for certain operations
+ * memory\address.h - Defines a memory address that provides destination-type functions
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _SUPPORT_KEYWORDS_H_
-#define _SUPPORT_KEYWORDS_H_
+#ifndef _MEMORY_ADDRESS_H_
+#define _MEMORY_ADDRESS_H_
 
 
 // required headers
-#include "constants.h"
+#include <stdlib.h>
+#include <string.h>
+#include "..\type\primitives.h"
 
 
-// get type of a variable
-#if COMPILER == VISUAL_CPP
-#define typeof(expr)	decltype(expr)
-#endif
+namespace wind {
 
 
-// convert a token to string
-#ifndef stringof
-#define stringof(a)		#a
-#endif
+// memory address class
+// can be type casted to type*
+template <typename T>
+class address
+{
 
 
-// mark unused parameters
-#ifndef unusedpar
-#define unusedpar(param)	(void)(param)
-#endif
+public:
+	// data
+	T* Value;
+	
+
+public:
+	// initialization
+	inline operator T*() const
+	{ return Value; }
+
+	inline address(const void* addr=NULL)
+	{ Value = (T*) addr; }
+
+	inline static address Create(const void* addr=NULL)
+	{ return address(addr); }
+
+	inline void Destroy()
+	{ Value = NULL; }
 
 
-// specify byte address
-#define byteaddr(base, off)	\
-(((unsigned char*)(base)) + (off))
+	// functions
+	inline bool IsValid()
+	{ return Value != NULL; }
+
+	inline void Fill(uint size, byte val)
+	{ memset(Value, val, size); }
+
+	inline void FillZero(uint size)
+	{ memset(Value, 0, size); }
+
+	inline void Copy(const void* src, uint size)
+	{ memcpy(Value, src, size); }
+
+	inline void Copy(uint dstSize, const void* src, uint size)
+	{ memcpy_s(Value, dstSize, src, size); }
+
+	inline void Move(const void* src, uint size)
+	{ memmove(Value, src, size); }
+
+	inline void Move(uint dstSize, const void* src, uint size)
+	{ memmove_s(Value, dstSize, src, size); }
+
+	inline int Compare(const void* addr, uint size) const
+	{ return memcmp(Value, addr, size); }
+
+	inline bool Equals(const void* addr, uint size) const
+	{ return memcmp(Value, addr, size) == 0; }
+
+	inline void* Find(uint size, byte val)
+	{ return memchr(Value, val, size); }
 
 
-// memory barrier to prevent reordering
-#if COMPILER == GCC
-#ifndef barrier
-#define barrier()		asm volatile("" ::: "memory")
-#endif
-#endif // COMPILER == GCC
+}; // end class address
 
 
-// assembly coding
-#if COMPILER == GCC
-#ifndef assembly
-#define assembly		__asm__ __volatile__
-#endif
-#ifndef line
-#define line(text)		text "\n\t"
-#endif
-#else // COMPILER != GCC
-#ifndef assembly
-#define assembly		__asm
-#endif
-#ifndef line
-#define line(text)		text
-#endif
-#endif // COMPILER == GCC
+} // end namespace wind
 
-#endif /* _SUPPORT_KEYWORDS_H_ */
+
+#endif /* _MEMORY_ADDRESS_H_ */

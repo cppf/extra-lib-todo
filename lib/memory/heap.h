@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * heap.h - Defines a heap wrapper class that provides functions for dynamic memory management
+ * heap.h - Defines a heap that provides destination-type functions for dynamic memory management
  * This file is part of the Wind library for C++.
  */
 
@@ -40,14 +40,21 @@
 
 
 // required headers
-#include "heap_func.h"
+#include "..\support\keywords.h"
+#include "..\support\constants.h"
+#include "..\type\primitives.h"
+#if OS == WINDOWS
+#include <Windows.h>
+#else
+#include <stdlib.h>
+#endif
 
 
 namespace wind {
 
 
-// heap wrapper class
-// for memory management
+// heap class for memory management
+// can be type casted to handle
 class heap
 {
 
@@ -60,38 +67,73 @@ public:
 
 public:
 	// initialization
-	inline static void Begin()
-	{ Default.Handle = heap_Begin(); }
-
-	inline static void End()
-	{ Default.Handle = NULL; }
-
 	inline operator handle()
 	{ return Handle; }
 
 	inline heap(handle hHeap=NULL)
 	{ Handle = hHeap; }
 
+#if OS == WINDOWS
+	inline static void Begin()
+	{ Default.Handle = GetProcessHeap(); }
+
+	inline static void End()
+	{ Default.Handle = NULL; }
+
 	inline static heap Create(uint startSize=0, uint flags=0)
-	{ return heap(heap_Create(startSize, flags)); }
+	{ return heap(HeapCreate(flags, startSize, 0)); }
 
 	inline void Destroy()
-	{ heap_Destroy(Handle); Handle = NULL; }
+	{ HeapDestroy(Handle); Handle = NULL; }
 
-	// getprocessheaps
+#else // OS != WINDOWS
+
+	inline static void Begin()
+	{ Default.Handle = (handle) 1; }
+
+	inline static void End()
+	{ Default.Handle = NULL; }
+
+	inline static heap Create(uint startSize=0, uint flags=0)
+	{ unusedpar(startSize); unusedpar(flags); return heap((handle) 1); }
+
+	inline void Destroy()
+	{ Handle = NULL; }
+#endif // OS == WINDOWS
 
 	// functions
+	inline bool IsValid()
+	{ return Handle != NULL; }
+
+#if OS == WINDOWS
 	inline void* Alloc(uint size, uint flags=0)
-	{ return heap_Alloc(Handle, size, flags); }
+	{ return HeapAlloc(Handle, flags, size); }
 
 	inline void* ReAlloc(void* addr, uint size, uint flags=0)
-	{ return heap_ReAlloc(Handle, addr, size, flags); }
+	{ return HeapReAlloc(Handle, flags, addr, size); }
 
 	inline void Free(void* addr, uint flags=0)
-	{ heap_Free(Handle, addr, flags); }
+	{ HeapFree(Handle, flags, addr); }
 
 	inline void Optimize(uint flags=0)
-	{ heap_Optimize(Handle, flags); }
+	{ HeapCompact(Handle, flags); }
+
+	// getprocessheaps
+#else // OS != WINDOWS
+	inline void* Alloc(uint size, uint flags=0)
+	{ unusedpar(flags); return malloc(size); }
+
+	inline void* ReAlloc(void* addr, uint size, uint flags=0)
+	{ unusedpar(flags); return realloc(addr, size); }
+
+	inline void Free(void* addr, uint flags=0)
+	{ unusedpar(flags); free(addr); }
+
+	inline void Optimize(uint flags=0)
+	{ unusedpar(flags); }
+
+	// getprocessheaps
+#endif // OS == WINDOWS
 
 
 }; // end class heap

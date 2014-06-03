@@ -40,9 +40,8 @@
 
 
 // required headers
-#include <stdlib.h>
-#include <string.h>
-#include "heap_func.h"
+#include "heap.h"
+#include "address.h"
 
 
 namespace wind {

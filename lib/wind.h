@@ -74,9 +74,8 @@
 
 
 // memory
-#include "memory\heap_func.h"
+#include "memory\address.h"
 #include "memory\heap.h"
-#include "memory\buffer_func.h"
 #include "memory\buffer.h"
 /*
 // math

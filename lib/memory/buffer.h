@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * memory\buffer.h - Defines a memory buffer that provides common associated functionality
+ * memory\buffer.h - Defines a memory buffer that provides destination-type functions
  * This file is part of the Wind library for C++.
  */
 
@@ -40,7 +40,8 @@
 
 
 // required headers
-#include "buffer_func.h"
+#include "heap.h"
+#include "address.h"
 
 
 namespace wind {
@@ -55,108 +56,78 @@ class buffer
 
 public:
 	// data
-	T* Address;
+	address<T> Address;
 	int	Size;
-#if HEAP_MODE == MULTI_HEAP
 	heap Heap;
-#endif
 
 
 public:
 	// initialization
 	inline operator T*() const
+	{ return Address.Value; }
+
+	inline operator address<T>() const
 	{ return Address; }
 
-#if HEAP_MODE == MULTI_HEAP
 	inline buffer()
 	{ Address = NULL; Size = 0; Heap = heap(); }
 
 	inline buffer(void* addr, uint size, heap hHeap=heap())
-	{ Address = (T*) addr; Size = size; Heap = hHeap; }
+	{ Address = addr; Size = size; Heap = hHeap; }
 
 	inline operator buffer<void>() const
 	{ return buffer<void>(Address, Size, Heap); }
 
-	inline void operator=(const buffer<void> &buff)
-	{ Address = (T*) buff.Address; Size = buff.Size; Heap = buff.Heap; }
-
 	inline buffer(const buffer<void> &buff)
-	{ Address = (T*) buff.Address; Size = buff.Size; Heap = buff.Heap; }
+	{ Address = buff.Address.Value; Size = buff.Size; Heap = buff.Heap; }
 
 	inline static buffer Create(heap hHeap, uint size, uint flags=0)
-	{ return buffer(buffer_Create(hHeap, size, flags), size, hHeap); }
+	{ return buffer(hHeap.Alloc(size, flags), size, hHeap); }
 
 	inline static buffer Create(uint size, uint flags=0)
-	{ return buffer(buffer_Create(size, flags), size, heap::Default); }
+	{ return buffer((heap::Default).Alloc(size, flags), size, heap::Default); }
 
 	inline void Destroy(uint flags=0)
-	{ buffer_Destroy(Heap, Address, flags); Address = NULL; Size = 0; Heap.Handle = NULL; }
+	{ if(Heap.IsValid()) Heap.Free(Address, flags); Address = NULL; Size = 0; Heap.Handle = NULL; }
 
-	inline void Resize(uint size, uint flags=0)
-	{ Address = (T*) buffer_Resize(Heap, Address, size, flags); Size = size; }
-
-
-#else
-
-	inline buffer()
-	{ Address = NULL; Size = 0; }
-
-	inline buffer(void* addr, uint size)
-	{ Address = (T*) addr; Size = size; }
-
-	inline operator buffer<void>() const
-	{ return buffer<void>(Address, Size); }
-
-	inline void operator=(const buffer<void> &blk)
-	{ Address = (T*) blk.Address; Size = blk.Size; }
-
-	inline buffer(const buffer<void> &blk)
-	{ Address = (T*) blk.Address; Size = blk.Size; }
-
-	inline static buffer Create(heap hHeap, uint size, uint flags=0)
-	{ return buffer(buffer_Create(hHeap, size, flags), size); }
-
-	inline static buffer Create(uint size, uint flags=0)
-	{ return buffer(buffer_Create(size, flags), size); }
-
-	inline void Destroy(heap hHeap, uint flags=0)
-	{ buffer_Destroy(hHeap, Address, flags); Address = NULL; Size = 0; }
-
-	inline void Destroy(uint flags=0)
-	{ buffer_Destroy(Address, flags); Address = NULL; Size = 0; }
-
-	inline void Resize(heap hHeap, uint size, uint flags=0)
-	{ Address = (T*) buffer_Resize(hHeap, Address, size, flags); Size = size; }
-
-	inline void Resize(uint size, uint flags=0)
-	{ Address = (T*) buffer_Resize(Address, size, flags); Size = size; }
-#endif
+	inline bool Resize(uint size, uint flags=0)
+	{
+		if(Heap.IsValid()) Address = Heap.ReAlloc(Address, size, flags);
+		if(Heap.IsValid() || size <= Size) { Size = size; return true; }
+		return false;
+	}
 
 
 	// functions
+	inline bool IsValid()
+	{ return Address.IsValid(); }
+
+	inline bool CanGrow()
+	{ return Heap.IsValid(); }
+
 	inline void Fill(uint size, byte val)
-	{ buffer_Fill(Address, size, val); }
+	{ Address.Fill(size, val); }
 
 	inline void Fill(byte val)
-	{ buffer_Fill(Address, Size, val); }
+	{ Address.Fill(Size, val); }
 
 	inline void FillZero(uint size=Size)
-	{ buffer_FillZero(Address, size); }
+	{ Address.FillZero(size); }
 
 	inline void Copy(const void* src, uint size)
-	{ buffer_Copy(Address, Size, src, size); }
+	{ Address.Move(Size, src, size); }
 
 	inline void Move(const void* src, uint size)
-	{ buffer_Move(Address, Size, src, size); }
+	{ Address.Move(Size, src, size); }
 
 	inline int Compare(const void* addr, uint size) const
-	{ return buffer_Compare(Address, addr, size); }
+	{ return Address.Compare(addr, size); }
 
 	inline bool Equals(const void* addr, uint size) const
-	{ return buffer_Equals(Address, addr, size); }
+	{ return Address.Equals(addr, size); }
 
 	inline void* Find(uint size, byte val)
-	{ return buffer_Find(Address, val, size); }
+	{ return Address.Find(size, val); }
 
 
 }; // end class buffer

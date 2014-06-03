@@ -73,14 +73,8 @@ inline char* stringz_GetLowerCase(char* dst, char* src)
 inline char* stringz_GetUpperCase(char* dst, char* src)
 { if(dst != src) stringz_Copy(dst, src); return strupr(src); }
 
-inline char* stringz_GetUpperCase(char* dst, const char* src)
-{ stringz_Copy(dst, src); return stringz_ToUpperCase(dst); }
-
-inline char* stringz_GetUpperCase(const char* str)
-{ return stringz_ToUpperCase(stringz_GetCopy(str)); }
-
-inline char* stringz_Reverse(char* str)
-{ return strrev(str); }
+inline char* stringz_GetReverse(char* dst, char* src)
+{ if(dst != src) stringz_Copy(dst, src); return strrev(dst); }
 
 inline char* stringz_Concat(char* dst, const char* str)
 { return strcat(dst, str); }

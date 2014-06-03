@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\gchar_func.h - Defines generic character wrapper class with standard associated functions
+ * type\gchar_func.h - Defines a generic character wrapper class with source-type functions
  * This file is part of the Wind library for C++.
  */
 
@@ -40,7 +40,7 @@
 
 
 // required headers
-#include "gchar_func.h"
+#include "primitives.h"
 
 
 namespace wind {
@@ -63,10 +63,7 @@ public:
 	inline operator T() const
 	{ return Value; }
 
-	inline void operator=(T ch)
-	{ Value = ch; }
-
-	inline gchar(T ch='\0')
+	inline gchar(T ch)
 	{ Value = ch; }
 
 	inline static gchar Create(T ch='\0')
