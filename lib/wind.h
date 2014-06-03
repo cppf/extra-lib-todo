@@ -70,7 +70,6 @@
 // types
 #include "type\primitives.h"
 #include "type\ranges.h"
-#include "type\gchar_func.h"
 #include "type\gchar.h"
 
 
