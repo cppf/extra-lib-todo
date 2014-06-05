@@ -74,10 +74,10 @@ public:
 	{ Handle = hHeap; }
 
 #if OS == WINDOWS
-	inline static void Begin()
+	inline static void Startup()
 	{ Default.Handle = GetProcessHeap(); }
 
-	inline static void End()
+	inline static void Cleanup()
 	{ Default.Handle = NULL; }
 
 	inline static heap Create(uint startSize=0, uint flags=0)
@@ -88,10 +88,10 @@ public:
 
 #else // OS != WINDOWS
 
-	inline static void Begin()
+	inline static void Startup()
 	{ Default.Handle = (handle) 1; }
 
-	inline static void End()
+	inline static void Cleanup()
 	{ Default.Handle = NULL; }
 
 	inline static heap Create(uint startSize=0, uint flags=0)

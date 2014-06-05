@@ -79,32 +79,71 @@ public:
 	inline bool IsValid()
 	{ return Value != NULL; }
 
-	inline void Fill(uint size, byte val)
-	{ memset(Value, val, size); }
+	inline address Begin(int off=0)
+	{ return address(Value+off); }
 
-	inline void FillZero(uint size)
-	{ memset(Value, 0, size); }
+	inline address End(int off=0)
+	{ return address(Value+off); }
 
-	inline void Copy(const void* src, uint size)
-	{ memcpy(Value, src, size); }
+	inline address Fill(T val, uint size)
+	{
+		if(sizeof(T) == 1) { memset(Value, val, size); return *this; }
+		for(T* ptr=Value; size; ++ptr, --size) *ptr = val;
+		return *this;
+	}
 
-	inline void Copy(uint dstSize, const void* src, uint size)
-	{ memcpy_s(Value, dstSize, src, size); }
+	inline address FillZero(uint size)
+	{ memset(Value, 0, size*sizeof(T)); return *this; }
 
-	inline void Move(const void* src, uint size)
-	{ memmove(Value, src, size); }
+	inline address Copy(const void* src, uint size)
+	{ memcpy(Value, src, size*sizeof(T)); return *this; }
 
-	inline void Move(uint dstSize, const void* src, uint size)
-	{ memmove_s(Value, dstSize, src, size); }
+	inline address Copy(uint dstSize, const void* src, uint size)
+	{ memcpy_s(Value, dstSize*sizeof(T), src, size*sizeof(T)); return *this; }
 
-	inline int Compare(const void* addr, uint size) const
-	{ return memcmp(Value, addr, size); }
+	inline address Move(const void* src, uint size)
+	{ memmove(Value, src, size*sizeof(T)); return *this; }
 
-	inline bool Equals(const void* addr, uint size) const
-	{ return memcmp(Value, addr, size) == 0; }
+	inline address Move(uint dstSize, const void* src, uint size)
+	{ memmove_s(Value, dstSize*sizeof(T), src, size*sizeof(T)); return *this; }
 
-	inline void* Find(uint size, byte val)
-	{ return memchr(Value, val, size); }
+	inline int Compare(const T* addr, uint size) const
+	{
+		if(sizeof(T) == 1) return memcmp(Value, addr, size);
+		for(T* ptr=Value; size; ++ptr, ++addr, --size)
+		{ if(*ptr != *addr) return *ptr-*addr; }
+		return 0;
+	}
+
+	inline bool Equals(const T* addr, uint size) const
+	{ return Compare(Value, addr, size) == 0; }
+
+	inline address Find(T val, uint size) const
+	{
+		if(sizeof(T) == 1) return address(memchr(Value, val, size));
+		for(T* ptr=Value; size; ++ptr, --size)
+		{ if(*ptr == val) return address(ptr); }
+		return NULL;
+	}
+
+	inline address FindLast(T val, uint size) const
+	{
+		for(T* ptr=Value+size-1; size; --ptr, --size)
+		{ if(*ptr == val) return address(ptr); }
+		return NULL;
+	}
+
+	inline int IndexOf(T val, uint size) const
+	{
+		T* ptr = Find(val, size);
+		return (ptr)? (int)(ptr - Value) : -1;
+	}
+
+	inline int IndexOfLast(T val, uint size) const
+	{
+		T* ptr = FindLast(val, size);
+		return (ptr)? (int)(ptr - Value) : -1;
+	}
 
 
 }; // end class address
