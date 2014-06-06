@@ -40,14 +40,7 @@
 
 
 // required headers
-#include "..\support\keywords.h"
-#include "..\support\constants.h"
-#include "..\type\primitives.h"
-#if OS == WINDOWS
-#include <Windows.h>
-#else
-#include <stdlib.h>
-#endif
+#include "heap_func.h"
 
 
 namespace wind {
@@ -73,67 +66,36 @@ public:
 	inline heap(handle hHeap=NULL)
 	{ Handle = hHeap; }
 
-#if OS == WINDOWS
 	inline static void Startup()
-	{ Default.Handle = GetProcessHeap(); }
+	{ Default.Handle = heap_GetDefault(); }
 
 	inline static void Cleanup()
 	{ Default.Handle = NULL; }
 
 	inline static heap Create(uint startSize=0, uint flags=0)
-	{ return heap(HeapCreate(flags, startSize, 0)); }
+	{ return heap_Create(startSize, flags);; }
 
 	inline void Destroy()
-	{ HeapDestroy(Handle); Handle = NULL; }
+	{ heap_Destroy(Handle); Handle = NULL; }
 
-#else // OS != WINDOWS
-
-	inline static void Startup()
-	{ Default.Handle = (handle) 1; }
-
-	inline static void Cleanup()
-	{ Default.Handle = NULL; }
-
-	inline static heap Create(uint startSize=0, uint flags=0)
-	{ unusedpar(startSize); unusedpar(flags); return heap((handle) 1); }
-
-	inline void Destroy()
-	{ Handle = NULL; }
-#endif // OS == WINDOWS
 
 	// functions
 	inline bool IsValid()
 	{ return Handle != NULL; }
 
-#if OS == WINDOWS
 	inline void* Alloc(uint size, uint flags=0)
-	{ return HeapAlloc(Handle, flags, size); }
+	{ return heap_Alloc(Handle, size, flags); }
 
 	inline void* ReAlloc(void* addr, uint size, uint flags=0)
-	{ return HeapReAlloc(Handle, flags, addr, size); }
+	{ return heap_ReAlloc(Handle, addr, size, flags); }
 
 	inline void Free(void* addr, uint flags=0)
-	{ HeapFree(Handle, flags, addr); }
+	{ heap_Free(Handle, addr, flags); }
 
 	inline void Optimize(uint flags=0)
-	{ HeapCompact(Handle, flags); }
+	{ heap_Optimize(Handle, flags); }
 
 	// getprocessheaps
-#else // OS != WINDOWS
-	inline void* Alloc(uint size, uint flags=0)
-	{ unusedpar(flags); return malloc(size); }
-
-	inline void* ReAlloc(void* addr, uint size, uint flags=0)
-	{ unusedpar(flags); return realloc(addr, size); }
-
-	inline void Free(void* addr, uint flags=0)
-	{ unusedpar(flags); free(addr); }
-
-	inline void Optimize(uint flags=0)
-	{ unusedpar(flags); }
-
-	// getprocessheaps
-#endif // OS == WINDOWS
 
 
 }; // end class heap

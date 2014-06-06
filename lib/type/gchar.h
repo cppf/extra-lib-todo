@@ -52,7 +52,7 @@ namespace wind {
 template <typename T>
 class gchar
 {
-
+	
 
 public:
 	// data
