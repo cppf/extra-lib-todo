@@ -31,62 +31,60 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.h - main include file
+ * type\gchar_func.h - Provides source-type functions for generic character
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _WIND_H_
-#define _WIND_H_
+#ifndef _TYPE_GCHAR_FUNC_H_
+#define _TYPE_GCHAR_FUNC_H_
 
 
 // required headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "support\constants.h"
-
-// Wind configuration settings
-#define	WORD_SIZE		32
-#define	TEXT_MODE		ANSI
-#define	HEAP_MODE		MULTI_HEAP
-#define	COMPILER		VISUAL_CPP
-#define	DEVICE			PROCESSOR
-#define	ARCHITECTURE	X86
-#define	OS				WINDOWS
+#include "primitives.h"
 
 
-// required headers
-#if OS == WINDOWS
-#include <Windows.h>
-#endif
+namespace wind {
 
 
-// make support
-#include "support\keywords.h"
-#include "support\attributes.h"
-#include "support\macro_overloading.h"
-#include "support\merge.h"
+// functions
+template <typename T>
+inline bool gchar_IsLowerCase(T ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
+
+template <typename T>
+inline bool gchar_IsUpperCase(T ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
+
+template <typename T>
+inline bool gchar_IsAlphabet(T ch)
+{ return gchar_IsLowerCase(ch) || gchar_IsUpperCase(ch); }
+
+template <typename T>
+inline bool gchar_IsDigit(T ch)
+{ return (ch >= '0') && (ch <= '9'); }
+
+template <typename T>
+inline T gchar_GetLowerCase(T ch)
+{ return gchar_IsUpperCase(ch)? ch - 'A' + 'a' : ch; }
+
+template <typename T>
+inline T gchar_GetUpperCase(T ch)
+{ return gchar_IsLowerCase(ch)? ch - 'a' + 'A' : ch; }
+
+template <typename T>
+inline char gchar_GetChar(T ch)
+{ return (char) ch; }
+
+template <typename T>
+inline wchar gchar_GetWchar(T ch)
+{ return (wchar) ch; }
+
+template <typename T>
+inline tchar gchar_GetTchar(T ch)
+{ return (tchar) ch; }
 
 
-// types
-#include "type\primitives.h"
-#include "type\ranges.h"
-#include "type\gchar.h"
+} // end namespace wind
 
 
-// memory
-//#include "memory\heap.h"
-//#include "memory\buffer.h"
-/*
-// math
-#include "math\basic.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\heap.hpp"
-#include "mem\address.hpp"
-#include "mem\block.hpp"
-*/
-
-
-#endif /* _WIND_H_ */
+#endif /* _TYPE_GCHAR_FUNC_H_ */

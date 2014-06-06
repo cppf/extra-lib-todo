@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\gchar_func.h - Defines a generic character wrapper class with source-type functions
+ * type\gchar.h - Defines a generic character wrapper class with source-type functions
  * This file is part of the Wind library for C++.
  */
 
@@ -41,13 +41,14 @@
 
 // required headers
 #include "primitives.h"
+#include "gchar_func.h"
 
 
 namespace wind {
 
 
-// Generic character wrapper class
-// can be type casted to char
+// generic character wrapper class
+// can be type casted to type
 template <typename T>
 class gchar
 {
@@ -55,7 +56,7 @@ class gchar
 
 public:
 	// data
-	char Value;
+	T Value;
 
 
 public:
@@ -63,7 +64,7 @@ public:
 	inline operator T() const
 	{ return Value; }
 
-	inline gchar(T ch)
+	inline gchar(T ch='\0')
 	{ Value = ch; }
 
 	inline static gchar Create(T ch='\0')
@@ -72,33 +73,46 @@ public:
 	inline void Destroy()
 	{ Value = '\0'; }
 
+	// operators
+	inline gchar operator ++()
+	{ return ++Value; }
+
+	inline gchar operator ++(T)
+	{ return Value++; }
+
+	inline void operator +=(gchar ch)
+	{ Value += ch.Value; }
+
+	inline void operator -= (gchar ch)
+	{ Value -= ch.Value; }
+
 	// functions
 	inline bool IsLowerCase() const
-	{ return (Value >= 'a') && (Value <= 'z'); }
+	{ return gchar_IsLowerCase(Value); }
 
 	inline bool IsUpperCase() const
-	{ return (Value >= 'A') && (Value <= 'Z'); }
+	{ return gchar_IsUpperCase(Value); }
 
 	inline bool IsAlphabet() const
-	{ return IsLowerCase() || IsUpperCase(); }
+	{ return gchar_IsAlphabet(Value);; }
 
 	inline bool IsDigit() const
-	{ return (Value >= '0') && (Value <= '9'); }
+	{ return gchar_IsDigit(Value); }
 
 	inline gchar GetLowerCase() const
-	{ return IsUpperCase()? gchar(Value - 'A' + 'a') : *this; }
+	{ return gchar_GetLowerCase(Value); }
 
 	inline gchar GetUpperCase() const
-	{ return IsLowerCase()? gchar(Value - 'a' + 'A') : *this; }
+	{ return gchar_GetUpperCase(Value); }
 
 	inline char GetChar() const
-	{ return (char) Value; }
+	{ return gchar_GetChar(Value); }
 
 	inline wchar GetWchar() const
-	{ return (wchar) Value; }
+	{ return gchar_GetWchar(Value); }
 
 	inline tchar GetTchar() const
-	{ return(tchar) Value; }
+	{ return gchar_GetTchar(Value); }
 
 
 }; // end class gchar

@@ -40,8 +40,9 @@
 
 
 // required headers
-#include "..\type\gchar.h"
-#include "..\memory\heap.h"
+#include "..\support\constants.h"
+#include "..\support\keywords.h"
+#include "..\type\primitives.h"
 #include <string.h>
 
 
@@ -69,7 +70,7 @@ public:
 	inline block(void* addr=NULL, uint size=0)
 	{ Address = addr; Size = size; }
 
-	inline static block Create(T* str)
+	inline static block Create(void* addr=NULL, uint )
 	{
 		if(sizeof(T) == 1) return block(str, strlen(str));
 		else if(sizeof(T) == 2) return block(str, wcslen(str));
