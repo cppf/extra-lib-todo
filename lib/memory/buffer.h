@@ -41,7 +41,7 @@
 
 // required headers
 #include "heap.h"
-#include "address.h"
+#include "block.h"
 
 
 namespace wind {
@@ -50,26 +50,18 @@ namespace wind {
 // memory buffer class
 // can be type casted to type*
 template <typename T>
-class buffer
+class buffer : public block<T>
 {
 
 
 public:
 	// data
-	address<T> Address;
-	uint Size;
 	heap Heap;
 
 
 public:
 	// initialization
-	inline operator T*() const
-	{ return Address.Value; }
-
-	inline operator address<T>() const
-	{ return Address; }
-
-	inline buffer()
+	inline buffer(void* addr=NULL, uint size=0)
 	{ Address = NULL; Size = 0; Heap = heap(); }
 
 	inline buffer(void* addr, uint size, heap hHeap=heap())
