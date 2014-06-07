@@ -31,65 +31,68 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * wind.h - main include file
+ * type\int_func.h - Provides functions for integer character
+ * This file is part of the Wind library for C++.
  */
 
-#ifndef _WIND_H_
-#define _WIND_H_
+#ifndef _TYPE_INT_FUNC_H_
+#define _TYPE_INT_FUNC_H_
 
 
 // required headers
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "support\constants.h"
-
-// Wind configuration settings
-#define	WORD_SIZE		32
-#define	TEXT_MODE		ANSI
-#define	HEAP_MODE		MULTI_HEAP
-#define	COMPILER		VISUAL_CPP
-#define	DEVICE			PROCESSOR
-#define	ARCHITECTURE	X86
-#define	OS				WINDOWS
+#include "primitives.h"
+#include "gchar_func.h"
 
 
-// required headers
-#if OS == WINDOWS
-#include <Windows.h>
-#endif
+namespace wind {
 
 
-// make support
-#include "support\keywords.h"
-#include "support\attributes.h"
-#include "support\macro_overloading.h"
-#include "support\merge.h"
+// functions
+template <typename Tint, typename Tstr>
+bool int_Parse(Tint* dst, Tstr* str, uint len, uint base=0)
+{
+	// get base from end
+	byte ch = gchar_GetLowerCase(str[len-1]);
+	if(ch == 'o' || ch == 'd' || ch =='h')
+	{
+		--len;
+		if(ch == 'o') base = 8;
+		else if(ch == 'd') base = 10;
+		else base = 16;
+	}
+	// get sign
+	bool neg = false;
+	if(*str == '-')
+	{ neg = true; ++str; --len; }
+	// get base from begin
+	if(*str == '0')
+	{
+		ch = gchar_GetLowerCase(str[1]);
+		if(ch == 't' || ch == 'c' || ch =='x')
+		{
+			str += 2; len -= 2;
+			if(ch == 't') base = 8;
+			else if(ch == 'c') base = 10;
+			else base = 16;
+		}
+	}
+	// default base = 10
+	if(base == 0) base = 10;
+	// parse integer
+	Tint num = 0;
+	for(; len; ++str, --len)
+	{
+		ch = gchar_GetLowerCase(*str);
+		ch = (ch <= '9')? ch - '0' : ch - 'a' + 10;
+		if(ch >= base) return false;
+		num = num*base + ch;
+	}
+	*dst = (neg)? -num : num;
+	return true;
+}
 
 
-// types
-#include "type\primitives.h"
-#include "type\ranges.h"
-#include "type\gchar_func.h"
-#include "type\gchar.h"
-#include "type\int_func.h"
+} // end namespace wind
 
 
-// memory
-#include "memory\heap_func.h"
-#include "memory\heap.h"
-//#include "memory\buffer.h"
-/*
-// math
-#include "math\basic.hpp"
-
-
-// memory
-#include "mem\basic.hpp"
-#include "mem\heap.hpp"
-#include "mem\address.hpp"
-#include "mem\block.hpp"
-*/
-
-
-#endif /* _WIND_H_ */
+#endif /* _TYPE_INT_FUNC_H_ */

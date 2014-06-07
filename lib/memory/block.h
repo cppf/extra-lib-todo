@@ -31,19 +31,16 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * data\block.h - Defines a memory block that provides destination-type functions
+ * memory\block.h - Defines a memory block that provides destination-type functions
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _DATA_BLOCK_H_
-#define _DATA_BLOCK_H_
+#ifndef _MEMORY_BLOCK_H_
+#define _MEMORY_BLOCK_H_
 
 
 // required headers
-#include "..\support\constants.h"
-#include "..\support\keywords.h"
-#include "..\type\primitives.h"
-#include <string.h>
+#include "block_func.h"
 
 
 namespace wind {
@@ -70,130 +67,112 @@ public:
 	inline block(void* addr=NULL, uint size=0)
 	{ Address = addr; Size = size; }
 
-	inline static block Create(void* addr=NULL, uint )
-	{
-		if(sizeof(T) == 1) return block(str, strlen(str));
-		else if(sizeof(T) == 2) return block(str, wcslen(str));
-		// else return block(str, Address.Find(int_Max, 0));
-	}
+	inline block(block<byte> &blk)
+	{ Address = blk.Address; Size = blk.Size; }
 
-	inline static block Create(T* str, uint len)
-	{ return block(str, len); }
+	inline operator block<byte>() const
+	{ return block<byte>(Address, Size); }
+
+	inline static block Create(void* addr=NULL, uint size=0)
+	{ return block(addr, size); }
 
 	inline void Destroy()
 	{ Address = NULL; Size = 0; }
 
 
-	// functions
-	inline bool IsValid()
+	// non-modifier functions
+	inline bool IsValid() const
 	{ return Address != NULL; }
-
-	inline block Begin(int off=0, uint size=0)
+	
+	inline block Part(int off=0, uint size=0) const
 	{ return block(Address+off, size); }
-
-	inline block End(int off=0, uint size=0)
-	{ return block(Address+Size+off, size); }
-
-	inline block BeginFull(int off=0, int sizeOff=0)
-	{ return block(Address+off, (uint)(Size+sizeOff)); }
-
-	inline block EndFull(int off=0, int sizeOff=0)
-	{ return block(Address+Size+off, (uint)(Size+sizeOff)); }
-
-	inline block Fill(T val)
+	
+	inline block Merge(block src) const
 	{
-		uint size = Size;
-		if(sizeof(T) == 1) { memset(Address, val, Size); return *this; }
-		for(T* ptr=Address; size; ++ptr, --size) *ptr = val;
-		return *this;
+		uint psrc = src;
+		if(src.Address > Address+Size) block_Copy(psrc=Address+Size, src, src.Size);
+		return block(Address, psrc + src.Size - Address);
 	}
 
+	inline int Compare(block src) const
+	{
+		uint cmpSz = (Size < src.Size)? Size : src.Size;
+		T cmp = block_Compare(Address, src, cmpSz);
+		return (cmp)? cmp : (Size - src.Size);
+	}
+
+	inline bool Equals(block src) const
+	{ return (Size == src.Size) && (block_Compare(Address, src, Size) == 0); }
+
+	inline block Find(T val) const
+	{ return block(block_Find(Address, Size, val), 1); }
+
+	inline block Find(block src) const
+	{ return block(block_Find(Address, Size, src, src.Size), src.Size); }
+
+	inline block FindAny(block src) const
+	{ return block(block_FindAny(Address, Size, src, src.Size), 1); }
+
+	inline block FindLast(T val) const
+	{ return block(block_FindLast(Address, Size, val), 1); }
+
+	inline block FindLast(block src) const
+	{ return block(block_FindLast(Address, Size, src, src.Size), src.Size); }
+
+	inline block FindLastAny(block src) const
+	{ return block(block_FindLastAny(Address, Size, src, src.Size), 1); }
+
+	inline int IndexOf(T val) const
+	{ return block_IndexOf(Address, Size, val); }
+
+	inline int IndexOf(block src) const
+	{ return block_IndexOf(Address, Size, src, src.Size); }
+
+	inline int IndexOfAny(block src) const
+	{ return block_IndexOfAny(Address, Size, src, src.Size); }
+
+	inline int LastIndexOf(T val) const
+	{ return block_LastIndexOf(Address, Size, val); }
+
+	inline int LastIndexOf(block src) const
+	{ return block_LastIndexOf(Address, Size, src, src.Size); }
+
+	inline int LastIndexOfAny(block src) const
+	{ return block_LastIndexOfAny(Address, Size, src, src.Size); }
+
+
+	// modifier functions
+	inline block Fill(T val)
+	{ block_Fill(Address, Size, val); return *this; }
+
 	inline block FillZero()
-	{ memset(Address, 0, Size*sizeof(T)); return *this; }
+	{ block_FillZero(Address, Size, val); return *this; }
 
-	inline block Copy(block src)
-	{ memcpy(Address, src, src.Size*sizeof(T)); return block(Address, src.Size); }
+	inline block CopyFrom(block src)
+	{ block_Copy(Address, src, src.Size); return block(Address, src.Size); }
 
-	inline block Move(block src)
-	{ memmove(Address, src, src.Size); return block(Address, src.Size); }
+	inline block MoveFrom(block src)
+	{ block_Move(Address, src, src.Size); return block(Address, src.Size); }
+
+	inline block Reverse()
+	{ block_Reverse(Address, Size); return *this; }
+
+
+
+
+	inline void PutCopy(block src)
+	{ block_Copy(Address+Size, src, Size += src.Size); }
+
+	inline void PutCopyOv(block src)
+	{ block_CopyOv(Address+Size, src, Size += src.Size); }
+
+
 
 	inline block Append(block src)
 	{
 		if(Address+Size != src.Address)
 		{ block<T>(Address+Size).Move(src); }
 		return block(Address, Size+src.Size);
-	}
-
-	inline int Compare(block src) const
-	{
-		uint cmp = (Size < src.Size)? Size : src.Size;
-		if(sizeof(T) == 1) cmp = memcmp(Address, src, cmp);
-		else
-		{
-			for(T* dptr=Address, sptr=src; cmp; ++dptr, ++sptr, --cmp)
-			{ if(*dptr != *sptr) { cmp = *dptr-*sptr; break; } }
-		}
-		return (cmp)? cmp : Size - src.Size;
-	}
-
-	inline bool Equals(block src) const
-	{ return (Size != src.Size)? false : (Compare(src) == 0); }
-
-	inline block Find(T val) const
-	{
-		uint size = Size;
-		if(sizeof(T) == 1) return memchr(Address, val, Size);
-		for(T* ptr=Address; size; ++ptr, --size)
-		{ if(*ptr == val) return ptr; }
-		return NULL;
-	}
-
-	inline block Find(block src) const
-	{
-		uint size = Size - src.Size + 1;
-		for(T* ptr=Address; size; ++ptr, --size)
-		{ if(block(ptr, src.Size).Equals(src)) return block(ptr, src.Size); }
-		return NULL;
-	}
-
-	inline block FindLast(T val) const
-	{
-		uint size = Size;
-		for(T* ptr=Address+size-1; size; --ptr, --size)
-		{ if(*ptr == val) return ptr; }
-		return NULL;
-	}
-
-	inline block FindLast(block src) const
-	{
-		uint size = Address - src.Size + 1;
-		for(T* ptr=Address+size-1; size; --ptr, --size)
-		{ if(block(ptr, src.Size).Equals(src)) return block(ptr, src.Size); }
-		return NULL;
-	}
-
-	inline int IndexOf(T val) const
-	{
-		T* ptr = Find(val);
-		return (ptr)? (int)(ptr - Address) : -1;
-	}
-
-	inline int IndexOf(block src) const
-	{
-		T* ptr = Find(src);
-		return (ptr)? (int)(ptr - Address) : -1;
-	}
-
-	inline int IndexOfLast(T val) const
-	{
-		T* ptr = FindLast(val);
-		return (ptr)? (int)(ptr - Address) : -1;
-	}
-
-	inline int IndexOfLast(block src) const
-	{
-		T* ptr = FindLast(src);
-		return (ptr)? (int)(ptr - Address) : -1;
 	}
 
 	inline block Reverse()
@@ -227,4 +206,4 @@ public:
 } // end namespace wind
 
 
-#endif /* _DATA_GSTRING_H_ */
+#endif /* _MEMORY_BLOCK_H_ */

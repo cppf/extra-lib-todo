@@ -62,6 +62,8 @@ inline void gstring_ToUpperCase(T* dst, T* src, uint len)
 }
 
 
+// trim
+
 } // end namespace wind
 
 
