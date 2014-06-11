@@ -180,22 +180,21 @@ inline void block_Reverse(T* dst, uint size)
 	{ *dst ^= *rev; *rev ^= *dst; *dst ^= *rev; }
 }
 
-
+template <typename T>
+inline void block_Reverse(T* dst, const T* src, uint size)
+{
+	for(T* rev=dst+size-1; size; ++dst, --rev, --size)
+	{ *dst = *rev; }
+}
 
 template <typename Tdst, typename Tsrc>
 inline void block_Convert(Tdst* dst, const Tsrc* src, uint size)
 {
-	if(sizeof(Tdst) == sizeof(Tsrc)) { memcpy(dst, src, size*sizeof(Tsrc)); return; }
-	for(; size; ++dst, ++src, --size)
-	{ *dst = (Tdst) *src; }
-}
-
-template <typename Tdst, typename Tsrc>
-inline void block_ConvertOv(Tdst* dst, const Tsrc* src, uint size)
-{
-	memmove(dst, src, size*sizeof(Tsrc));
-	if(sizeof(Tdst) == sizeof(Tsrc)) return;
-	else if(sizeof(Tdst) < sizeof(Tsrc)) 
+	if(sizeof(Tdst) == sizeof(Tsrc))
+	{
+		if(dst != (Tdst*) src) block_Copy(dst, src, size);
+	}
+	else if(sizeof(Tdst) < sizeof(Tsrc))
 	{
 		for(; size; ++dst, ++src, --size)
 		{ *dst = (Tdst) *src; }
@@ -207,6 +206,30 @@ inline void block_ConvertOv(Tdst* dst, const Tsrc* src, uint size)
 	}
 }
 
+template <typename T>
+inline uint block_Count(const T* dst, uint size, T val)
+{
+	uint count = 0;
+	for(; size; ++dst, --size)
+	{ if(*dst == val) ++count; }
+	return count;
+}
+
+template <typename T>
+inline uint block_Count(const T* dst, uint dSize, const T* src, uint sSize)
+{
+	uint count = 0;	dSize -= sSize - 1;
+	for(; dSize; ++dst, --dSize)
+	{ if(block_Compare(dst, src, sSize) == 0) ++count; }
+}
+
+template <typename T>
+inline uint block_Remove(T* dst, T* src, uint size, T val)
+{
+	for(; size; ++src, --size)
+	{ if(*dst != val) { *dst = *src; ++dst; } }
+	return (uint)(src - dst);
+}
 
 template <typename T>
 inline void block_Replace(T* dst, uint size, T find, T replace)
@@ -234,13 +257,6 @@ inline void block_Replace(T* dst, const T* src, uint sSize, T* find, uint fSize,
 		if(block_Compare(src, find, fSize) != 0) *dst = *src;
 		else { block_Copy(dst, replace, rSize); src += fSize-1; dst += rSize-1; }
 	}
-}
-
-template <typename T>
-inline void block_Reverse(T* dst, const T* src, uint size)
-{
-	for(T* rev=dst+size-1; size; ++dst, --rev, --size)
-	{ *dst = *rev; }
 }
 
 

@@ -154,53 +154,44 @@ public:
 	inline block MoveFrom(block src)
 	{ block_Move(Address, src, src.Size); return block(Address, src.Size); }
 
+	inline block Convert(T* type)
+	{ block_Convert(Address, Address, Size); return *this; }
+
 	inline block Reverse()
 	{ block_Reverse(Address, Size); return *this; }
 
+	inline block ExpandAt(int off, uint size=1)
+	{ block_Move(Address+off+size, Address+off, Size-off); return block(Address, Size+size); }
+
+	inline block InsertAt(int off, T val)
+	{ block_Move(Address+off+1, Address+off, Size-off); Address[off] = val; return block(Address, Size+1);  }
+
+	inline block InsertAt(int off, block src)
+	{ block_Move(Address+off+src.Size, Address+off, Size-off); block_Copy(Address+off, src, src.Size); return block(Address, Size+src.Size); }
+
+	inline block RemoveAt(int off, uint size=1)
+	{ block_Move(Address+off, Address+off+size, size); return block(Address, Size-size); }
+
+	inline uint Count(T val)
+	{ return block_Count(Address, Size, val); }
+
+	inline block Remove(T val)
+	{ uint rmvd = block_Remove(Address, Address, Size, val); return block(Address, Size-rmvd); }
+
+	inline block Remove(block src)
+	{  }
+
+	inline block Replace(T find, T replace)
+	{ block_Replace(Address, Size, find, replace); return *this; }
+
+	template <typename Tsrc>
+	inline block Add(block<Tsrc> src)
+	{ block_Convert(Address+Size, src, src.Size); return block(Address, Size+src.Size); }
 
 
 
-	inline void PutCopy(block src)
-	{ block_Copy(Address+Size, src, Size += src.Size); }
 
-	inline void PutCopyOv(block src)
-	{ block_CopyOv(Address+Size, src, Size += src.Size); }
-
-
-
-	inline block Append(block src)
-	{
-		if(Address+Size != src.Address)
-		{ block<T>(Address+Size).Move(src); }
-		return block(Address, Size+src.Size);
-	}
-
-	inline block Reverse()
-	{
-		uint size = Size/2;
-		for(T* fptr=Address, rptr=Address+Size-1; size; ++fptr, --rptr, --size)
-		{ *fptr ^= *rptr; *rptr ^= *fptr; *fptr ^= *rptr; }
-		return *this;
-	}
-
-	inline block ToLowerCase()
-	{
-		uint len = Length;
-		for(T* ptr=Address; len; ++ptr, --len)
-		{ *ptr = gchar<T>(*ptr).GetLowerCase(); }
-		return *this;
-	}
-
-	inline block ToUpperCase()
-	{
-		uint len = Length;
-		for(T* ptr=Address; len; ++ptr, --len)
-		{ *ptr = gchar<T>(*ptr).GetUpperCase(); }
-		return *this;
-	}
-
-
-}; // end class gstring
+}; // end class block
 
 
 } // end namespace wind
