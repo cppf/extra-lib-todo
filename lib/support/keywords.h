@@ -45,13 +45,13 @@
 
 // get type of a variable
 #if COMPILER == VISUAL_CPP
-#define typeof(expr)	decltype(expr)
+#define typeof(expr)		decltype(expr)
 #endif
 
 
 // convert a token to string
 #ifndef stringof
-#define stringof(a)		#a
+#define stringof(a)			#a
 #endif
 
 
@@ -62,33 +62,26 @@
 
 
 // specify byte address
-#define byteaddr(base, off)	\
-(((unsigned char*)(base)) + (off))
+#define byteaddr(base, off)	(((unsigned char*)(base)) + (off))
 
 
 // memory barrier to prevent reordering
 #if COMPILER == GCC
 #ifndef barrier
-#define barrier()		asm volatile("" ::: "memory")
+#define barrier()			asm volatile("" ::: "memory")
 #endif
-#endif // COMPILER == GCC
+#endif // COMPILER
 
 
 // assembly coding
 #if COMPILER == GCC
-#ifndef assembly
-#define assembly		__asm__ __volatile__
-#endif
-#ifndef line
-#define line(text)		text "\n\t"
-#endif
+#define assembly			__asm__ __volatile__
+#define line(text)			text "\n\t"
+
 #else // COMPILER != GCC
-#ifndef assembly
-#define assembly		__asm
-#endif
-#ifndef line
-#define line(text)		text
-#endif
-#endif // COMPILER == GCC
+#define assembly			__asm
+#define line(text)			text
+#endif // COMPILER
+
 
 #endif /* _SUPPORT_KEYWORDS_H_ */

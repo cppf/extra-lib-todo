@@ -41,6 +41,7 @@
 
 // required headers
 #include "..\support\constants.h"
+
 #if OS == WINDOWS
 #include <Windows.h>
 #endif
@@ -63,9 +64,11 @@ namespace wind {
 // character types
 typedef	wchar_t			wchar;
 #define	wcharof(str)	L##str
+
 #if TEXT_MODE == ANSI
 typedef char			tchar;
 #define	tcharof(str)	str
+
 #else // UNICODE
 typedef wchar			tchar;
 #define	tcharof(str)	L##str
@@ -84,27 +87,37 @@ typedef	unsigned long long	uint64;
 
 
 // word size integer
-#ifndef word
 #if WORD_SIZE == 8
 typedef	int8	word;
 typedef	uint8	uword;
+typedef	int32	lword;
+typedef	uint32	ulword;
+
 #elif WORD_SIZE == 16
 typedef	int16	word;
 typedef	uint16	uword;
+typedef	int32	lword;
+typedef	uint32	ulword;
+
 #elif WORD_SIZE == 32
 typedef int32	word;
 typedef uint32	uword;
+typedef	int64	lword;
+typedef	uint64	ulword;
+
 #else // 64
 typedef int64	word;
 typedef uint64	uword;
-#endif
-#endif // !word
+typedef	int64	lword;
+typedef	uint64	ulword;
+#endif // WORD_SIZE == 8
 
 
 // named types
 #if OS != WINDOWS
 typedef	unsigned char	byte;
 #endif
+
 typedef	signed char		sbyte;
 typedef unsigned short	ushort;
 typedef unsigned int	uint;
@@ -112,8 +125,9 @@ typedef unsigned long	ulong;
 
 
 // object handle
-#if OS == WINDOWS
+#if OS != WINDOWS
 typedef void* handle;
+
 #else
 typedef HANDLE handle;
 #endif

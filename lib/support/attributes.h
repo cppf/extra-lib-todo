@@ -85,9 +85,9 @@
 #define	optimized			compact
 #endif
 // calling convention
-#define	ccall			attrib(__cdecl__)
-#define	cdecl			attrib(__cdecl__)
-#define	stdcall			attrib(__stdcall__)
+#define	ccall				attrib(__cdecl__)
+#define	cdecl				attrib(__cdecl__)
+#define	stdcall				attrib(__stdcall__)
 
 #else // COMPILER != GCC
 
@@ -107,16 +107,16 @@
 #define notinline			attrib(noinline)
 #define aligned(amt)		attrib(align(amt))
 // calling convention
-#define	ccall			__cdecl
+#define	ccall				__cdecl
 #ifndef cdecl
-#define	cdecl			__cdecl
+#define	cdecl				__cdecl
 #endif
 #ifndef stdcall
-#define	stdcall			__stdcall
+#define	stdcall				__stdcall
 #endif
 
 
-#endif // COMPILER == GCC
+#endif // COMPILER
 
 
 #endif /* _SUPPORT_ATTRIBUTES_H_ */

@@ -31,7 +31,7 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * heap.h - Provides destination-type heap functions for dynamic memory management
+ * heap_func.h - Provides heap functions for dynamic memory management
  * This file is part of the Wind library for C++.
  */
 
@@ -54,51 +54,49 @@ namespace wind {
 
 
 #if OS == WINDOWS
-inline handle heap_GetDefault()
+inline handle defaultHeap()
 { return GetProcessHeap(); }
 
-inline handle heap_Create(uint startSize=0, uint flags=0)
+inline handle createHeap(uint startSize=0, uint flags=0)
 { return HeapCreate(flags, startSize, 0); }
 
-inline void heap_Destroy(handle hHeap)
+inline void	destroyHeap(handle hHeap)
 { HeapDestroy(hHeap); }
 
-inline void* heap_Alloc(handle hHeap, uint size, uint flags=0)
+inline void* alloc(handle hHeap, uint size, uint flags=0)
 { return HeapAlloc(hHeap, flags, size); }
 
-inline void* heap_ReAlloc(handle hHeap, void* addr, uint size, uint flags=0)
+inline void* reAlloc(handle hHeap, void* addr, uint size, uint flags=0)
 { return HeapReAlloc(hHeap, flags, addr, size); }
 
-inline void heap_Free(handle hHeap, void* addr, uint flags=0)
+inline void free(handle hHeap, void* addr, uint flags=0)
 { HeapFree(hHeap, flags, addr); }
 
-inline void heap_Optimize(handle hHeap, uint flags=0)
+inline void optimizeHeap(handle hHeap, uint flags=0)
 { HeapCompact(hHeap, flags); }
 
-// getprocessheaps
 #else // OS != WINDOWS
-inline handle heap_GetDefault()
+inline handle defaultHeap()
 { return (handle) 1; }
 
-inline handle heap_Create(uint startSize=0, uint flags=0)
+inline handle createHeap(uint startSize=0, uint flags=0)
 { unusedpar(startSize); unusedpar(flags); return (handle) 1; }
 
-inline void heap_Destroy(handle hHeap)
+inline void destroyHeap(handle hHeap)
 { unusedpar(hHeap); }
 
-inline void* heap_Alloc(handle hHeap, uint size, uint flags=0)
+inline void* alloc(handle hHeap, uint size, uint flags=0)
 { unusedpar(hHeap); unusedpar(flags); return malloc(size); }
 
-inline void* heap_ReAlloc(handle hHeap, void* addr, uint size, uint flags=0)
+inline void* reAlloc(handle hHeap, void* addr, uint size, uint flags=0)
 { unusedpar(hHeap); unusedpar(flags); return realloc(addr, size); }
 
-inline void heap_Free(handle hHeap, void* addr, uint flags=0)
+inline void free(handle hHeap, void* addr, uint flags=0)
 { unusedpar(hHeap); unusedpar(flags); free(addr); }
 
-inline void heap_Optimize(handle hHeap, uint flags=0)
+inline void optimizeHeap(handle hHeap, uint flags=0)
 { unusedpar(hHeap); unusedpar(flags); }
 
-// getprocessheaps
 #endif // OS == WINDOWS
 
 

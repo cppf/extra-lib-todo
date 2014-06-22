@@ -43,6 +43,7 @@
 #include "..\support\constants.h"
 #include "..\support\keywords.h"
 #include "..\type\primitives.h"
+#include "..\type\var_func.h"
 #include <string.h>
 
 
@@ -51,197 +52,207 @@ namespace wind {
 
 // non-modifier functions
 template <typename T>
-inline T block_Compare(const T* dst, const T* src, uint size)
+inline bool equals(const T* dst, const T* src, uint len)
+{ return memcmp(dst, src, len*sizeof(T)) == 0; }
+
+template <typename T>
+inline T compare(const T* dst, const T* src, uint len)
 {
-	if(sizeof(T) == 1) return memcmp(dst, src, size);
-	for(; size; ++dst, ++src, --size)
+	if(sizeof(T) == 1) return memcmp(dst, src, len);
+	for(; len; ++dst, ++src, --len)
 	{ if(*dst != *src) return *dst - *src; }
 	return 0;
 }
 
 template <typename T>
-inline T* block_Find(const T* dst, uint size, T val)
+inline T* find(const T* dst, uint len, T val)
 {
-	if(sizeof(T) == 1) return memchr(dst, val, size);
-	for(; size; ++dst, --size)
+	if(sizeof(T) == 1) return memchr(dst, val, len);
+	for(; len; ++dst, --len)
 	{ if(*dst == val) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline T* block_Find(const T* dst, uint dSize, const T* src, uint sSize)
+inline T* find(const T* dst, uint dlen, const T* src, uint slen)
 {
-	dSize -= sSize - 1;
-	for(; dSize; ++dst, --dSize)
-	{ if(block_Compare(dst, src, sSize) == 0) return dst; }
+	for(dlen-=slen-1; dlen; ++dst, --dlen)
+	{ if(equals(dst, src, slen)) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline T* block_FindAny(const T* dst, uint dSize, const T* src, uint sSize)
+inline T* findAny(const T* dst, uint dlen, const T* src, uint slen)
 {
-	for(; dSize; ++dst, --dSize)
-	{ if(block_Find(src, sSize, *dst)) return dst; }
+	for(; dlen; ++dst, --dlen)
+	{ if(find(src, slen, *dst)) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline T* block_FindLast(const T* dst, uint size, T val)
+inline T* findLast(const T* dst, uint len, T val)
 {
-	for(dst+=size-1; size; --dst, --size)
+	for(dst+=len-1; len; --dst, --len)
 	{ if(*dst == val) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline T* block_FindLast(const T* dst, uint dSize, const T* src, uint sSize)
+inline T* findLast(const T* dst, uint dlen, const T* src, uint slen)
 {
-	dSize -= sSize - 1;
-	for(dst+=dSize-1; dSize; --dst, --dSize)
-	{ if(block_Compare(dst, src, sSize) == 0) return dst; }
+	for(dlen-=slen-1, dst+=dlen-1; dlen; --dst, --dlen)
+	{ if(equals(dst, src, slen)) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline T* block_FindLastAny(const T* dst, uint dSize, const T* src, uint sSize)
+inline T* findLastAny(const T* dst, uint dlen, const T* src, uint slen)
 {
-	for(dst+=dSize-1; dSize; --dst, --dSize)
-	{ if(block_Find(src, sSize, *dst)) return dst; }
+	for(dst+=dlen-1; dlen; --dst, --dlen)
+	{ if(find(src, slen, *dst)) return dst; }
 	return NULL;
 }
 
 template <typename T>
-inline int block_IndexOf(const T* dst, uint size, T val)
+inline int indexOf(const T* dst, uint len, T val)
 {
-	T* ptr = block_Find(dst, size, val);
+	T* ptr = find(dst, len, val);
 	return (ptr)? (int)(ptr - dst) : -1;
 }
 
 template <typename T>
-inline int block_IndexOf(const T* dst, uint dSize, const T* src, uint sSize)
+inline int indexOf(const T* dst, uint dlen, const T* src, uint slen)
 {
-	T* ptr = block_Find(dst, dSize, src, sSize);
+	T* ptr = find(dst, dlen, src, slen);
 	return (ptr)? (int)(ptr - dst) : -1;
 }
 
 template <typename T>
-inline int block_IndexOfAny(const T* dst, uint dSize, const T* src, uint sSize)
+inline int indexOfAny(const T* dst, uint dlen, const T* src, uint slen)
 {
-	T* ptr = block_FindAny(dst, dSize, src, sSize);
+	T* ptr = findAny(dst, dlen, src, slen);
 	return (ptr)? (int)(ptr - dst) : -1;
 }
 
 template <typename T>
-inline int block_LastIndexOf(const T* dst, uint size, T val)
+inline int lastIndexOf(const T* dst, uint len, T val)
 {
-	T* ptr = block_FindLast(dst, size, val);
+	T* ptr = findLast(dst, len, val);
 	return (ptr)? (int)(ptr - dst) : -1;
 }
 
 template <typename T>
-inline int block_LastIndexOf(const T* dst, uint dSize, const T* src, uint sSize)
+inline int lastIndexOf(const T* dst, uint dlen, const T* src, uint slen)
 {
-	T* ptr = block_FindLast(dst, dSize, src, sSize);
+	T* ptr = findLast(dst, dlen, src, slen);
 	return (ptr)? (int)(ptr - dst) : -1;
 }
 
 template <typename T>
-inline int block_LastIndexOfAny(const T* dst, uint dSize, const T* src, uint sSize)
+inline int lastIndexOfAny(const T* dst, uint dlen, const T* src, uint slen)
 {
-	T* ptr = block_FindLastAny(dst, dSize, src, sSize);
+	T* ptr = findLastAny(dst, dlen, src, slen);
 	return (ptr)? (int)(ptr - dst) : -1;
+}
+
+template <typename T>
+inline uint count(const T* dst, uint len, T val)
+{
+	uint ctr = 0;
+	for(; len; ++dst, --len)
+	{ if(*dst == val) ++ctr; }
+	return ctr;
+}
+
+template <typename T>
+inline uint count(const T* dst, uint dlen, const T* src, uint slen)
+{
+	uint ctr = 0;
+	for(dlen -= slen-1; dlen; ++dst, --dlen)
+	{ if(equals(dst, src, slen)) ++ctr; }
+	return ctr;
+}
+
+template <typename T>
+inline uint countAny(const T* dst, uint dlen, const T* src, uint slen)
+{
+	uint ctr = 0;
+	for(; dlen; ++dst, --dlen)
+	{ if(find(src, slen, *dst) != NULL) ++ctr; }
+	return ctr;
 }
 
 
 // modifier functions
 template <typename T>
-inline void block_Fill(T* dst, uint size, T val)
+inline void fill(T* dst, uint len, T val)
 {
-	if(sizeof(T) == 1) { memset(dst, val, size); return; }
-	for(; size; ++dst, --size) *dst = val;
+	if(sizeof(T) == 1) { memset(dst, val, len); return; }
+	for(; len; ++dst, --len) *dst = val;
 }
 
 template <typename T>
-inline void block_FillZero(T* dst, uint size, T val)
-{ memset(dst, 0, size*sizeof(T)); }
-
-template <typename T>
-inline void block_Copy(void* dst, const T* src, uint size)
-{ memcpy(dst, src, size*sizeof(T)); }
-
-template <typename T>
-inline void block_Move(void* dst, const T* src, uint size)
-{ memmove(dst, src, size*sizeof(T)); }
-
-template <typename T>
-inline void block_Reverse(T* dst, uint size)
-{
-	for(T* rev=dst+size-1; dst < rev; ++dst, --rev)
-	{ *dst ^= *rev; *rev ^= *dst; *dst ^= *rev; }
-}
-
-template <typename T>
-inline void block_Reverse(T* dst, const T* src, uint size)
-{
-	for(T* rev=dst+size-1; size; ++dst, --rev, --size)
-	{ *dst = *rev; }
-}
+inline void fillZero(T* dst, uint len, T val)
+{ memset(dst, 0, len*sizeof(T)); }
 
 template <typename Tdst, typename Tsrc>
-inline void block_Convert(Tdst* dst, const Tsrc* src, uint size)
+inline void copyFrom(Tdst* dst, const Tsrc* src, uint len)
 {
 	if(sizeof(Tdst) == sizeof(Tsrc))
-	{
-		if(dst != (Tdst*) src) block_Copy(dst, src, size);
-	}
+	{ memcpy(dst, src, len*sizeof(Tsrc)); }
 	else if(sizeof(Tdst) < sizeof(Tsrc))
 	{
-		for(; size; ++dst, ++src, --size)
+		for(; len; ++dst, ++src, --len)
 		{ *dst = (Tdst) *src; }
 	}
 	else
 	{
-		for(dst+=size-1, src+=size-1; size; --dst, --src, --size)
+		for(dst+=len-1, src+=len-1; len; --dst, --src, --len)
 		{ *dst = (Tdst) *src; }
 	}
 }
 
 template <typename T>
-inline uint block_Count(const T* dst, uint size, T val)
+inline void moveFrom(void* dst, const T* src, uint len)
+{ memmove(dst, src, len*sizeof(T)); }
+
+template <typename T>
+inline void reverse(T* dst, uint len)
 {
-	uint count = 0;
-	for(; size; ++dst, --size)
-	{ if(*dst == val) ++count; }
-	return count;
+	for(T* rev=dst+len-1; dst < rev; ++dst, --rev)
+	{ swap(*dst, *rev); }
 }
 
 template <typename T>
-inline uint block_Count(const T* dst, uint dSize, const T* src, uint sSize)
+inline void reverseFrom(T* dst, const T* src, uint len)
 {
-	uint count = 0;	dSize -= sSize - 1;
-	for(; dSize; ++dst, --dSize)
-	{ if(block_Compare(dst, src, sSize) == 0) ++count; }
+	for(T* rev=dst+len-1; len; ++dst, --rev, --len)
+	{ *dst = *rev; }
 }
 
 template <typename T>
-inline uint block_Remove(T* dst, T* src, uint size, T val)
+inline uint removeFrom(T* dst, const T* src, uint len, T val)
 {
-	for(; size; ++src, --size)
+	for(; len; ++src, --len)
 	{ if(*dst != val) { *dst = *src; ++dst; } }
 	return (uint)(src - dst);
 }
 
 template <typename T>
-inline void block_Replace(T* dst, uint size, T find, T replace)
+inline uint remove(T* dst, uint len, T val)
+{ return removeFrom(dst, dst, len, val); }
+
+template <typename T>
+inline void replace(T* dst, uint len, T find, T replace)
 {
-	for(; size; ++dst, --size)
+	for(; len; ++dst, --len)
 	{ if(*dst == find) *dst = replace; }
 }
 
 template <typename T>
-inline void block_Replace(T* dst, const T* src, uint size, T find, T replace)
+inline void replaceFrom(T* dst, const T* src, uint len, T find, T replace)
 {
-	for(; size; ++dst, ++src, --size)
+	for(; len; ++dst, ++src, --len)
 	{
 		if(*src == find) * dst = replace;
 		else *dst = *src;
@@ -249,13 +260,13 @@ inline void block_Replace(T* dst, const T* src, uint size, T find, T replace)
 }
 
 template <typename T>
-inline void block_Replace(T* dst, const T* src, uint sSize, T* find, uint fSize, T* replace, uint rSize)
+inline void replace(T* dst, const T* src, uint slen, T* find, uint flen, T* replace, uint rlen)
 {
-	sSize -= fSize - 1;
-	for(; sSize; ++dst, ++src, --sSize)
+	slen -= flen - 1;
+	for(; slen; ++dst, ++src, --slen)
 	{
-		if(block_Compare(src, find, fSize) != 0) *dst = *src;
-		else { block_Copy(dst, replace, rSize); src += fSize-1; dst += rSize-1; }
+		if(compare(src, find, flen) != 0) *dst = *src;
+		else { copy(dst, replace, rlen); src += flen-1; dst += rlen-1; }
 	}
 }
 

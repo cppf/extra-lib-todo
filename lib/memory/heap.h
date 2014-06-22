@@ -60,42 +60,50 @@ public:
 
 public:
 	// initialization
-	inline operator handle()
-	{ return Handle; }
-
 	inline heap(handle hHeap=NULL)
 	{ Handle = hHeap; }
 
-	inline static void Startup()
-	{ Default.Handle = heap_GetDefault(); }
+	inline static void startup()
+	{ Default.Handle = defaultHeap(); }
 
-	inline static void Cleanup()
+	inline static void cleanup()
 	{ Default.Handle = NULL; }
 
-	inline static heap Create(uint startSize=0, uint flags=0)
-	{ return heap_Create(startSize, flags);; }
+	inline static heap create(uint startSize=0, uint flags=0)
+	{ return createHeap(startSize, flags);; }
 
-	inline void Destroy()
-	{ heap_Destroy(Handle); Handle = NULL; }
+	inline void destroy()
+	{ destroyHeap(Handle); Handle = NULL; }
+
+
+	// operator overload
+	inline operator handle() const
+	{ return Handle; }
+
+
+	// properties
+	inline handle handle()
+	{ return Handle; }
+
+	static inline heap default()
+	{ return Default; }
 
 
 	// functions
-	inline bool IsValid()
+	inline bool isValid() const
 	{ return Handle != NULL; }
 
-	inline void* Alloc(uint size, uint flags=0)
-	{ return heap_Alloc(Handle, size, flags); }
+	inline void* alloc(uint size, uint flags=0) const
+	{ return wind::alloc(Handle, size, flags); }
 
-	inline void* ReAlloc(void* addr, uint size, uint flags=0)
-	{ return heap_ReAlloc(Handle, addr, size, flags); }
+	inline void* reAlloc(void* addr, uint size, uint flags=0) const
+	{ return wind::reAlloc(Handle, addr, size, flags); }
 
-	inline void Free(void* addr, uint flags=0)
-	{ heap_Free(Handle, addr, flags); }
+	inline void free(void* addr, uint flags=0) const
+	{ wind::free(Handle, addr, flags); }
 
-	inline void Optimize(uint flags=0)
-	{ heap_Optimize(Handle, flags); }
-
-	// getprocessheaps
+	inline void optimize(uint flags=0) const
+	{ optimizeHeap(Handle, flags); }
 
 
 }; // end class heap

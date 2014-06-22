@@ -31,68 +31,60 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\int_func.h - Provides functions for integer character
+ * type\char_func.h - Provides standard generic character functions
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_INT_FUNC_H_
-#define _TYPE_INT_FUNC_H_
+#ifndef _TYPE_CHAR_FUNC_H_
+#define _TYPE_CHAR_FUNC_H_
 
 
 // required headers
 #include "primitives.h"
-#include "gchar_func.h"
 
 
 namespace wind {
 
 
 // functions
-template <typename Tint, typename Tstr>
-bool int_Parse(Tint* dst, Tstr* str, uint len, uint base=0)
-{
-	// get base from end
-	byte ch = gchar_GetLowerCase(str[len-1]);
-	if(ch == 'o' || ch == 'd' || ch =='h')
-	{
-		--len;
-		if(ch == 'o') base = 8;
-		else if(ch == 'd') base = 10;
-		else base = 16;
-	}
-	// get sign
-	bool neg = false;
-	if(*str == '-')
-	{ neg = true; ++str; --len; }
-	// get base from begin
-	if(*str == '0')
-	{
-		ch = gchar_GetLowerCase(str[1]);
-		if(ch == 't' || ch == 'c' || ch =='x')
-		{
-			str += 2; len -= 2;
-			if(ch == 't') base = 8;
-			else if(ch == 'c') base = 10;
-			else base = 16;
-		}
-	}
-	// default base = 10
-	if(base == 0) base = 10;
-	// parse integer
-	Tint num = 0;
-	for(; len; ++str, --len)
-	{
-		ch = gchar_GetLowerCase(*str);
-		ch = (ch <= '9')? ch - '0' : ch - 'a' + 10;
-		if(ch >= base) return false;
-		num = num*base + ch;
-	}
-	*dst = (neg)? -num : num;
-	return true;
-}
+template <typename T>
+inline bool isLowerCase(T ch)
+{ return (ch >= 'a') && (ch <= 'z'); }
+
+template <typename T>
+inline bool isUpperCase(T ch)
+{ return (ch >= 'A') && (ch <= 'Z'); }
+
+template <typename T>
+inline bool isAlphabet(T ch)
+{ return isLowerCase(ch) || isUpperCase(ch); }
+
+template <typename T>
+inline bool isDigit(T ch)
+{ return (ch >= '0') && (ch <= '9'); }
+
+template <typename T>
+inline T lowerCaseOf(T ch)
+{ return isUpperCase(ch)? ch - 'A' + 'a' : ch; }
+
+template <typename T>
+inline T upperCaseOf(T ch)
+{ return isLowerCase(ch)? ch - 'a' + 'A' : ch; }
+
+template <typename T>
+inline char charOf(T ch)
+{ return (char) ch; }
+
+template <typename T>
+inline wchar wcharOf(T ch)
+{ return (wchar) ch; }
+
+template <typename T>
+inline tchar tcharOf(T ch)
+{ return (tchar) ch; }
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_INT_FUNC_H_ */
+#endif /* _TYPE_CHAR_FUNC_H_ */

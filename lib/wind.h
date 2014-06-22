@@ -42,7 +42,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "support\constants.h"
+
 
 // Wind configuration settings
 #define	WORD_SIZE		32
@@ -63,20 +65,20 @@
 // make support
 #include "support\keywords.h"
 #include "support\attributes.h"
-#include "support\macro_overloading.h"
+#include "support\macros.h"
 #include "support\merge.h"
 
 
 // types
 #include "type\primitives.h"
 #include "type\ranges.h"
-#include "type\gchar_func.h"
-#include "type\gchar.h"
-#include "type\int_func.h"
+#include "type\var_func.h"
+#include "type\char_func.h"
 
 
 // memory
 #include "memory\heap_func.h"
+#include "memory\block_func.h"
 #include "memory\heap.h"
 //#include "memory\buffer.h"
 /*

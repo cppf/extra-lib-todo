@@ -31,60 +31,72 @@
  * ----------------------------------------------------------------------- */
 
 /* 
- * type\gchar_func.h - Provides functions for generic character
+ * type\num_parse.h - Provides functions for paring numbers from string
  * This file is part of the Wind library for C++.
  */
 
-#ifndef _TYPE_GCHAR_FUNC_H_
-#define _TYPE_GCHAR_FUNC_H_
+#ifndef _TYPE_NUM_PARSE_H_
+#define _TYPE_NUM_PARSE_H_
 
 
 // required headers
 #include "primitives.h"
+#include "char_std.h"
 
 
 namespace wind {
 
 
 // functions
-template <typename T>
-inline bool gchar_IsLowerCase(T ch)
-{ return (ch >= 'a') && (ch <= 'z'); }
+template <typename Tnum, typename Tstr>
+bool parseBin(lword* dst, )
+{
+}
 
-template <typename T>
-inline bool gchar_IsUpperCase(T ch)
-{ return (ch >= 'A') && (ch <= 'Z'); }
+template <typename Tnum, typename Tstr>
+bool parseDecimal(Tnum* dst, Tstr& str, uint len)
+{
+	char ch;
+	bool neg = false;
+	// get sign
+	if(*str == '-')
+}
 
-template <typename T>
-inline bool gchar_IsAlphabet(T ch)
-{ return gchar_IsLowerCase(ch) || gchar_IsUpperCase(ch); }
-
-template <typename T>
-inline bool gchar_IsDigit(T ch)
-{ return (ch >= '0') && (ch <= '9'); }
-
-template <typename T>
-inline T gchar_GetLowerCase(T ch)
-{ return gchar_IsUpperCase(ch)? ch - 'A' + 'a' : ch; }
-
-template <typename T>
-inline T gchar_GetUpperCase(T ch)
-{ return gchar_IsLowerCase(ch)? ch - 'a' + 'A' : ch; }
-
-template <typename T>
-inline char gchar_GetChar(T ch)
-{ return (char) ch; }
-
-template <typename T>
-inline wchar gchar_GetWchar(T ch)
-{ return (wchar) ch; }
-
-template <typename T>
-inline tchar gchar_GetTchar(T ch)
-{ return (tchar) ch; }
+template <typename Tnum, typename Tstr>
+bool parseNum(Tnum* dst, const Tstr* str, uint len, uint base=0)
+{
+	char ch;
+	bool neg = false;
+	// get sign
+	if(*str == '-')
+	{ neg = true; ++str; --len; }
+	// get base
+	if(*str == '0')
+	{
+		ch = lowerCaseOf(str[1]);
+		if(ch == 'b' || ch == 'o' || ch == 'x')
+		{
+			str += 2; len -= 2;
+			
+		}
+	}
+	// default base = 10
+	if(base == 0) base = 10;
+	// parse integer
+	Tint num = 0;
+	for(; len; ++str, --len)
+	{
+		ch = lowerCaseOf(*str);
+		ch = (ch <= '9')? ch - '0' : ch - 'a' + 10;
+		if(ch >= base) return false;
+		num = num*base + ch;
+	}
+	*dst = (neg)? -num : num;
+	return true;
+}
 
 
 } // end namespace wind
 
 
-#endif /* _TYPE_GCHAR_FUNC_H_ */
+#endif /* _TYPE_NUM_PARSE_H_ */

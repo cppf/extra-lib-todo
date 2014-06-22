@@ -56,124 +56,143 @@ class block
 public:
 	// data
 	T* Address;
-	uint Size;
+	uint Length;
 
 
 public:
 	// initialization
+	inline block(void* addr=NULL, uint len=0)
+	{ Address = addr; Length = len; }
+
+	template <typename Tsrc>
+	inline block(block<Tsrc> &blk)
+	{ Address = (T*) blk.Address; Length = blk.Length; }
+
+	inline static block create(void* addr=NULL, uint len=0)
+	{ return block(addr, len); }
+
+	inline void destroy()
+	{ Address = NULL; Length = 0; }
+
+
+	// operator overload
 	inline operator T*() const
 	{ return Address; }
 
-	inline block(void* addr=NULL, uint size=0)
-	{ Address = addr; Size = size; }
-
-	inline block(block<byte> &blk)
-	{ Address = blk.Address; Size = blk.Size; }
-
 	inline operator block<byte>() const
-	{ return block<byte>(Address, Size); }
+	{ return block<byte>(Address, Length); }
 
-	inline static block Create(void* addr=NULL, uint size=0)
-	{ return block(addr, size); }
 
-	inline void Destroy()
-	{ Address = NULL; Size = 0; }
+	// properties
+	inline T* address() const
+	{ return Address; }
+
+	inline uint size() const
+	{ return Length * sizeof(T); }
+
+	inline uint length() const
+	{ return Length; }
+
+	inline uint count() const
+	{ return Length; }
+
+	inline uint capacity() const
+	{ return 0; }
 
 
 	// non-modifier functions
-	inline bool IsValid() const
+	inline bool isValid() const
 	{ return Address != NULL; }
 	
-	inline block Part(int off=0, uint size=0) const
-	{ return block(Address+off, size); }
-	
-	inline block Merge(block src) const
+	inline block part(int off=0, uint len=0) const
+	{ return block(Address+off, len); }
+
+	inline int compare(block src) const
 	{
-		uint psrc = src;
-		if(src.Address > Address+Size) block_Copy(psrc=Address+Size, src, src.Size);
-		return block(Address, psrc + src.Size - Address);
+		uint cmpSz = (Length < src.Length)? Length : src.Length;
+		T cmp = wind::compare(Address, src, cmpSz);
+		return (cmp)? cmp : (Length - src.Length);
 	}
 
-	inline int Compare(block src) const
-	{
-		uint cmpSz = (Size < src.Size)? Size : src.Size;
-		T cmp = block_Compare(Address, src, cmpSz);
-		return (cmp)? cmp : (Size - src.Size);
-	}
+	inline bool equals(block src) const
+	{ return (Length == src.Length) && wind::equals(Address, src, Length); }
 
-	inline bool Equals(block src) const
-	{ return (Size == src.Size) && (block_Compare(Address, src, Size) == 0); }
+	inline block find(T val) const
+	{ return block(wind::find(Address, Length, val), 1); }
 
-	inline block Find(T val) const
-	{ return block(block_Find(Address, Size, val), 1); }
+	inline block find(block src) const
+	{ return block(wind::find(Address, Length, src, src.Length), src.Length); }
 
-	inline block Find(block src) const
-	{ return block(block_Find(Address, Size, src, src.Size), src.Size); }
+	inline block findAny(block src) const
+	{ return block(wind::findAny(Address, Length, src, src.Length), 1); }
 
-	inline block FindAny(block src) const
-	{ return block(block_FindAny(Address, Size, src, src.Size), 1); }
+	inline block findLast(T val) const
+	{ return block(wind::findLast(Address, Length, val), 1); }
 
-	inline block FindLast(T val) const
-	{ return block(block_FindLast(Address, Size, val), 1); }
+	inline block findLast(block src) const
+	{ return block(wind::findLast(Address, Length, src, src.Length), src.Length); }
 
-	inline block FindLast(block src) const
-	{ return block(block_FindLast(Address, Size, src, src.Size), src.Size); }
+	inline block findLastAny(block src) const
+	{ return block(wind::findLastAny(Address, Length, src, src.Length), 1); }
 
-	inline block FindLastAny(block src) const
-	{ return block(block_FindLastAny(Address, Size, src, src.Size), 1); }
+	inline int indexOf(T val) const
+	{ return wind::indexOf(Address, Length, val); }
 
-	inline int IndexOf(T val) const
-	{ return block_IndexOf(Address, Size, val); }
+	inline int indexOf(block src) const
+	{ return wind::indexOf(Address, Length, src, src.Length); }
 
-	inline int IndexOf(block src) const
-	{ return block_IndexOf(Address, Size, src, src.Size); }
+	inline int indexOfAny(block src) const
+	{ return wind::indexOfAny(Address, Length, src, src.Length); }
 
-	inline int IndexOfAny(block src) const
-	{ return block_IndexOfAny(Address, Size, src, src.Size); }
+	inline int lastIndexOf(T val) const
+	{ return wind::lastIndexOf(Address, Length, val); }
 
-	inline int LastIndexOf(T val) const
-	{ return block_LastIndexOf(Address, Size, val); }
+	inline int lastIndexOf(block src) const
+	{ return wind::lastIndexOf(Address, Length, src, src.Length); }
 
-	inline int LastIndexOf(block src) const
-	{ return block_LastIndexOf(Address, Size, src, src.Size); }
+	inline int lastIndexOfAny(block src) const
+	{ return wind::lastIndexOfAny(Address, Length, src, src.Length); }
 
-	inline int LastIndexOfAny(block src) const
-	{ return block_LastIndexOfAny(Address, Size, src, src.Size); }
+	inline uint count(T val) const
+	{ return wind::count(Address, Length, val); }
+
+	inline uint count(block src) const
+	{ return wind::count(Address, Length, src, src.Length); }
+
+	inline uint countAny(block src) const
+	{ return wind::countAny(Address, Length, src, src.Length); }
 
 
 	// modifier functions
-	inline block Fill(T val)
-	{ block_Fill(Address, Size, val); return *this; }
+	inline block fill(T val)
+	{ wind::fill(Address, Length, val); return *this; }
 
-	inline block FillZero()
-	{ block_FillZero(Address, Size, val); return *this; }
+	inline block fillZero()
+	{ wind::fillZero(Address, Length); return *this; }
 
-	inline block CopyFrom(block src)
-	{ block_Copy(Address, src, src.Size); return block(Address, src.Size); }
+	inline block copyFrom(block src)
+	{ wind::copyFrom(Address, src, src.Length); return block(Address, src.Length); }
 
-	inline block MoveFrom(block src)
-	{ block_Move(Address, src, src.Size); return block(Address, src.Size); }
+	inline block moveFrom(block src)
+	{ wind::moveFrom(Address, src, src.Length); return block(Address, src.Length); }
 
-	inline block Convert(T* type)
-	{ block_Convert(Address, Address, Size); return *this; }
+	inline block reverse()
+	{ wind::reverse(Address, Length); return *this; }
+	
+	inline block reverseFrom(block src)
+	{ wind::reverseFrom(Address, src, src.Length); }
 
-	inline block Reverse()
-	{ block_Reverse(Address, Size); return *this; }
+	inline block expandAt(int off, uint len=1)
+	{ wind::moveFrom(Address+off+len, Address+off, Length-off); return block(Address, Length+len); }
 
-	inline block ExpandAt(int off, uint size=1)
-	{ block_Move(Address+off+size, Address+off, Size-off); return block(Address, Size+size); }
-
-	inline block InsertAt(int off, T val)
+	inline block insertAt(int off, T val)
 	{ block_Move(Address+off+1, Address+off, Size-off); Address[off] = val; return block(Address, Size+1);  }
 
-	inline block InsertAt(int off, block src)
+	inline block insertAt(int off, block src)
 	{ block_Move(Address+off+src.Size, Address+off, Size-off); block_Copy(Address+off, src, src.Size); return block(Address, Size+src.Size); }
 
 	inline block RemoveAt(int off, uint size=1)
 	{ block_Move(Address+off, Address+off+size, size); return block(Address, Size-size); }
-
-	inline uint Count(T val)
-	{ return block_Count(Address, Size, val); }
 
 	inline block Remove(T val)
 	{ uint rmvd = block_Remove(Address, Address, Size, val); return block(Address, Size-rmvd); }
@@ -187,8 +206,6 @@ public:
 	template <typename Tsrc>
 	inline block Add(block<Tsrc> src)
 	{ block_Convert(Address+Size, src, src.Size); return block(Address, Size+src.Size); }
-
-
 
 
 }; // end class block
