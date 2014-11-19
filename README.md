@@ -1,7 +1,7 @@
 Wind
 ====
 
-Header-only library for C++
+Header-only library for C++.
 
 
 
